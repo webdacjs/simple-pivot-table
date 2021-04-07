@@ -49,7 +49,8 @@ function PivotTable(_ref) {
       columnsLabels = _ref.columnsLabels,
       width = _ref.width,
       values = _ref.values,
-      height = _ref.height;
+      height = _ref.height,
+      postprocessfn = _ref.postprocessfn;
 
   var _useState = (0, _react.useState)(),
       _useState2 = _slicedToArray(_useState, 2),
@@ -72,7 +73,7 @@ function PivotTable(_ref) {
   }
 
   (0, _react.useEffect)(function () {
-    var groupedData = (0, _getGrouped.default)(getFilteredRows(data), rows, values);
+    var groupedData = (0, _getGrouped.default)(getFilteredRows(data), rows, values, postprocessfn);
     var denormalizedData = (0, _getDenormalized.default)(groupedData, rows, values);
     setCols(getColumns());
     setRows(denormalizedData);
@@ -146,5 +147,6 @@ PivotTable.propTypes = {
   values: _propTypes.default.array,
   filters: _propTypes.default.array,
   height: _propTypes.default.number,
+  postprocessfn: _propTypes.default.func,
   width: _propTypes.default.number
 };

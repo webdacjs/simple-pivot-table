@@ -32,7 +32,7 @@ function getReducedValue(values, aggregator, formatter) {
   return values.length;
 }
 
-function getAggreagatedValues(items, vals) {
+function getAggregatedValues(items, vals, postprocessfn) {
   var reduced = {};
   vals.forEach(function (val) {
     var values = items.map(function (item) {
@@ -40,10 +40,10 @@ function getAggreagatedValues(items, vals) {
     });
     reduced[val.field] = getReducedValue(values, val.aggregator, val.formatter);
   });
-  return reduced;
+  return postprocessfn ? postprocessfn(reduced) : reduced;
 }
 
-function getGroupedData(data, rows, vals) {
+function getGroupedData(data, rows, vals, postprocessfn) {
   var grouped = {};
   data.forEach(function (dataItem) {
     var keyArray = [];
@@ -56,9 +56,9 @@ function getGroupedData(data, rows, vals) {
   }); // Get the reduced values by key.
 
   Object.keys(grouped).forEach(function (key) {
-    grouped[key] = getAggreagatedValues(grouped[key], vals);
+    grouped[key] = getAggregatedValues(grouped[key], vals, postprocessfn);
   });
-  var valueTotals = getAggreagatedValues(data, vals);
+  var valueTotals = getAggregatedValues(data, vals, postprocessfn);
   return {
     grouped: grouped,
     valueTotals: valueTotals
