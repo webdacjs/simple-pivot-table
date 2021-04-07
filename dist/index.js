@@ -9,7 +9,15 @@ Object.defineProperty(exports, "Table", {
     return _Table.default;
   }
 });
+Object.defineProperty(exports, "PivotTable", {
+  enumerable: true,
+  get: function get() {
+    return _PivotTable.default;
+  }
+});
 
 var _Table = _interopRequireDefault(require("./Table"));
+
+var _PivotTable = _interopRequireDefault(require("./PivotTable"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
