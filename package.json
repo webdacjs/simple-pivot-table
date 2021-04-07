@@ -1,0 +1,79 @@
+{
+  "name": "simple-pivot-table",
+  "version": "0.0.1",
+  "private": true,
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "description": "Simple pivot table library with basica functions.",
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "dependencies": {
+    "dayjs": "1.10.4",
+    "rimraf": "3.0.2",
+    "sort-objects-array": "1.7.1"
+  },
+  "scripts": {
+    "lint": "standard .",
+    "lint:fix": "standard . --fix",
+    "storybook": "start-storybook -p 6006 -s public",
+    "build-storybook": "build-storybook -s public",
+    "clean": "rimraf dist",
+    "compile": "npm run clean && cross-env NODE_ENV=production babel src/components --out-dir dist --copy-files --no-copy-ignored --ignore __tests__,spec.js,test.js,**/*.stories.js,__snapshots__"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.12.10",
+    "@babel/plugin-transform-runtime": "7.12.10",
+    "@babel/preset-env": "7.12.11",
+    "@babel/preset-flow": "7.12.1",
+    "@babel/preset-react": "^7.12.10",
+    "@storybook/addon-actions": "6.2.5",
+    "@storybook/addon-console": "1.2.3",
+    "@storybook/addon-docs": "6.2.5",
+    "@storybook/addon-essentials": "6.2.5",
+    "@storybook/addon-knobs": "6.2.5",
+    "@storybook/addon-links": "6.2.5",
+    "@storybook/addon-storyshots": "6.2.5",
+    "@storybook/addon-storysource": "^6.2.5",
+    "@storybook/node-logger": "6.2.5",
+    "@storybook/preset-create-react-app": "3.1.7",
+    "@storybook/react": "6.2.5",
+    "@testing-library/jest-dom": "5.11.9",
+    "@testing-library/react": "11.2.3",
+    "@testing-library/user-event": "12.6.2",
+    "babel-plugin-macros": "3.0.1",
+    "cross-env": "7.0.3",
+    "prop-types": "15.7.2",
+    "react": "17.0.1",
+    "react-dom": "17.0.1",
+    "react-scripts": "4.0.1",
+    "react-test-renderer": "17.0.1",
+    "require-context.macro": "1.2.2",
+    "standard": "16.0.3",
+    "web-vitals": "0.2.4"
+  },
+  "standard": {
+    "ignore": [
+      "/dist/"
+    ]
+  }
+}
