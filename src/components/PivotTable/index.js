@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import getGroupedData from './getGrouped'
 import getDenormalized from './getDenormalized'
 
-export default function PivotTable ({ data, filters, rows, columns, columnsLabels, width, values, height }) {
+export default function PivotTable ({ data, filters, rows, columns, columnsLabels, width, values, height, postprocessfn }) {
   const [cols, setCols] = useState()
   const [pivotRows, setRows] = useState()
 
@@ -17,7 +17,7 @@ export default function PivotTable ({ data, filters, rows, columns, columnsLabel
 
   useEffect(() => {
     const groupedData = getGroupedData(
-      getFilteredRows(data), rows, values)
+      getFilteredRows(data), rows, values, postprocessfn)
     const denormalizedData = getDenormalized(groupedData, rows, values)
     setCols(getColumns())
     setRows(denormalizedData)
@@ -85,5 +85,6 @@ PivotTable.propTypes = {
   values: PropTypes.array,
   filters: PropTypes.array,
   height: PropTypes.number,
+  postprocessfn: PropTypes.func,
   width: PropTypes.number
 }

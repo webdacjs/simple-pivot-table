@@ -4,7 +4,6 @@ import PivotTable from './index'
 import './index.css'
 
 import testData from '../../testData/'
-import budget from '../../testData/budget.json'
 
 export default {
   title: 'PivotTable',
@@ -35,6 +34,15 @@ const Template = ({
 export const Default = Template.bind({})
 Default.args = {
   data: testData,
+  rows: ['continent', 'country'],
+  values: [
+    { field: 'population', aggregator: 'sum' }
+  ]
+}
+
+export const ColumnLabelsAndFormatters = Template.bind({})
+ColumnLabelsAndFormatters.args = {
+  data: testData,
   rows: ['continent', 'currency_code', 'government', 'country'],
   columnsLabels: ['Continent', 'Currency', 'Government', 'Country', 'Population Sum', 'Count'],
   values: [
@@ -47,36 +55,48 @@ Default.args = {
   ]
 }
 
-export const ContinentCurrency = Template.bind({})
-ContinentCurrency.args = {
-  data: testData,
-  rows: ['continent', 'currency_code'],
-  columnsLabels: ['Continent', 'Currency', 'Population Sum'],
-  values: [
-    {
-      field: 'population',
-      aggregator: 'sum',
-      formatter: x => Math.round(x).toLocaleString()
-    }
-  ]
-}
-
-export const PopulationContinent = Template.bind({})
-PopulationContinent.args = {
+export const AverageAggregator = Template.bind({})
+AverageAggregator.args = {
   data: testData,
   rows: ['continent'],
-  columnsLabels: ['Continent', 'Population Sum'],
+  columnsLabels: ['Continent', 'Population Avg'],
   values: [
     {
       field: 'population',
-      aggregator: 'sum',
+      aggregator: 'avg',
       formatter: x => Math.round(x).toLocaleString()
     }
   ]
 }
 
-export const PopulationAreaContinent = Template.bind({})
-PopulationAreaContinent.args = {
+export const MedianAggregator = Template.bind({})
+MedianAggregator.args = {
+  data: testData,
+  rows: ['continent'],
+  columnsLabels: ['Continent', 'Population Avg'],
+  values: [
+    {
+      field: 'population',
+      aggregator: 'median',
+      formatter: x => Math.round(x).toLocaleString()
+    }
+  ]
+}
+
+export const CountAggregator = Template.bind({})
+CountAggregator.args = {
+  data: testData,
+  rows: ['continent'],
+  columnsLabels: ['Continent', 'Country Count'],
+  values: [
+    {
+      field: 'country'
+    }
+  ]
+}
+
+export const CustomFormatters = Template.bind({})
+CustomFormatters.args = {
   data: testData,
   rows: ['continent', 'country'],
   columnsLabels: ['Continent', 'country', 'Population Sum', 'Area Sum'],
@@ -84,7 +104,7 @@ PopulationAreaContinent.args = {
     {
       field: 'population',
       aggregator: 'sum',
-      formatter: x => Math.round(x).toLocaleString()
+      formatter: x => `${parseFloat(x / 1000000).toFixed(2)} M. hab.`
     },
     {
       field: 'area',

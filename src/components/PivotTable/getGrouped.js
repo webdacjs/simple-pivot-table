@@ -17,16 +17,16 @@ function getReducedValue (values, aggregator, formatter) {
   return values.length
 }
 
-function getAggreagatedValues (items, vals) {
+function getAggregatedValues (items, vals, postprocessfn) {
   const reduced = {}
   vals.forEach(val => {
     const values = items.map(item => item[val.field])
     reduced[val.field] = getReducedValue(values, val.aggregator, val.formatter)
   })
-  return reduced
+  return postprocessfn ? postprocessfn(reduced) : reduced
 }
 
-export default function getGroupedData (data, rows, vals) {
+export default function getGroupedData (data, rows, vals, postprocessfn) {
   const grouped = {}
   data.forEach(dataItem => {
     const keyArray = []
@@ -39,9 +39,9 @@ export default function getGroupedData (data, rows, vals) {
   })
   // Get the reduced values by key.
   Object.keys(grouped).forEach(key => {
-    grouped[key] = getAggreagatedValues(grouped[key], vals)
+    grouped[key] = getAggregatedValues(grouped[key], vals, postprocessfn)
   })
-  const valueTotals = getAggreagatedValues(data, vals)
+  const valueTotals = getAggregatedValues(data, vals, postprocessfn)
 
   return {
     grouped,

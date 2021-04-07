@@ -38,7 +38,7 @@ function getDenormalizedLine (key, data, previousItem, keyCounts, valuesFields) 
   return line
 }
 
-// This functions is used to calculate later on how many rowSpan will be required
+// This function it is used later to calculate later how many rowSpan will be required
 // when generating the actual HTML table.
 function getKeysCounts (sortedKeys) {
   const keyCounts = {}
