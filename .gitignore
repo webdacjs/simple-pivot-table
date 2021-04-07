@@ -24,3 +24,5 @@ yarn-error.log*
 
 .eslintcache
 __snapshots__
+
+src/testData/budget.json

@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
-import soa from 'sort-objects-array'
 
 import getGroupedData from './getGrouped'
 import getDenormalized from './getDenormalized'

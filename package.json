@@ -11,6 +11,7 @@
   ],
   "dependencies": {
     "dayjs": "1.10.4",
+    "lodash.filter": "^4.6.0",
     "rimraf": "3.0.2",
     "sort-objects-array": "1.7.1"
   },

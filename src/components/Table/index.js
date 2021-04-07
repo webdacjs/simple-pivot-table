@@ -61,7 +61,6 @@ export default function Table ({ data, filters, columns, columnsLabels, width, h
         {cols && rows && getRows()}
       </table>
     </div>
-
   )
 }
 
