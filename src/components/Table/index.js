@@ -28,7 +28,7 @@ export default function Table ({ data, filters, columns, columnsLabels, width, h
     })
     return filteredRows
   }
-  
+
   const getFilteredRows = rawRows => filters
     ? filterIterations(rawRows)
     : rawRows

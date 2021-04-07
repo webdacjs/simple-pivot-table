@@ -30,7 +30,7 @@ export default function PivotTable ({ data, filters, rows, columns, columnsLabel
     })
     return filteredRows
   }
-  
+
   const getFilteredRows = rawRows => filters
     ? filterIterations(rawRows)
     : rawRows
@@ -50,12 +50,11 @@ export default function PivotTable ({ data, filters, rows, columns, columnsLabel
 
   const getRowLine = (row, i) => {
     const rowItems = row.map((item, y) => {
-        if (item.type === 'header' && item.visible) {
-          return <th key={`th-${i}-${y}`} rowspan={item.rowSpan}>{item.value}</th>
-        }
-        else if (item.type === 'value') {
-          return <td key={`td-${i}-${y}`}>{item.value}</td>
-        }
+      if (item.type === 'header' && item.visible) {
+        return <th key={`th-${i}-${y}`} rowspan={item.rowSpan}>{item.value}</th>
+      } else if (item.type === 'value') {
+        return <td key={`td-${i}-${y}`}>{item.value}</td>
+      }
     })
     return rowItems.filter(x => x)
   }

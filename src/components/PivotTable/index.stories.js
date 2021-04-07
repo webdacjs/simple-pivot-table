@@ -4,6 +4,7 @@ import PivotTable from './index'
 import './index.css'
 
 import testData from '../../testData/'
+import budget from '../../testData/budget.json'
 
 export default {
   title: 'PivotTable',
@@ -38,11 +39,11 @@ Default.args = {
   columnsLabels: ['Continent', 'Currency', 'Government', 'Country', 'Population Sum', 'Count'],
   values: [
     {
-      field: 'population', 
+      field: 'population',
       aggregator: 'sum',
       formatter: x => Math.round(x).toLocaleString()
-    }, 
-    {field: 'area'},
+    },
+    { field: 'area' }
   ]
 }
 
@@ -53,10 +54,10 @@ ContinentCurrency.args = {
   columnsLabels: ['Continent', 'Currency', 'Population Sum'],
   values: [
     {
-      field: 'population', 
+      field: 'population',
       aggregator: 'sum',
       formatter: x => Math.round(x).toLocaleString()
-    } 
+    }
   ]
 }
 
@@ -67,10 +68,10 @@ PopulationContinent.args = {
   columnsLabels: ['Continent', 'Population Sum'],
   values: [
     {
-      field: 'population', 
+      field: 'population',
       aggregator: 'sum',
       formatter: x => Math.round(x).toLocaleString()
-    } 
+    }
   ]
 }
 
@@ -81,7 +82,7 @@ PopulationAreaContinent.args = {
   columnsLabels: ['Continent', 'country', 'Population Sum', 'Area Sum'],
   values: [
     {
-      field: 'population', 
+      field: 'population',
       aggregator: 'sum',
       formatter: x => Math.round(x).toLocaleString()
     },
