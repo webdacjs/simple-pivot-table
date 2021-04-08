@@ -68,11 +68,11 @@ function getKeysCounts(sortedKeys) {
   return keyCounts;
 }
 
-function getDenormalized(groupedData, rows, values) {
-  var valuesFields = values.map(function (x) {
-    return x.field;
-  });
+function getDenormalized(groupedData) {
   var grouped = groupedData.grouped;
+  var valuesFields = Array.from(new Set(Object.keys(grouped).map(function (x) {
+    return Object.keys(grouped[x]);
+  }).flat()));
   var denormalizedArray = [];
   var sortedKeys = Object.keys(grouped).sort();
   var keyCounts = getKeysCounts(sortedKeys);

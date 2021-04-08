@@ -31,7 +31,7 @@ function getAggregatedValues (items, vals, postprocessfn) {
 function getCombinedKeyBasedOnRowAttributes (dataItem, rowAttributes) {
   const keyArray = []
   rowAttributes.forEach((rowAttribute, i) => {
-    keyArray.push(dataItem[rowAttribute] || 'null')
+    keyArray.push(dataItem[rowAttribute] || ' ')
   })
   const combinedKeyArray = keyArray.join(separator)
   return combinedKeyArray

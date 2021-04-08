@@ -121,3 +121,22 @@ CustomFormatters.args = {
     }
   ]
 }
+
+export const PostProcessFunction = Template.bind({})
+PostProcessFunction.args = {
+  data: testData,
+  rows: ['continent'],
+  columnsLabels: ['Continent', 'Country Count', 'Custom Field'],
+  showColumnTotals: true,
+  postprocessfn: result => {
+    return {
+      country: result.country,
+      custom_field: 10
+    }
+  },
+  values: [
+    {
+      field: 'country'
+    }
+  ]
+}

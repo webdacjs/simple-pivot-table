@@ -72,7 +72,7 @@ function PivotCsv(_ref) {
   (0, _react.useEffect)(function () {
     var groupedData = (0, _getGrouped.default)((0, _pivotCommon.getFilteredRows)(data, filters), rows, values, postprocessfn);
     setColsTotals(groupedData.valueTotals);
-    var denormalizedData = (0, _getDenormalized.default)(groupedData, rows, values);
+    var denormalizedData = (0, _getDenormalized.default)(groupedData);
     setCols((0, _pivotCommon.getColumns)(columnsLabels, rows, values));
     setRows(denormalizedData);
   }, []); // eslint-disable-line

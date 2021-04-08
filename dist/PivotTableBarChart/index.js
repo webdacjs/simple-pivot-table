@@ -5,17 +5,25 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.default = PivotTable;
+exports.default = PivotTableBarChart;
 
 var _react = _interopRequireWildcard(require("react"));
 
 var _propTypes = _interopRequireDefault(require("prop-types"));
+
+var _lodash = _interopRequireDefault(require("lodash.filter"));
 
 var _getGrouped = _interopRequireDefault(require("../utils/getGrouped"));
 
 var _getDenormalized = _interopRequireDefault(require("../utils/getDenormalized"));
 
 var _pivotCommon = require("../utils/pivotCommon");
+
+var _GaugeChart = _interopRequireDefault(require("../BarCharts/GaugeChart"));
+
+var _D3Header = _interopRequireDefault(require("../BarCharts/D3Header"));
+
+var _d3getLinearScale = _interopRequireDefault(require("../BarCharts/d3getLinearScale"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -35,18 +43,27 @@ function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
-function PivotTable(_ref) {
+function PivotTableBarChart(_ref) {
   var data = _ref.data,
       filters = _ref.filters,
       rows = _ref.rows,
       columns = _ref.columns,
       columnsLabels = _ref.columnsLabels,
+      _ref$barsMinValue = _ref.barsMinValue,
+      barsMinValue = _ref$barsMinValue === void 0 ? 0 : _ref$barsMinValue,
+      _ref$barsMaxValue = _ref.barsMaxValue,
+      barsMaxValue = _ref$barsMaxValue === void 0 ? 100 : _ref$barsMaxValue,
+      _ref$barLegendSteps = _ref.barLegendSteps,
+      barLegendSteps = _ref$barLegendSteps === void 0 ? 10 : _ref$barLegendSteps,
+      _ref$barsHeight = _ref.barsHeight,
+      barsHeight = _ref$barsHeight === void 0 ? 15 : _ref$barsHeight,
+      _ref$barType = _ref.barType,
+      barType = _ref$barType === void 0 ? 'gauge' : _ref$barType,
+      barLegendFormatter = _ref.barLegendFormatter,
       width = _ref.width,
       values = _ref.values,
       height = _ref.height,
-      postprocessfn = _ref.postprocessfn,
-      showColumnTotals = _ref.showColumnTotals,
-      showRowsTotals = _ref.showRowsTotals;
+      postprocessfn = _ref.postprocessfn;
 
   var _useState = (0, _react.useState)(),
       _useState2 = _slicedToArray(_useState, 2),
@@ -69,6 +86,7 @@ function PivotTable(_ref) {
     var denormalizedData = (0, _getDenormalized.default)(groupedData);
     setCols((0, _pivotCommon.getColumns)(columnsLabels, rows, values));
     setRows(denormalizedData);
+    (0, _d3getLinearScale.default)(0, 100, 15);
   }, []); // eslint-disable-line
 
   var getColumnLabel = function getColumnLabel(col, i) {
@@ -76,13 +94,48 @@ function PivotTable(_ref) {
   };
 
   var getHeader = function getHeader() {
-    return /*#__PURE__*/_react.default.createElement("thead", null, /*#__PURE__*/_react.default.createElement("tr", null, cols.map(function (col, i) {
+    return /*#__PURE__*/_react.default.createElement("thead", null, /*#__PURE__*/_react.default.createElement("tr", null, cols.slice(0, rows.length).map(function (col, i) {
       return /*#__PURE__*/_react.default.createElement("th", {
         key: "col-".concat(i),
         className: "pivotHeader"
       }, getColumnLabel(col, i));
-    })));
+    }), /*#__PURE__*/_react.default.createElement("th", {
+      key: "bar-header",
+      className: "bar-header"
+    }, /*#__PURE__*/_react.default.createElement(_D3Header.default, {
+      height: barsHeight,
+      legendValues: (0, _d3getLinearScale.default)(barsMinValue, barsMaxValue, barLegendSteps, barLegendFormatter)
+    }))));
   };
+
+  var getValuesObj = function getValuesObj(row) {
+    var values = (0, _lodash.default)(row, function (x) {
+      return x.type === 'value';
+    }).map(function (x) {
+      return x.value;
+    });
+    var valuesCols = cols.slice(rows.length, 100);
+    var valuesObj = values.reduce(function (obj, val, i) {
+      obj[valuesCols[i]] = val;
+      return obj;
+    }, {});
+    return {
+      valuesObj: valuesObj,
+      valuesCols: valuesCols
+    };
+  };
+
+  function getBarChart(valuesObj, valuesCols) {
+    if (barType === 'gauge') {
+      return /*#__PURE__*/_react.default.createElement(_GaugeChart.default, {
+        dataElement: valuesObj,
+        dimensions: valuesCols,
+        height: barsHeight,
+        minValue: barsMinValue,
+        maxValue: barsMaxValue
+      });
+    }
+  }
 
   var getRowLine = function getRowLine(row, i) {
     var rowItems = row.map(function (item, y) {
@@ -92,28 +145,22 @@ function PivotTable(_ref) {
           rowspan: item.rowSpan,
           className: "pivotRowHeader"
         }, item.value);
-      } else if (item.type === 'value') {
-        return /*#__PURE__*/_react.default.createElement("td", {
-          key: "td-".concat(i, "-").concat(y),
-          className: "pivotValue"
-        }, item.value);
       }
+    }).filter(function (x) {
+      return x;
     });
+
+    var _getValuesObj = getValuesObj(row),
+        valuesObj = _getValuesObj.valuesObj,
+        valuesCols = _getValuesObj.valuesCols;
+
+    rowItems.push( /*#__PURE__*/_react.default.createElement("td", {
+      key: "bar-".concat(i),
+      className: "bar"
+    }, getBarChart(valuesObj, valuesCols)));
     return rowItems.filter(function (x) {
       return x;
     });
-  };
-
-  var getColumnTotalsRow = function getColumnTotalsRow() {
-    return /*#__PURE__*/_react.default.createElement("tr", null, /*#__PURE__*/_react.default.createElement("th", {
-      key: "th-totals-col",
-      colspan: values.length,
-      className: "pivotRowHeaderTotal"
-    }, "Totals:"), Object.keys(colsTotals).map(function (item) {
-      return /*#__PURE__*/_react.default.createElement("td", {
-        className: "pivotRowValueTotal"
-      }, colsTotals[item]);
-    }));
   };
 
   var getRows = function getRows() {
@@ -121,7 +168,7 @@ function PivotTable(_ref) {
       return /*#__PURE__*/_react.default.createElement("tr", {
         key: "row-".concat(i)
       }, getRowLine(row, i));
-    }), showColumnTotals && getColumnTotalsRow());
+    }));
   };
 
   return /*#__PURE__*/_react.default.createElement("div", null, /*#__PURE__*/_react.default.createElement("table", {
@@ -133,16 +180,20 @@ function PivotTable(_ref) {
   }, cols && getHeader(), cols && pivotRows && getRows()));
 }
 
-PivotTable.propTypes = {
+PivotTableBarChart.propTypes = {
   data: _propTypes.default.array,
   rows: _propTypes.default.array,
   columns: _propTypes.default.array,
   columnsLabels: _propTypes.default.array,
+  barType: _propTypes.default.string,
+  barLegendFormatter: _propTypes.default.func,
+  barLegendSteps: _propTypes.default.number,
+  barsHeight: _propTypes.default.number,
+  barsMinValue: _propTypes.default.number,
+  barsMaxValue: _propTypes.default.number,
   values: _propTypes.default.array,
   filters: _propTypes.default.array,
   height: _propTypes.default.number,
   postprocessfn: _propTypes.default.func,
-  showColumnTotals: _propTypes.default.bool,
-  showRowsTotals: _propTypes.default.bool,
   width: _propTypes.default.number
 };

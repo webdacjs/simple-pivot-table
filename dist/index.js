@@ -21,11 +21,19 @@ Object.defineProperty(exports, "PivotTable", {
     return _PivotTable.default;
   }
 });
+Object.defineProperty(exports, "PivotTableBarChart", {
+  enumerable: true,
+  get: function get() {
+    return _PivotTableBarChart.default;
+  }
+});
 
 var _Table = _interopRequireDefault(require("./Table"));
 
 var _PivotCsv = _interopRequireDefault(require("./PivotCsv"));
 
 var _PivotTable = _interopRequireDefault(require("./PivotTable"));
+
+var _PivotTableBarChart = _interopRequireDefault(require("./PivotTableBarChart"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }

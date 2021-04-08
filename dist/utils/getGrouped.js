@@ -48,7 +48,7 @@ function getAggregatedValues(items, vals, postprocessfn) {
 function getCombinedKeyBasedOnRowAttributes(dataItem, rowAttributes) {
   var keyArray = [];
   rowAttributes.forEach(function (rowAttribute, i) {
-    keyArray.push(dataItem[rowAttribute] || 'null');
+    keyArray.push(dataItem[rowAttribute] || ' ');
   });
   var combinedKeyArray = keyArray.join(_settings.separator);
   return combinedKeyArray;
