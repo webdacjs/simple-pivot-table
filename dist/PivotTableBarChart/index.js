@@ -87,7 +87,7 @@ function PivotTableBarChart(_ref) {
     setCols((0, _pivotCommon.getColumns)(columnsLabels, rows, values));
     setRows(denormalizedData);
     (0, _d3getLinearScale.default)(0, 100, 15);
-  }, []); // eslint-disable-line
+  }, [data]); // eslint-disable-line
 
   var getColumnLabel = function getColumnLabel(col, i) {
     return columnsLabels && columnsLabels[i] ? columnsLabels[i] : col;

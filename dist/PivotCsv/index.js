@@ -75,7 +75,7 @@ function PivotCsv(_ref) {
     var denormalizedData = (0, _getDenormalized.default)(groupedData);
     setCols((0, _pivotCommon.getColumns)(columnsLabels, rows, values));
     setRows(denormalizedData);
-  }, []); // eslint-disable-line
+  }, [data]); // eslint-disable-line
 
   function getCsvContents() {
     var header = "\"".concat(cols.join('","'), "\"");

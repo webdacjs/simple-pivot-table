@@ -19,7 +19,7 @@ export default function Table ({ data, filters, columns, columnsLabels, width, h
     setCols(columns || Object.keys(data[0]))
     setRows(data)
     setAsc(true)
-  }, []) // eslint-disable-line
+  }, [data]) // eslint-disable-line
 
   function filterIterations (rawRows) {
     let filteredRows = [...rawRows]

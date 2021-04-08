@@ -29,7 +29,7 @@ export default function PivotTable ({
     const denormalizedData = getDenormalized(groupedData)
     setCols(getColumns(columnsLabels, rows, values))
     setRows(denormalizedData)
-  }, []) // eslint-disable-line
+  }, [data]) // eslint-disable-line
 
   const getColumnLabel = (col, i) =>
     columnsLabels && columnsLabels[i] ? columnsLabels[i] : col

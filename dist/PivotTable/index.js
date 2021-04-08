@@ -69,7 +69,7 @@ function PivotTable(_ref) {
     var denormalizedData = (0, _getDenormalized.default)(groupedData);
     setCols((0, _pivotCommon.getColumns)(columnsLabels, rows, values));
     setRows(denormalizedData);
-  }, []); // eslint-disable-line
+  }, [data]); // eslint-disable-line
 
   var getColumnLabel = function getColumnLabel(col, i) {
     return columnsLabels && columnsLabels[i] ? columnsLabels[i] : col;
