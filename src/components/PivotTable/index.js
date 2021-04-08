@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 
-import getGroupedData from './getGrouped'
-import getDenormalized from './getDenormalized'
+import getGroupedData from '../utils/getGrouped'
+import getDenormalized from '../utils/getDenormalized'
 
 export default function PivotTable ({ data, filters, rows, columns, columnsLabels, width, values, height, postprocessfn }) {
   const [cols, setCols] = useState()

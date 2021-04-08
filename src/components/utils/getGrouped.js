@@ -26,14 +26,21 @@ function getAggregatedValues (items, vals, postprocessfn) {
   return postprocessfn ? postprocessfn(reduced) : reduced
 }
 
-export default function getGroupedData (data, rows, vals, postprocessfn) {
+// This function creates a combined key that is used to aggregated data.
+// ie. Europe___Switzerland, etc
+function getCombinedKeyBasedOnRowAttributes (dataItem, rowAttributes) {
+  const keyArray = []
+  rowAttributes.forEach((rowAttribute, i) => {
+    keyArray.push(dataItem[rowAttribute] || 'null')
+  })
+  const combinedKeyArray = keyArray.join(separator)
+  return combinedKeyArray
+}
+
+export default function getGroupedData (data, rowAttributes, vals, postprocessfn) {
   const grouped = {}
   data.forEach(dataItem => {
-    const keyArray = []
-    rows.forEach((row, i) => {
-      keyArray.push(dataItem[row] || 'null')
-    })
-    const combinedKeyArray = keyArray.join(separator)
+    const combinedKeyArray = getCombinedKeyBasedOnRowAttributes(dataItem, rowAttributes)
     grouped[combinedKeyArray] = grouped[combinedKeyArray] || []
     grouped[combinedKeyArray].push(dataItem)
   })
