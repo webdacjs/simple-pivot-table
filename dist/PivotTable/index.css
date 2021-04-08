@@ -41,6 +41,11 @@ body {
 }
 
 
+.table th.pivotRowHeaderTotal {
+    text-align: right;
+    font-weight: bold;
+}
+
 .table tr:nth-child(even) {
     background-color: #f2f2f2;
 }

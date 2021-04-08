@@ -3,37 +3,33 @@ import PropTypes from 'prop-types'
 
 import getGroupedData from '../utils/getGrouped'
 import getDenormalized from '../utils/getDenormalized'
+import { getColumns, getFilteredRows } from '../utils/pivotCommon'
 
-export default function PivotTable ({ data, filters, rows, columns, columnsLabels, width, values, height, postprocessfn }) {
+export default function PivotTable ({
+  data,
+  filters,
+  rows,
+  columns,
+  columnsLabels,
+  width,
+  values,
+  height,
+  postprocessfn,
+  showColumnTotals,
+  showRowsTotals
+}) {
   const [cols, setCols] = useState()
   const [pivotRows, setRows] = useState()
-
-  function getColumns () {
-    if (columnsLabels) {
-      return columnsLabels
-    }
-    return [...rows, ...values.map(x => x.field)]
-  }
+  const [colsTotals, setColsTotals] = useState()
 
   useEffect(() => {
     const groupedData = getGroupedData(
-      getFilteredRows(data), rows, values, postprocessfn)
+      getFilteredRows(data, filters), rows, values, postprocessfn)
+    setColsTotals(groupedData.valueTotals)
     const denormalizedData = getDenormalized(groupedData, rows, values)
-    setCols(getColumns())
+    setCols(getColumns(columnsLabels, rows, values))
     setRows(denormalizedData)
   }, []) // eslint-disable-line
-
-  function filterIterations (rawRows) {
-    let filteredRows = [...rawRows]
-    filters.forEach(filterFn => {
-      filteredRows = filteredRows.filter(filterFn)
-    })
-    return filteredRows
-  }
-
-  const getFilteredRows = rawRows => filters
-    ? filterIterations(rawRows)
-    : rawRows
 
   const getColumnLabel = (col, i) =>
     columnsLabels && columnsLabels[i] ? columnsLabels[i] : col
@@ -59,12 +55,20 @@ export default function PivotTable ({ data, filters, rows, columns, columnsLabel
     return rowItems.filter(x => x)
   }
 
+  const getColumnTotalsRow = () =>
+    <tr>
+      <th key='th-totals-col' colspan={values.length} className='pivotRowHeaderTotal'>Totals:</th>
+      {Object.keys(colsTotals).map(item =>
+        <td className='pivotRowValueTotal'>{colsTotals[item]}</td>)}
+    </tr>
+
   const getRows = () =>
     <tbody>
       {pivotRows.map((row, i) =>
         <tr key={`row-${i}`}>
           {getRowLine(row, i)}
         </tr>)}
+      {showColumnTotals && getColumnTotalsRow()}
     </tbody>
 
   return (
@@ -86,5 +90,7 @@ PivotTable.propTypes = {
   filters: PropTypes.array,
   height: PropTypes.number,
   postprocessfn: PropTypes.func,
+  showColumnTotals: PropTypes.bool,
+  showRowsTotals: PropTypes.bool,
   width: PropTypes.number
 }

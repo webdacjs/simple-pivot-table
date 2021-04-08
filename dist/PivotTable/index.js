@@ -15,19 +15,13 @@ var _getGrouped = _interopRequireDefault(require("../utils/getGrouped"));
 
 var _getDenormalized = _interopRequireDefault(require("../utils/getDenormalized"));
 
+var _pivotCommon = require("../utils/pivotCommon");
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
-
-function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
-
-function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
-
-function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter); }
-
-function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
 
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 
@@ -50,7 +44,9 @@ function PivotTable(_ref) {
       width = _ref.width,
       values = _ref.values,
       height = _ref.height,
-      postprocessfn = _ref.postprocessfn;
+      postprocessfn = _ref.postprocessfn,
+      showColumnTotals = _ref.showColumnTotals,
+      showRowsTotals = _ref.showRowsTotals;
 
   var _useState = (0, _react.useState)(),
       _useState2 = _slicedToArray(_useState, 2),
@@ -62,35 +58,18 @@ function PivotTable(_ref) {
       pivotRows = _useState4[0],
       setRows = _useState4[1];
 
-  function getColumns() {
-    if (columnsLabels) {
-      return columnsLabels;
-    }
-
-    return [].concat(_toConsumableArray(rows), _toConsumableArray(values.map(function (x) {
-      return x.field;
-    })));
-  }
+  var _useState5 = (0, _react.useState)(),
+      _useState6 = _slicedToArray(_useState5, 2),
+      colsTotals = _useState6[0],
+      setColsTotals = _useState6[1];
 
   (0, _react.useEffect)(function () {
-    var groupedData = (0, _getGrouped.default)(getFilteredRows(data), rows, values, postprocessfn);
+    var groupedData = (0, _getGrouped.default)((0, _pivotCommon.getFilteredRows)(data, filters), rows, values, postprocessfn);
+    setColsTotals(groupedData.valueTotals);
     var denormalizedData = (0, _getDenormalized.default)(groupedData, rows, values);
-    setCols(getColumns());
+    setCols((0, _pivotCommon.getColumns)(columnsLabels, rows, values));
     setRows(denormalizedData);
   }, []); // eslint-disable-line
-
-  function filterIterations(rawRows) {
-    var filteredRows = _toConsumableArray(rawRows);
-
-    filters.forEach(function (filterFn) {
-      filteredRows = filteredRows.filter(filterFn);
-    });
-    return filteredRows;
-  }
-
-  var getFilteredRows = function getFilteredRows(rawRows) {
-    return filters ? filterIterations(rawRows) : rawRows;
-  };
 
   var getColumnLabel = function getColumnLabel(col, i) {
     return columnsLabels && columnsLabels[i] ? columnsLabels[i] : col;
@@ -125,12 +104,24 @@ function PivotTable(_ref) {
     });
   };
 
+  var getColumnTotalsRow = function getColumnTotalsRow() {
+    return /*#__PURE__*/_react.default.createElement("tr", null, /*#__PURE__*/_react.default.createElement("th", {
+      key: "th-totals-col",
+      colspan: values.length,
+      className: "pivotRowHeaderTotal"
+    }, "Totals:"), Object.keys(colsTotals).map(function (item) {
+      return /*#__PURE__*/_react.default.createElement("td", {
+        className: "pivotRowValueTotal"
+      }, colsTotals[item]);
+    }));
+  };
+
   var getRows = function getRows() {
     return /*#__PURE__*/_react.default.createElement("tbody", null, pivotRows.map(function (row, i) {
       return /*#__PURE__*/_react.default.createElement("tr", {
         key: "row-".concat(i)
       }, getRowLine(row, i));
-    }));
+    }), showColumnTotals && getColumnTotalsRow());
   };
 
   return /*#__PURE__*/_react.default.createElement("div", null, /*#__PURE__*/_react.default.createElement("table", {
@@ -151,5 +142,7 @@ PivotTable.propTypes = {
   filters: _propTypes.default.array,
   height: _propTypes.default.number,
   postprocessfn: _propTypes.default.func,
+  showColumnTotals: _propTypes.default.bool,
+  showRowsTotals: _propTypes.default.bool,
   width: _propTypes.default.number
 };

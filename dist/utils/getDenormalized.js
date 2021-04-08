@@ -72,8 +72,7 @@ function getDenormalized(groupedData, rows, values) {
   var valuesFields = values.map(function (x) {
     return x.field;
   });
-  var grouped = groupedData.grouped,
-      totals = groupedData.totals;
+  var grouped = groupedData.grouped;
   var denormalizedArray = [];
   var sortedKeys = Object.keys(grouped).sort();
   var keyCounts = getKeysCounts(sortedKeys);
