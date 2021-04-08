@@ -59,6 +59,7 @@ function PivotTableBarChart(_ref) {
       barsHeight = _ref$barsHeight === void 0 ? 15 : _ref$barsHeight,
       _ref$barType = _ref.barType,
       barType = _ref$barType === void 0 ? 'gauge' : _ref$barType,
+      barLegendFormatter = _ref.barLegendFormatter,
       width = _ref.width,
       values = _ref.values,
       height = _ref.height,
@@ -82,7 +83,7 @@ function PivotTableBarChart(_ref) {
   (0, _react.useEffect)(function () {
     var groupedData = (0, _getGrouped.default)((0, _pivotCommon.getFilteredRows)(data, filters), rows, values, postprocessfn);
     setColsTotals(groupedData.valueTotals);
-    var denormalizedData = (0, _getDenormalized.default)(groupedData, rows, values);
+    var denormalizedData = (0, _getDenormalized.default)(groupedData);
     setCols((0, _pivotCommon.getColumns)(columnsLabels, rows, values));
     setRows(denormalizedData);
     (0, _d3getLinearScale.default)(0, 100, 15);
@@ -103,7 +104,7 @@ function PivotTableBarChart(_ref) {
       className: "bar-header"
     }, /*#__PURE__*/_react.default.createElement(_D3Header.default, {
       height: barsHeight,
-      legendValues: (0, _d3getLinearScale.default)(barsMinValue, barsMaxValue, barLegendSteps)
+      legendValues: (0, _d3getLinearScale.default)(barsMinValue, barsMaxValue, barLegendSteps, barLegendFormatter)
     }))));
   };
 
@@ -185,6 +186,7 @@ PivotTableBarChart.propTypes = {
   columns: _propTypes.default.array,
   columnsLabels: _propTypes.default.array,
   barType: _propTypes.default.string,
+  barLegendFormatter: _propTypes.default.func,
   barLegendSteps: _propTypes.default.number,
   barsHeight: _propTypes.default.number,
   barsMinValue: _propTypes.default.number,
