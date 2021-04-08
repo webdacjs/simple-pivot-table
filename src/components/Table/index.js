@@ -56,7 +56,7 @@ export default function Table ({ data, filters, columns, columnsLabels, width, h
 
   return (
     <div>
-      <table className='table table-sortable' style={{ width, height }}>
+      <table className='simple-table' style={{ width, height }}>
         {cols && getHeader()}
         {cols && rows && getRows()}
       </table>

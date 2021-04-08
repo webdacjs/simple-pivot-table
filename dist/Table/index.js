@@ -117,7 +117,7 @@ function Table(_ref) {
   };
 
   return /*#__PURE__*/_react.default.createElement("div", null, /*#__PURE__*/_react.default.createElement("table", {
-    className: "table table-sortable",
+    className: "simple-table",
     style: {
       width: width,
       height: height

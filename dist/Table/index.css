@@ -9,18 +9,18 @@ body {
     color: #333333;
 }
 
-.table {
+.simple-table {
     border-collapse: collapse;
     border-spacing: 0;
     width: 100%;
     border: 1px solid #ddd;
   }
   
-.table th, td {
+.simple-table th, td {
     text-align: left;
     padding: 0.6em;
 }
   
-.table tr:nth-child(even) {
+.simple-table tr:nth-child(even) {
     background-color: #f2f2f2;
 }

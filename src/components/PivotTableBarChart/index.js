@@ -106,7 +106,7 @@ export default function PivotTableBarChart ({
 
   return (
     <div>
-      <table className='table' style={{ width, height }}>
+      <table className='simple-pivot-table' style={{ width, height }}>
         {cols && getHeader()}
         {cols && pivotRows && getRows()}
       </table>

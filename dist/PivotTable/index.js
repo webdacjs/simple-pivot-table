@@ -125,7 +125,7 @@ function PivotTable(_ref) {
   };
 
   return /*#__PURE__*/_react.default.createElement("div", null, /*#__PURE__*/_react.default.createElement("table", {
-    className: "table",
+    className: "simple-pivot-table",
     style: {
       width: width,
       height: height
