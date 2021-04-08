@@ -76,11 +76,16 @@ function PivotTable(_ref) {
   };
 
   var getHeader = function getHeader() {
-    return /*#__PURE__*/_react.default.createElement("thead", null, /*#__PURE__*/_react.default.createElement("tr", null, cols.map(function (col, i) {
+    return /*#__PURE__*/_react.default.createElement("thead", null, /*#__PURE__*/_react.default.createElement("tr", null, cols.slice(0, rows.length).map(function (col, i) {
       return /*#__PURE__*/_react.default.createElement("th", {
         key: "col-".concat(i),
         className: "pivotHeader"
       }, getColumnLabel(col, i));
+    }), cols.slice(rows.length, 100).map(function (col, i) {
+      return /*#__PURE__*/_react.default.createElement("th", {
+        key: "col-".concat(i + rows.length),
+        className: "pivotHeaderValue"
+      }, getColumnLabel(col, i + rows.length));
     })));
   };
 

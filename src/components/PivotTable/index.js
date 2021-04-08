@@ -37,9 +37,13 @@ export default function PivotTable ({
   const getHeader = () =>
     <thead>
       <tr>
-        {cols.map((col, i) =>
+        {cols.slice(0, rows.length).map((col, i) =>
           <th key={`col-${i}`} className='pivotHeader'>
             {getColumnLabel(col, i)}
+          </th>)}
+        {cols.slice(rows.length, 100).map((col, i) =>
+          <th key={`col-${i + rows.length}`} className='pivotHeaderValue'>
+            {getColumnLabel(col, i + rows.length)}
           </th>)}
       </tr>
     </thead>
