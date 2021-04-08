@@ -41,16 +41,23 @@ function getAggregatedValues(items, vals, postprocessfn) {
     reduced[val.field] = getReducedValue(values, val.aggregator, val.formatter);
   });
   return postprocessfn ? postprocessfn(reduced) : reduced;
+} // This function creates a combined key that is used to aggregated data.
+// ie. Europe___Switzerland, etc
+
+
+function getCombinedKeyBasedOnRowAttributes(dataItem, rowAttributes) {
+  var keyArray = [];
+  rowAttributes.forEach(function (rowAttribute, i) {
+    keyArray.push(dataItem[rowAttribute] || 'null');
+  });
+  var combinedKeyArray = keyArray.join(_settings.separator);
+  return combinedKeyArray;
 }
 
-function getGroupedData(data, rows, vals, postprocessfn) {
+function getGroupedData(data, rowAttributes, vals, postprocessfn) {
   var grouped = {};
   data.forEach(function (dataItem) {
-    var keyArray = [];
-    rows.forEach(function (row, i) {
-      keyArray.push(dataItem[row] || 'null');
-    });
-    var combinedKeyArray = keyArray.join(_settings.separator);
+    var combinedKeyArray = getCombinedKeyBasedOnRowAttributes(dataItem, rowAttributes);
     grouped[combinedKeyArray] = grouped[combinedKeyArray] || [];
     grouped[combinedKeyArray].push(dataItem);
   }); // Get the reduced values by key.
