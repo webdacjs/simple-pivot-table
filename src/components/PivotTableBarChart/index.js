@@ -21,6 +21,7 @@ export default function PivotTableBarChart ({
   barLegendSteps = 10,
   barsHeight = 15,
   barType = 'gauge',
+  barLegendFormatter,
   width,
   values,
   height,
@@ -34,7 +35,7 @@ export default function PivotTableBarChart ({
     const groupedData = getGroupedData(
       getFilteredRows(data, filters), rows, values, postprocessfn)
     setColsTotals(groupedData.valueTotals)
-    const denormalizedData = getDenormalized(groupedData, rows, values)
+    const denormalizedData = getDenormalized(groupedData)
     setCols(getColumns(columnsLabels, rows, values))
     setRows(denormalizedData)
     getLinearScale(0, 100, 15)
@@ -53,7 +54,7 @@ export default function PivotTableBarChart ({
         <th key='bar-header' className='bar-header'>
           <D3Header
             height={barsHeight}
-            legendValues={getLinearScale(barsMinValue, barsMaxValue, barLegendSteps)}
+            legendValues={getLinearScale(barsMinValue, barsMaxValue, barLegendSteps, barLegendFormatter)}
           />
         </th>
       </tr>
@@ -119,6 +120,7 @@ PivotTableBarChart.propTypes = {
   columns: PropTypes.array,
   columnsLabels: PropTypes.array,
   barType: PropTypes.string,
+  barLegendFormatter: PropTypes.func,
   barLegendSteps: PropTypes.number,
   barsHeight: PropTypes.number,
   barsMinValue: PropTypes.number,
