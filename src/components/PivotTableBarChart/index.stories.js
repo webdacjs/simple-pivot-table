@@ -49,6 +49,7 @@ export const Default = Template.bind({})
 Default.args = {
   data: testData,
   rows: ['continent', 'country'],
+  // China population
   barsMaxValue: 1443622060,
   barLegendSteps: 5,
   values: [
@@ -61,6 +62,12 @@ TwoDimensions.args = {
   data: testData,
   rows: ['continent', 'currency_code', 'government', 'country'],
   columnsLabels: ['Continent', 'Currency', 'Government', 'Country', 'Population Sum', 'Count'],
+  postprocessfn: result => {
+    return {
+      population: 100,
+      area: Math.round((result.population * 100) / (result.area || 1) / 1000)
+    }
+  },
   values: [
     {
       field: 'population',
