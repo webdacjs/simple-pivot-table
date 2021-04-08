@@ -99,7 +99,8 @@ function PivotTable(_ref) {
   var getHeader = function getHeader() {
     return /*#__PURE__*/_react.default.createElement("thead", null, /*#__PURE__*/_react.default.createElement("tr", null, cols.map(function (col, i) {
       return /*#__PURE__*/_react.default.createElement("th", {
-        key: "col-".concat(i)
+        key: "col-".concat(i),
+        className: "pivotHeader"
       }, getColumnLabel(col, i));
     })));
   };
@@ -109,11 +110,13 @@ function PivotTable(_ref) {
       if (item.type === 'header' && item.visible) {
         return /*#__PURE__*/_react.default.createElement("th", {
           key: "th-".concat(i, "-").concat(y),
-          rowspan: item.rowSpan
+          rowspan: item.rowSpan,
+          className: "pivotRowHeader"
         }, item.value);
       } else if (item.type === 'value') {
         return /*#__PURE__*/_react.default.createElement("td", {
-          key: "td-".concat(i, "-").concat(y)
+          key: "td-".concat(i, "-").concat(y),
+          className: "pivotValue"
         }, item.value);
       }
     });
@@ -131,7 +134,7 @@ function PivotTable(_ref) {
   };
 
   return /*#__PURE__*/_react.default.createElement("div", null, /*#__PURE__*/_react.default.createElement("table", {
-    className: "table table-sortable",
+    className: "table",
     style: {
       width: width,
       height: height

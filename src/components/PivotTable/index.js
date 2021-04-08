@@ -42,7 +42,7 @@ export default function PivotTable ({ data, filters, rows, columns, columnsLabel
     <thead>
       <tr>
         {cols.map((col, i) =>
-          <th key={`col-${i}`}>
+          <th key={`col-${i}`} className='pivotHeader'>
             {getColumnLabel(col, i)}
           </th>)}
       </tr>
@@ -51,9 +51,9 @@ export default function PivotTable ({ data, filters, rows, columns, columnsLabel
   const getRowLine = (row, i) => {
     const rowItems = row.map((item, y) => {
       if (item.type === 'header' && item.visible) {
-        return <th key={`th-${i}-${y}`} rowspan={item.rowSpan}>{item.value}</th>
+        return <th key={`th-${i}-${y}`} rowspan={item.rowSpan} className='pivotRowHeader'>{item.value}</th>
       } else if (item.type === 'value') {
-        return <td key={`td-${i}-${y}`}>{item.value}</td>
+        return <td key={`td-${i}-${y}`} className='pivotValue'>{item.value}</td>
       }
     })
     return rowItems.filter(x => x)
@@ -69,7 +69,7 @@ export default function PivotTable ({ data, filters, rows, columns, columnsLabel
 
   return (
     <div>
-      <table className='table table-sortable' style={{ width, height }}>
+      <table className='table' style={{ width, height }}>
         {cols && getHeader()}
         {cols && pivotRows && getRows()}
       </table>
