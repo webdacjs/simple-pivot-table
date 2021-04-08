@@ -75,7 +75,6 @@ function PivotTable(_ref) {
   (0, _react.useEffect)(function () {
     var groupedData = (0, _getGrouped.default)(getFilteredRows(data), rows, values, postprocessfn);
     var denormalizedData = (0, _getDenormalized.default)(groupedData, rows, values);
-    console.log(denormalizedData);
     setCols(getColumns());
     setRows(denormalizedData);
   }, []); // eslint-disable-line

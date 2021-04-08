@@ -19,7 +19,6 @@ export default function PivotTable ({ data, filters, rows, columns, columnsLabel
     const groupedData = getGroupedData(
       getFilteredRows(data), rows, values, postprocessfn)
     const denormalizedData = getDenormalized(groupedData, rows, values)
-    console.log(denormalizedData)
     setCols(getColumns())
     setRows(denormalizedData)
   }, []) // eslint-disable-line
