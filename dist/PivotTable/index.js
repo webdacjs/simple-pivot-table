@@ -11,9 +11,9 @@ var _react = _interopRequireWildcard(require("react"));
 
 var _propTypes = _interopRequireDefault(require("prop-types"));
 
-var _getGrouped = _interopRequireDefault(require("./getGrouped"));
+var _getGrouped = _interopRequireDefault(require("../utils/getGrouped"));
 
-var _getDenormalized = _interopRequireDefault(require("./getDenormalized"));
+var _getDenormalized = _interopRequireDefault(require("../utils/getDenormalized"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
