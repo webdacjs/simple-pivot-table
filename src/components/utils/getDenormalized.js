@@ -56,9 +56,12 @@ function getKeysCounts (sortedKeys) {
   return keyCounts
 }
 
-export default function getDenormalized (groupedData, rows, values) {
-  const valuesFields = values.map(x => x.field)
+export default function getDenormalized (groupedData) {
   const { grouped } = groupedData
+  const valuesFields = Array.from(
+    new Set(Object.keys(grouped).map(
+      x => Object.keys(grouped[x])).flat()
+    ))
   const denormalizedArray = []
   const sortedKeys = Object.keys(grouped).sort()
   const keyCounts = getKeysCounts(sortedKeys)
