@@ -1,7 +1,7 @@
 import queue from 'queue'
 
 const q = queue()
-q.concurrency = 80
+q.concurrency = 100
 q.autostart = true
 
 export function setD3BuilderConcurrency (concurrency) {
