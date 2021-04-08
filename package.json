@@ -9,6 +9,7 @@
     "dist",
     "README.md"
   ],
+  "homepage": "http://webdacjs.github.io/simple-pivot-table",
   "dependencies": {
     "dayjs": "1.10.4",
     "lodash.filter": "^4.6.0",
@@ -20,6 +21,8 @@
     "lint:fix": "standard . --fix",
     "storybook": "start-storybook -p 6006 -s public",
     "build-storybook": "build-storybook -s public",
+    "predeploy": "npm run build-storybook",
+    "deploy-storybook": "gh-pages -d storybook-static",
     "clean": "rimraf dist",
     "compile": "npm run clean && cross-env NODE_ENV=production babel src/components --out-dir dist --copy-files --no-copy-ignored --ignore __tests__,spec.js,test.js,**/*.stories.js,__snapshots__"
   },
@@ -63,6 +66,7 @@
     "@testing-library/user-event": "12.6.2",
     "babel-plugin-macros": "3.0.1",
     "cross-env": "7.0.3",
+    "gh-pages": "^3.1.0",
     "prop-types": "15.7.2",
     "react": "17.0.1",
     "react-dom": "17.0.1",
