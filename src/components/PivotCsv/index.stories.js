@@ -11,13 +11,16 @@ export default {
 
 const Template = ({
   data,
-  columns,
-  rows,
-  columnsLabels,
   filters,
-  height,
+  rows,
+  columns,
+  columnsLabels,
+  width,
   values,
-  width
+  height,
+  postprocessfn,
+  showColumnTotals,
+  showRowsTotals
 }) =>
   <PivotCsv
     data={data}
@@ -28,6 +31,9 @@ const Template = ({
     height={height}
     values={values}
     width={width}
+    postprocessfn={postprocessfn}
+    showColumnTotals={showColumnTotals}
+    showRowsTotals={showRowsTotals}
   />
 
 export const Default = Template.bind({})
@@ -99,6 +105,7 @@ CustomFormatters.args = {
   data: testData,
   rows: ['continent', 'country'],
   columnsLabels: ['Continent', 'country', 'Population Sum', 'Area Sum'],
+  showColumnTotals: true,
   values: [
     {
       field: 'population',

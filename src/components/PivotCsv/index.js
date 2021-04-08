@@ -3,46 +3,47 @@ import PropTypes from 'prop-types'
 
 import getGroupedData from '../utils/getGrouped'
 import getDenormalized from '../utils/getDenormalized'
+import { getColumns, getFilteredRows } from '../utils/pivotCommon'
 
-export default function PivotCsv ({ data, filters, rows, columns, columnsLabels, values, postprocessfn }) {
+export default function PivotCsv ({
+  data,
+  filters,
+  rows,
+  columns,
+  columnsLabels,
+  values,
+  postprocessfn,
+  showColumnTotals,
+  showRowsTotals
+}) {
   const [cols, setCols] = useState()
   const [pivotRows, setRows] = useState()
-
-  function getColumns () {
-    if (columnsLabels) {
-      return columnsLabels
-    }
-    return [...rows, ...values.map(x => x.field)]
-  }
+  const [colsTotals, setColsTotals] = useState()
 
   useEffect(() => {
     const groupedData = getGroupedData(
-      getFilteredRows(data), rows, values, postprocessfn)
+      getFilteredRows(data, filters), rows, values, postprocessfn)
+    setColsTotals(groupedData.valueTotals)
     const denormalizedData = getDenormalized(groupedData, rows, values)
-    setCols(getColumns())
+    setCols(getColumns(columnsLabels, rows, values))
     setRows(denormalizedData)
   }, []) // eslint-disable-line
 
-  function filterIterations (rawRows) {
-    let filteredRows = [...rawRows]
-    filters.forEach(filterFn => {
-      filteredRows = filteredRows.filter(filterFn)
-    })
-    return filteredRows
-  }
-
-  const getFilteredRows = rawRows => filters
-    ? filterIterations(rawRows)
-    : rawRows
-
   function getCsvContents () {
     const header = `"${cols.join('","')}"`
-    const rows = pivotRows
+    const thisRows = pivotRows
       .map(x =>
         x.map(y => y.value)
           .map(z => z)
       ).map(x => `"${x.join('","')}"`)
-    const combined = [header, ...rows].join('\n')
+    if (showColumnTotals) {
+      const totalLine = new Array(rows.length).fill('totals')
+      Object.keys(colsTotals).forEach(item => {
+        totalLine.push(colsTotals[item])
+      })
+      thisRows.push(`"${totalLine.join('","')}"`)
+    }
+    const combined = [header, ...thisRows].join('\n')
     return <textarea style={{ width: '100%', height: '500px' }} value={combined} readOnly />
   }
 
@@ -62,5 +63,7 @@ PivotCsv.propTypes = {
   filters: PropTypes.array,
   height: PropTypes.number,
   postprocessfn: PropTypes.func,
+  showColumnTotals: PropTypes.bool,
+  showRowsTotals: PropTypes.bool,
   width: PropTypes.number
 }

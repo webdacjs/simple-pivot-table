@@ -15,6 +15,8 @@ var _getGrouped = _interopRequireDefault(require("../utils/getGrouped"));
 
 var _getDenormalized = _interopRequireDefault(require("../utils/getDenormalized"));
 
+var _pivotCommon = require("../utils/pivotCommon");
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
@@ -48,7 +50,9 @@ function PivotCsv(_ref) {
       columns = _ref.columns,
       columnsLabels = _ref.columnsLabels,
       values = _ref.values,
-      postprocessfn = _ref.postprocessfn;
+      postprocessfn = _ref.postprocessfn,
+      showColumnTotals = _ref.showColumnTotals,
+      showRowsTotals = _ref.showRowsTotals;
 
   var _useState = (0, _react.useState)(),
       _useState2 = _slicedToArray(_useState, 2),
@@ -60,39 +64,22 @@ function PivotCsv(_ref) {
       pivotRows = _useState4[0],
       setRows = _useState4[1];
 
-  function getColumns() {
-    if (columnsLabels) {
-      return columnsLabels;
-    }
-
-    return [].concat(_toConsumableArray(rows), _toConsumableArray(values.map(function (x) {
-      return x.field;
-    })));
-  }
+  var _useState5 = (0, _react.useState)(),
+      _useState6 = _slicedToArray(_useState5, 2),
+      colsTotals = _useState6[0],
+      setColsTotals = _useState6[1];
 
   (0, _react.useEffect)(function () {
-    var groupedData = (0, _getGrouped.default)(getFilteredRows(data), rows, values, postprocessfn);
+    var groupedData = (0, _getGrouped.default)((0, _pivotCommon.getFilteredRows)(data, filters), rows, values, postprocessfn);
+    setColsTotals(groupedData.valueTotals);
     var denormalizedData = (0, _getDenormalized.default)(groupedData, rows, values);
-    setCols(getColumns());
+    setCols((0, _pivotCommon.getColumns)(columnsLabels, rows, values));
     setRows(denormalizedData);
   }, []); // eslint-disable-line
 
-  function filterIterations(rawRows) {
-    var filteredRows = _toConsumableArray(rawRows);
-
-    filters.forEach(function (filterFn) {
-      filteredRows = filteredRows.filter(filterFn);
-    });
-    return filteredRows;
-  }
-
-  var getFilteredRows = function getFilteredRows(rawRows) {
-    return filters ? filterIterations(rawRows) : rawRows;
-  };
-
   function getCsvContents() {
     var header = "\"".concat(cols.join('","'), "\"");
-    var rows = pivotRows.map(function (x) {
+    var thisRows = pivotRows.map(function (x) {
       return x.map(function (y) {
         return y.value;
       }).map(function (z) {
@@ -101,7 +88,16 @@ function PivotCsv(_ref) {
     }).map(function (x) {
       return "\"".concat(x.join('","'), "\"");
     });
-    var combined = [header].concat(_toConsumableArray(rows)).join('\n');
+
+    if (showColumnTotals) {
+      var totalLine = new Array(rows.length).fill('totals');
+      Object.keys(colsTotals).forEach(function (item) {
+        totalLine.push(colsTotals[item]);
+      });
+      thisRows.push("\"".concat(totalLine.join('","'), "\""));
+    }
+
+    var combined = [header].concat(_toConsumableArray(thisRows)).join('\n');
     return /*#__PURE__*/_react.default.createElement("textarea", {
       style: {
         width: '100%',
@@ -124,5 +120,7 @@ PivotCsv.propTypes = {
   filters: _propTypes.default.array,
   height: _propTypes.default.number,
   postprocessfn: _propTypes.default.func,
+  showColumnTotals: _propTypes.default.bool,
+  showRowsTotals: _propTypes.default.bool,
   width: _propTypes.default.number
 };
