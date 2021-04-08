@@ -1,7 +1,6 @@
 import React from 'react'
 
 import PivotCsv from './index'
-import './index.css'
 
 import testData from '../../testData/'
 
