@@ -26,3 +26,6 @@ yarn-error.log*
 __snapshots__
 
 src/testData/budget.json
+
+# storybook static
+storybook-static
