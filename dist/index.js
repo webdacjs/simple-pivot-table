@@ -9,6 +9,12 @@ Object.defineProperty(exports, "Table", {
     return _Table.default;
   }
 });
+Object.defineProperty(exports, "PivotCsv", {
+  enumerable: true,
+  get: function get() {
+    return _PivotCsv.default;
+  }
+});
 Object.defineProperty(exports, "PivotTable", {
   enumerable: true,
   get: function get() {
@@ -17,6 +23,8 @@ Object.defineProperty(exports, "PivotTable", {
 });
 
 var _Table = _interopRequireDefault(require("./Table"));
+
+var _PivotCsv = _interopRequireDefault(require("./PivotCsv"));
 
 var _PivotTable = _interopRequireDefault(require("./PivotTable"));
 

@@ -5,7 +5,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.default = PivotTable;
+exports.default = PivotCsv;
 
 var _react = _interopRequireWildcard(require("react"));
 
@@ -41,15 +41,13 @@ function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
-function PivotTable(_ref) {
+function PivotCsv(_ref) {
   var data = _ref.data,
       filters = _ref.filters,
       rows = _ref.rows,
       columns = _ref.columns,
       columnsLabels = _ref.columnsLabels,
-      width = _ref.width,
       values = _ref.values,
-      height = _ref.height,
       postprocessfn = _ref.postprocessfn;
 
   var _useState = (0, _react.useState)(),
@@ -75,7 +73,6 @@ function PivotTable(_ref) {
   (0, _react.useEffect)(function () {
     var groupedData = (0, _getGrouped.default)(getFilteredRows(data), rows, values, postprocessfn);
     var denormalizedData = (0, _getDenormalized.default)(groupedData, rows, values);
-    console.log(denormalizedData);
     setCols(getColumns());
     setRows(denormalizedData);
   }, []); // eslint-disable-line
@@ -93,57 +90,32 @@ function PivotTable(_ref) {
     return filters ? filterIterations(rawRows) : rawRows;
   };
 
-  var getColumnLabel = function getColumnLabel(col, i) {
-    return columnsLabels && columnsLabels[i] ? columnsLabels[i] : col;
-  };
-
-  var getHeader = function getHeader() {
-    return /*#__PURE__*/_react.default.createElement("thead", null, /*#__PURE__*/_react.default.createElement("tr", null, cols.map(function (col, i) {
-      return /*#__PURE__*/_react.default.createElement("th", {
-        key: "col-".concat(i),
-        className: "pivotHeader"
-      }, getColumnLabel(col, i));
-    })));
-  };
-
-  var getRowLine = function getRowLine(row, i) {
-    var rowItems = row.map(function (item, y) {
-      if (item.type === 'header' && item.visible) {
-        return /*#__PURE__*/_react.default.createElement("th", {
-          key: "th-".concat(i, "-").concat(y),
-          rowspan: item.rowSpan,
-          className: "pivotRowHeader"
-        }, item.value);
-      } else if (item.type === 'value') {
-        return /*#__PURE__*/_react.default.createElement("td", {
-          key: "td-".concat(i, "-").concat(y),
-          className: "pivotValue"
-        }, item.value);
-      }
+  function getCsvContents() {
+    var header = "\"".concat(cols.join('","'), "\"");
+    var rows = pivotRows.map(function (x) {
+      return x.map(function (y) {
+        return y.value;
+      }).map(function (z) {
+        return z;
+      });
+    }).map(function (x) {
+      return "\"".concat(x.join('","'), "\"");
     });
-    return rowItems.filter(function (x) {
-      return x;
+    var combined = [header].concat(_toConsumableArray(rows)).join('\n');
+    return /*#__PURE__*/_react.default.createElement("textarea", {
+      style: {
+        width: '100%',
+        height: '500px'
+      },
+      value: combined,
+      readOnly: true
     });
-  };
+  }
 
-  var getRows = function getRows() {
-    return /*#__PURE__*/_react.default.createElement("tbody", null, pivotRows.map(function (row, i) {
-      return /*#__PURE__*/_react.default.createElement("tr", {
-        key: "row-".concat(i)
-      }, getRowLine(row, i));
-    }));
-  };
-
-  return /*#__PURE__*/_react.default.createElement("div", null, /*#__PURE__*/_react.default.createElement("table", {
-    className: "table",
-    style: {
-      width: width,
-      height: height
-    }
-  }, cols && getHeader(), cols && pivotRows && getRows()));
+  return /*#__PURE__*/_react.default.createElement("div", null, cols && pivotRows && getCsvContents());
 }
 
-PivotTable.propTypes = {
+PivotCsv.propTypes = {
   data: _propTypes.default.array,
   rows: _propTypes.default.array,
   columns: _propTypes.default.array,
