@@ -11,8 +11,10 @@
   ],
   "homepage": "http://webdacjs.github.io/simple-pivot-table",
   "dependencies": {
+    "d3": "6.6.2",
     "dayjs": "1.10.4",
-    "lodash.filter": "^4.6.0",
+    "lodash.filter": "4.6.0",
+    "queue": "6.0.2",
     "rimraf": "3.0.2",
     "sort-objects-array": "1.7.1"
   },
