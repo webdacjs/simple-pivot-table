@@ -181,19 +181,14 @@ function PivotTableBarChart(_ref) {
   var getRowLine = function getRowLine(row, i) {
     var headerItems = (0, _lodash.default)(row, function (x) {
       return x.type === 'header';
-    }).map(function (x) {
-      return {
-        value: x.value,
-        visible: x.visible
-      };
     });
     var popOverDataArray = getPopOverDataArray(headerItems);
     var rowItems = headerItems.map(function (item, y) {
-      return /*#__PURE__*/_react.default.createElement("th", {
+      return item.visible ? /*#__PURE__*/_react.default.createElement("th", {
         key: "th-".concat(i, "-").concat(y),
-        rowspan: item.rowSpan,
+        rowSpan: item.rowSpan,
         className: "pivotRowHeader"
-      }, item.value);
+      }, item.value) : null;
     }).filter(function (x) {
       return x;
     });

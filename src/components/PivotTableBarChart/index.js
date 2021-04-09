@@ -111,8 +111,8 @@ export default function PivotTableBarChart ({
     const headerItems = filter(row, x => x.type === 'header')
     const popOverDataArray = getPopOverDataArray(headerItems)
     const rowItems = headerItems.map(
-      (item, y) => item.visible 
-        ? <th key={`th-${i}-${y}`} rowSpan={item.rowSpan} className='pivotRowHeader'>{item.value}</th> 
+      (item, y) => item.visible
+        ? <th key={`th-${i}-${y}`} rowSpan={item.rowSpan} className='pivotRowHeader'>{item.value}</th>
         : null).filter(x => x)
     const { valuesObj, valuesCols } = getValuesObj(row)
     rowItems.push(
