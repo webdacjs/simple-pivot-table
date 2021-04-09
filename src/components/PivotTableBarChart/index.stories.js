@@ -22,6 +22,8 @@ const Template = ({
   barsMinValue,
   barsMaxValue,
   barsHeight,
+  showPopOver,
+  popOverFormatter,
   width,
   values,
   height,
@@ -39,6 +41,8 @@ const Template = ({
     height={height}
     barsMinValue={barsMinValue}
     barsMaxValue={barsMaxValue}
+    showPopOver={showPopOver}
+    popOverFormatter={popOverFormatter}
     barsHeight={barsHeight}
     values={values}
     width={width}
@@ -49,6 +53,8 @@ export const Default = Template.bind({})
 Default.args = {
   data: testData,
   rows: ['continent', 'country'],
+  showPopOver: true,
+  popOverFormatter: x => `${Math.round(x).toLocaleString()} hab`,
   // China population
   barsMaxValue: 1443622060,
   barLegendSteps: 5,
