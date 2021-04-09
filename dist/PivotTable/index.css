@@ -49,3 +49,7 @@ body {
 .simple-pivot-table tr:nth-child(even) {
     background-color: #f2f2f2;
 }
+
+.simple-pivot-table tbody tr.selected td {
+    background: #bbe4f2;
+}

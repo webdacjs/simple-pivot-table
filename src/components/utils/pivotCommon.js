@@ -19,3 +19,11 @@ export function getFilteredRows (rawRows, filters) {
     ? filterIterations(rawRows, filters)
     : rawRows
 }
+
+export function timerFn (funtionName) {
+  const t0 = performance.now()
+  return () => {
+    const t1 = performance.now()
+    console.log(`TIMER (${funtionName}) took ${(t1 - t0)}  milliseconds.`)
+  }
+}

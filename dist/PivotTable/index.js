@@ -63,6 +63,11 @@ function PivotTable(_ref) {
       colsTotals = _useState6[0],
       setColsTotals = _useState6[1];
 
+  var _useState7 = (0, _react.useState)(),
+      _useState8 = _slicedToArray(_useState7, 2),
+      selectedRow = _useState8[0],
+      setSelectedRow = _useState8[1];
+
   (0, _react.useEffect)(function () {
     var groupedData = (0, _getGrouped.default)((0, _pivotCommon.getFilteredRows)(data, filters), rows, values, postprocessfn);
     setColsTotals(groupedData.valueTotals);
@@ -70,6 +75,19 @@ function PivotTable(_ref) {
     setCols((0, _pivotCommon.getColumns)(columnsLabels, rows, values));
     setRows(denormalizedData);
   }, [data]); // eslint-disable-line
+
+  var getRowClassName = function getRowClassName(rowid) {
+    return rowid === selectedRow ? 'selected' : null;
+  };
+
+  var setSelectedRowFn = function setSelectedRowFn(rowid) {
+    if (rowid !== selectedRow) {
+      setSelectedRow(rowid);
+      return;
+    }
+
+    setSelectedRow();
+  };
 
   var getColumnLabel = function getColumnLabel(col, i) {
     return columnsLabels && columnsLabels[i] ? columnsLabels[i] : col;
@@ -124,7 +142,11 @@ function PivotTable(_ref) {
   var getRows = function getRows() {
     return /*#__PURE__*/_react.default.createElement("tbody", null, pivotRows.map(function (row, i) {
       return /*#__PURE__*/_react.default.createElement("tr", {
-        key: "row-".concat(i)
+        key: "row-".concat(i),
+        className: getRowClassName("row-".concat(i)),
+        onClick: function onClick() {
+          return setSelectedRowFn("row-".concat(i));
+        }
       }, getRowLine(row, i));
     }), showColumnTotals && getColumnTotalsRow());
   };
