@@ -4,7 +4,7 @@
   "private": true,
   "main": "dist/index.js",
   "module": "dist/index.js",
-  "description": "Simple pivot table library with basica functions.",
+  "description": "Simple pivot table library with basic functions.",
   "files": [
     "dist",
     "README.md"
