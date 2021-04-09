@@ -21,6 +21,7 @@ export default function PivotTable ({
   const [cols, setCols] = useState()
   const [pivotRows, setRows] = useState()
   const [colsTotals, setColsTotals] = useState()
+  const [selectedRow, setSelectedRow] = useState()
 
   useEffect(() => {
     const groupedData = getGroupedData(
@@ -30,6 +31,16 @@ export default function PivotTable ({
     setCols(getColumns(columnsLabels, rows, values))
     setRows(denormalizedData)
   }, [data]) // eslint-disable-line
+
+  const getRowClassName = rowid => rowid === selectedRow ? 'selected' : null
+
+  const setSelectedRowFn = rowid => {
+    if (rowid !== selectedRow) {
+      setSelectedRow(rowid)
+      return
+    }
+    setSelectedRow()
+  }
 
   const getColumnLabel = (col, i) =>
     columnsLabels && columnsLabels[i] ? columnsLabels[i] : col
@@ -69,7 +80,11 @@ export default function PivotTable ({
   const getRows = () =>
     <tbody>
       {pivotRows.map((row, i) =>
-        <tr key={`row-${i}`}>
+        <tr
+          key={`row-${i}`}
+          className={getRowClassName(`row-${i}`)}
+          onClick={() => setSelectedRowFn(`row-${i}`)}
+        >
           {getRowLine(row, i)}
         </tr>)}
       {showColumnTotals && getColumnTotalsRow()}

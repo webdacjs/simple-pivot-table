@@ -23,7 +23,7 @@ export function getFilteredRows (rawRows, filters) {
 export function timerFn (funtionName) {
   const t0 = performance.now()
   return () => {
-    let t1 = performance.now()
+    const t1 = performance.now()
     console.log(`TIMER (${funtionName}) took ${(t1 - t0)}  milliseconds.`)
   }
 }

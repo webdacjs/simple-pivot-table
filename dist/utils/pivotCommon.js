@@ -5,6 +5,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.getColumns = getColumns;
 exports.getFilteredRows = getFilteredRows;
+exports.timerFn = timerFn;
 
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
 
@@ -39,4 +40,12 @@ function filterIterations(rawRows, filters) {
 
 function getFilteredRows(rawRows, filters) {
   return filters ? filterIterations(rawRows, filters) : rawRows;
+}
+
+function timerFn(funtionName) {
+  var t0 = performance.now();
+  return function () {
+    var t1 = performance.now();
+    console.log("TIMER (".concat(funtionName, ") took ").concat(t1 - t0, "  milliseconds."));
+  };
 }
