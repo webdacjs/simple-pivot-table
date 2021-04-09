@@ -62,7 +62,7 @@ export default function PivotTable ({
   const getRowLine = (row, i) => {
     const rowItems = row.map((item, y) => {
       if (item.type === 'header' && item.visible) {
-        return <th key={`th-${i}-${y}`} rowspan={item.rowSpan} className='pivotRowHeader'>{item.value}</th>
+        return <th key={`th-${i}-${y}`} rowSpan={item.rowSpan} className='pivotRowHeader'>{item.value}</th>
       } else if (item.type === 'value') {
         return <td key={`td-${i}-${y}`} className='pivotValue'>{item.value}</td>
       }

@@ -5,10 +5,13 @@ import filter from 'lodash.filter'
 import getGroupedData from '../utils/getGrouped'
 import getDenormalized from '../utils/getDenormalized'
 import { getColumns, getFilteredRows } from '../utils/pivotCommon'
+import { separator } from '../utils/settings'
 
 import GaugeChart from '../BarCharts/GaugeChart'
 import D3Header from '../BarCharts/D3Header'
 import getLinearScale from '../BarCharts/d3getLinearScale'
+
+import PopOver from '../PopOver/'
 
 export default function PivotTableBarChart ({
   data,
@@ -22,6 +25,8 @@ export default function PivotTableBarChart ({
   barsHeight = 15,
   barType = 'gauge',
   barLegendFormatter,
+  showPopOver,
+  popOverFormatter,
   width,
   values,
   height,
@@ -29,12 +34,14 @@ export default function PivotTableBarChart ({
 }) {
   const [cols, setCols] = useState()
   const [pivotRows, setRows] = useState()
+  const [groupedDataState, setGroupedDataState] = useState()
   const [colsTotals, setColsTotals] = useState()
 
   useEffect(() => {
     const groupedData = getGroupedData(
-      getFilteredRows(data, filters), rows, values, postprocessfn)
+      getFilteredRows(data, filters), rows, values, postprocessfn, true)
     setColsTotals(groupedData.valueTotals)
+    setGroupedDataState(groupedData.groupedOriginals)
     const denormalizedData = getDenormalized(groupedData)
     setCols(getColumns(columnsLabels, rows, values))
     setRows(denormalizedData)
@@ -67,30 +74,48 @@ export default function PivotTableBarChart ({
     return { valuesObj, valuesCols }
   }
 
-  function getBarChart (valuesObj, valuesCols) {
+  function getBarChart (valuesObj, valuesCols, dataArray) {
     if (barType === 'gauge') {
       return (
-        <GaugeChart
-          dataElement={valuesObj}
-          dimensions={valuesCols}
-          height={barsHeight}
-          minValue={barsMinValue}
-          maxValue={barsMaxValue}
-        />
+        <PopOver showPopOver={showPopOver} dataArray={dataArray}>
+          <GaugeChart
+            dataElement={valuesObj}
+            dimensions={valuesCols}
+            height={barsHeight}
+            minValue={barsMinValue}
+            maxValue={barsMaxValue}
+          />
+        </PopOver>
       )
     }
   }
 
+  const getPopOverDataArray = headerItems => {
+    if (!showPopOver) {
+      return []
+    }
+    const rowKey = headerItems.map(x => x.value).join(separator)
+    const originalValue = groupedDataState[rowKey]
+    const dataArray = []
+    headerItems.forEach((item, i) => {
+      dataArray.push({ key: rows[i], value: item.value })
+    })
+    Object.keys(originalValue).forEach(key => {
+      const item = originalValue[key]
+      dataArray.push({ key, value: popOverFormatter ? popOverFormatter(item) : item })
+    })
+    return dataArray
+  }
+
   const getRowLine = (row, i) => {
-    const rowItems = row.map((item, y) => {
-      if (item.type === 'header' && item.visible) {
-        return <th key={`th-${i}-${y}`} rowspan={item.rowSpan} className='pivotRowHeader'>{item.value}</th>
-      }
-    }).filter(x => x)
+    const headerItems = filter(row, x => x.type === 'header').map(x => ({ value: x.value, visible: x.visible }))
+    const popOverDataArray = getPopOverDataArray(headerItems)
+    const rowItems = headerItems.map(
+      (item, y) => <th key={`th-${i}-${y}`} rowspan={item.rowSpan} className='pivotRowHeader'>{item.value}</th>).filter(x => x)
     const { valuesObj, valuesCols } = getValuesObj(row)
     rowItems.push(
       <td key={`bar-${i}`} className='bar'>
-        {getBarChart(valuesObj, valuesCols)}
+        {getBarChart(valuesObj, valuesCols, popOverDataArray)}
       </td>
     )
     return rowItems.filter(x => x)
@@ -125,6 +150,8 @@ PivotTableBarChart.propTypes = {
   barsHeight: PropTypes.number,
   barsMinValue: PropTypes.number,
   barsMaxValue: PropTypes.number,
+  showPopOver: PropTypes.bool,
+  popOverFormatter: PropTypes.func,
   values: PropTypes.array,
   filters: PropTypes.array,
   height: PropTypes.number,
