@@ -112,7 +112,7 @@ function PivotTable(_ref) {
       if (item.type === 'header' && item.visible) {
         return /*#__PURE__*/_react.default.createElement("th", {
           key: "th-".concat(i, "-").concat(y),
-          rowspan: item.rowSpan,
+          rowSpan: item.rowSpan,
           className: "pivotRowHeader"
         }, item.value);
       } else if (item.type === 'value') {
