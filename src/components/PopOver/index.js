@@ -32,7 +32,7 @@ export default function PopOver ({
       isOpen={showPopOver ? hovered : false}
       place='below'
       tipSize={0.01}
-      enterExitTransitionDurationMs={false}
+      enterExitTransitionDurationMs={0}
       body={getPopOver()}
     >
       <div onMouseOver={() => setHovered(true)} onMouseOut={() => setHovered()}>
