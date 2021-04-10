@@ -27,7 +27,7 @@ export default function PivotCsv ({
     const denormalizedData = getDenormalized(groupedData)
     setCols(getColumns(columnsLabels, rows, values))
     setRows(denormalizedData)
-  }, [data]) // eslint-disable-line
+  }, [data, rows, values]) // eslint-disable-line
 
   function getCsvContents () {
     const header = `"${cols.join('","')}"`

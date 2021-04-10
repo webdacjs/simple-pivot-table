@@ -73,6 +73,7 @@ function GaugeChart(_ref) {
     });
   });
   var ref = (0, _d3hook.default)(function (svg) {
+    svg.selectAll('*').remove();
     (0, _d3chartBuilder.default)(svg, builtDataObjectWithX, showBarValues, function () {
       return console.log;
     });

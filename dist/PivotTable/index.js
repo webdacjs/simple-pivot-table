@@ -74,7 +74,7 @@ function PivotTable(_ref) {
     var denormalizedData = (0, _getDenormalized.default)(groupedData);
     setCols((0, _pivotCommon.getColumns)(columnsLabels, rows, values));
     setRows(denormalizedData);
-  }, [data]); // eslint-disable-line
+  }, [data, rows, values]); // eslint-disable-line
 
   var getRowClassName = function getRowClassName(rowid) {
     return rowid === selectedRow ? 'selected' : null;
