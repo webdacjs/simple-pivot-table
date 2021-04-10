@@ -41,7 +41,13 @@ function PopOver(_ref) {
 
   var getPopOver = function getPopOver() {
     return /*#__PURE__*/_react.default.createElement("div", {
-      className: "popoverBox"
+      className: "popoverBox",
+      onMouseOver: function onMouseOver() {
+        return setHovered(true);
+      },
+      onMouseOut: function onMouseOut() {
+        return setHovered();
+      }
     }, /*#__PURE__*/_react.default.createElement("table", {
       className: "popOverBox-table"
     }, /*#__PURE__*/_react.default.createElement("tbody", null, dataArray.map(function (item, i) {

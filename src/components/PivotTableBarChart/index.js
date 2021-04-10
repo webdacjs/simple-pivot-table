@@ -46,7 +46,7 @@ export default function PivotTableBarChart ({
     setCols(getColumns(columnsLabels, rows, values))
     setRows(denormalizedData)
     getLinearScale(0, 100, 15)
-  }, [data]) // eslint-disable-line
+  }, [data, rows, values]) // eslint-disable-line
 
   const getColumnLabel = (col, i) =>
     columnsLabels && columnsLabels[i] ? columnsLabels[i] : col

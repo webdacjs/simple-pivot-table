@@ -58,6 +58,7 @@ export default function GaugeChart ({
 
   const ref = useD3(
     svg => {
+      svg.selectAll('*').remove()
       d3chartBuilder(
         svg,
         builtDataObjectWithX,
