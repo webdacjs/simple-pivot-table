@@ -6,7 +6,9 @@ function defaultFormatter (x) {
   } else if (x > 1000) {
     return `${(x / 1000).toFixed(2)} k`
   }
-  return x
+  // Avoid many decimal points in the legend.
+  const value = Math.round(x) === x ? x : x.toFixed(2)
+  return value
 }
 
 export default function getLinearScale (minVal, maxVal, steps, legendFormatter) {

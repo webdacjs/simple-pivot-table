@@ -68,6 +68,7 @@ TwoDimensions.args = {
   data: testData,
   rows: ['continent', 'currency_code', 'government', 'country'],
   columnsLabels: ['Continent', 'Currency', 'Government', 'Country', 'Population Sum', 'Count'],
+  barLegendSteps: 10,
   postprocessfn: result => {
     return {
       population: 100,
