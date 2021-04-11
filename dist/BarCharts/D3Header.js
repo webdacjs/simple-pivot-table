@@ -16,9 +16,10 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 function D3Header(_ref) {
   var height = _ref.height,
       legendValues = _ref.legendValues;
+  var stepvalue = 100 / (legendValues.length - 1);
 
-  var getWidth = function getWidth(val) {
-    return (val + 1 * 100) / legendValues.length;
+  var getWidth = function getWidth(i) {
+    return stepvalue * i;
   };
 
   var builtDataObject = legendValues.map(function (x, i) {
@@ -26,28 +27,17 @@ function D3Header(_ref) {
       dimension: x,
       text: x,
       y: 0,
-      width: getWidth(i),
+      width: i === 0 ? 0 : getWidth(i),
+      x: 0,
+      textX: i === 0 ? 0 : getWidth(i),
       height: height || 16,
       color: 'transparent',
       fontColor: '#495057'
     };
   });
-  var widths = builtDataObject.map(function (x) {
-    return x.width;
-  });
-  var builtDataObjectWithX = builtDataObject.map(function (item, index) {
-    return Object.assign(item, {
-      x: index === 0 ? 0 : widths.slice(0, index).reduce(function (a, b) {
-        return a + b;
-      }, 0),
-      textX: index === 0 ? 0 : widths.slice(0, index).reduce(function (a, b) {
-        return a + b;
-      }, 0) + widths[index] / 2
-    });
-  });
   var ref = (0, _d3hook.default)(function (svg) {
     svg.selectAll('*').remove();
-    (0, _d3chartBuilder.default)(svg, builtDataObjectWithX, true, function () {
+    (0, _d3chartBuilder.default)(svg, builtDataObject, true, function () {
       return console.log;
     });
   }, [legendValues]);
