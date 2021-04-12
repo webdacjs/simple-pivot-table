@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 
-import getGroupedData from '../utils/getGrouped'
-import getDenormalized from '../utils/getDenormalized'
-import { getColumns, getFilteredRows } from '../utils/pivotCommon'
+import getPivotDataColumns from '../utils/pivotMain'
 
 export default function PivotTable ({
   data,
@@ -24,12 +22,17 @@ export default function PivotTable ({
   const [selectedRow, setSelectedRow] = useState()
 
   useEffect(() => {
-    const groupedData = getGroupedData(
-      getFilteredRows(data, filters), rows, values, postprocessfn)
-    setColsTotals(groupedData.valueTotals)
-    const denormalizedData = getDenormalized(groupedData)
-    setCols(getColumns(columnsLabels, rows, values))
-    setRows(denormalizedData)
+    const { pivotData, colsValues, colsTotals } = getPivotDataColumns({
+      data,
+      filters,
+      rows,
+      values,
+      columnsLabels,
+      postprocessfn
+    })
+    setColsTotals(colsTotals)
+    setCols(colsValues)
+    setRows(pivotData)
   }, [data, rows, values, columnsLabels]) // eslint-disable-line
 
   const getRowClassName = rowid => rowid === selectedRow ? 'selected' : null

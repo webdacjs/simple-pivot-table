@@ -13,11 +13,7 @@ var _propTypes = _interopRequireDefault(require("prop-types"));
 
 var _lodash = _interopRequireDefault(require("lodash.filter"));
 
-var _getGrouped = _interopRequireDefault(require("../utils/getGrouped"));
-
-var _getDenormalized = _interopRequireDefault(require("../utils/getDenormalized"));
-
-var _pivotCommon = require("../utils/pivotCommon");
+var _pivotMain = _interopRequireDefault(require("../utils/pivotMain"));
 
 var _settings = require("../utils/settings");
 
@@ -91,14 +87,26 @@ function PivotTableBarChart(_ref) {
       colsTotals = _useState8[0],
       setColsTotals = _useState8[1];
 
+  var getOriginals = true;
   (0, _react.useEffect)(function () {
-    var groupedData = (0, _getGrouped.default)((0, _pivotCommon.getFilteredRows)(data, filters), rows, values, postprocessfn, true);
-    setColsTotals(groupedData.valueTotals);
-    setGroupedDataState(groupedData.groupedOriginals);
-    var denormalizedData = (0, _getDenormalized.default)(groupedData);
-    setCols((0, _pivotCommon.getColumns)(columnsLabels, rows, values));
-    setRows(denormalizedData);
-    (0, _d3getLinearScale.default)(0, 100, 15);
+    var _getPivotDataColumns = (0, _pivotMain.default)({
+      data: data,
+      filters: filters,
+      rows: rows,
+      values: values,
+      columnsLabels: columnsLabels,
+      postprocessfn: postprocessfn,
+      getOriginals: getOriginals
+    }),
+        pivotData = _getPivotDataColumns.pivotData,
+        colsValues = _getPivotDataColumns.colsValues,
+        colsTotals = _getPivotDataColumns.colsTotals,
+        groupedOriginals = _getPivotDataColumns.groupedOriginals;
+
+    setColsTotals(colsTotals);
+    setCols(colsValues);
+    setRows(pivotData);
+    setGroupedDataState(groupedOriginals);
   }, [data, rows, values, columnsLabels]); // eslint-disable-line
 
   var getColumnLabel = function getColumnLabel(col, i) {

@@ -15,6 +15,12 @@ Object.defineProperty(exports, "PivotCsv", {
     return _PivotCsv.default;
   }
 });
+Object.defineProperty(exports, "PivotJSON", {
+  enumerable: true,
+  get: function get() {
+    return _PivotJSON.default;
+  }
+});
 Object.defineProperty(exports, "PivotTable", {
   enumerable: true,
   get: function get() {
@@ -27,13 +33,29 @@ Object.defineProperty(exports, "PivotTableBarChart", {
     return _PivotTableBarChart.default;
   }
 });
+Object.defineProperty(exports, "getPivotCsvData", {
+  enumerable: true,
+  get: function get() {
+    return _pivotMain.getPivotCsvData;
+  }
+});
+Object.defineProperty(exports, "getPivotJonsData", {
+  enumerable: true,
+  get: function get() {
+    return _pivotMain.getPivotJonsData;
+  }
+});
 
 var _Table = _interopRequireDefault(require("./Table"));
 
 var _PivotCsv = _interopRequireDefault(require("./PivotCsv"));
 
+var _PivotJSON = _interopRequireDefault(require("./PivotJSON"));
+
 var _PivotTable = _interopRequireDefault(require("./PivotTable"));
 
 var _PivotTableBarChart = _interopRequireDefault(require("./PivotTableBarChart"));
+
+var _pivotMain = require("./utils/pivotMain");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }

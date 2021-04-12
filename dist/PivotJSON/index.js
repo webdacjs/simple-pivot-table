@@ -5,13 +5,13 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.default = PivotTable;
+exports.default = PivotJSON;
 
 var _react = _interopRequireWildcard(require("react"));
 
 var _propTypes = _interopRequireDefault(require("prop-types"));
 
-var _pivotMain = _interopRequireDefault(require("../utils/pivotMain"));
+var _pivotMain = require("../utils/pivotMain");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -31,142 +31,46 @@ function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
-function PivotTable(_ref) {
+function PivotJSON(_ref) {
   var data = _ref.data,
       filters = _ref.filters,
       rows = _ref.rows,
       columns = _ref.columns,
       columnsLabels = _ref.columnsLabels,
-      width = _ref.width,
       values = _ref.values,
-      height = _ref.height,
       postprocessfn = _ref.postprocessfn,
       showColumnTotals = _ref.showColumnTotals,
       showRowsTotals = _ref.showRowsTotals;
 
   var _useState = (0, _react.useState)(),
       _useState2 = _slicedToArray(_useState, 2),
-      cols = _useState2[0],
-      setCols = _useState2[1];
-
-  var _useState3 = (0, _react.useState)(),
-      _useState4 = _slicedToArray(_useState3, 2),
-      pivotRows = _useState4[0],
-      setRows = _useState4[1];
-
-  var _useState5 = (0, _react.useState)(),
-      _useState6 = _slicedToArray(_useState5, 2),
-      colsTotals = _useState6[0],
-      setColsTotals = _useState6[1];
-
-  var _useState7 = (0, _react.useState)(),
-      _useState8 = _slicedToArray(_useState7, 2),
-      selectedRow = _useState8[0],
-      setSelectedRow = _useState8[1];
+      JSONData = _useState2[0],
+      setJSONData = _useState2[1];
 
   (0, _react.useEffect)(function () {
-    var _getPivotDataColumns = (0, _pivotMain.default)({
+    var JSONContents = (0, _pivotMain.getPivotJsonData)({
       data: data,
       filters: filters,
       rows: rows,
       values: values,
       columnsLabels: columnsLabels,
-      postprocessfn: postprocessfn
-    }),
-        pivotData = _getPivotDataColumns.pivotData,
-        colsValues = _getPivotDataColumns.colsValues,
-        colsTotals = _getPivotDataColumns.colsTotals;
-
-    setColsTotals(colsTotals);
-    setCols(colsValues);
-    setRows(pivotData);
+      postprocessfn: postprocessfn,
+      showColumnTotals: showColumnTotals
+    });
+    setJSONData(JSONContents);
   }, [data, rows, values, columnsLabels]); // eslint-disable-line
 
-  var getRowClassName = function getRowClassName(rowid) {
-    return rowid === selectedRow ? 'selected' : null;
-  };
-
-  var setSelectedRowFn = function setSelectedRowFn(rowid) {
-    if (rowid !== selectedRow) {
-      setSelectedRow(rowid);
-      return;
-    }
-
-    setSelectedRow();
-  };
-
-  var getColumnLabel = function getColumnLabel(col, i) {
-    return columnsLabels && columnsLabels[i] ? columnsLabels[i] : col;
-  };
-
-  var getHeader = function getHeader() {
-    return /*#__PURE__*/_react.default.createElement("thead", null, /*#__PURE__*/_react.default.createElement("tr", null, cols.slice(0, rows.length).map(function (col, i) {
-      return /*#__PURE__*/_react.default.createElement("th", {
-        key: "col-".concat(i),
-        className: "pivotHeader"
-      }, getColumnLabel(col, i));
-    }), cols.slice(rows.length, 100).map(function (col, i) {
-      return /*#__PURE__*/_react.default.createElement("th", {
-        key: "col-".concat(i + rows.length),
-        className: "pivotHeaderValue"
-      }, getColumnLabel(col, i + rows.length));
-    })));
-  };
-
-  var getRowLine = function getRowLine(row, i) {
-    var rowItems = row.map(function (item, y) {
-      if (item.type === 'header' && item.visible) {
-        return /*#__PURE__*/_react.default.createElement("th", {
-          key: "th-".concat(i, "-").concat(y),
-          rowSpan: item.rowSpan,
-          className: "pivotRowHeader"
-        }, item.value);
-      } else if (item.type === 'value') {
-        return /*#__PURE__*/_react.default.createElement("td", {
-          key: "td-".concat(i, "-").concat(y),
-          className: "pivotValue"
-        }, item.value);
-      }
-    });
-    return rowItems.filter(function (x) {
-      return x;
-    });
-  };
-
-  var getColumnTotalsRow = function getColumnTotalsRow() {
-    return /*#__PURE__*/_react.default.createElement("tr", null, /*#__PURE__*/_react.default.createElement("th", {
-      key: "th-totals-col",
-      colspan: rows.length,
-      className: "pivotRowHeaderTotal"
-    }, "Totals:"), Object.keys(colsTotals).map(function (item) {
-      return /*#__PURE__*/_react.default.createElement("td", {
-        className: "pivotRowValueTotal"
-      }, colsTotals[item]);
-    }));
-  };
-
-  var getRows = function getRows() {
-    return /*#__PURE__*/_react.default.createElement("tbody", null, pivotRows.map(function (row, i) {
-      return /*#__PURE__*/_react.default.createElement("tr", {
-        key: "row-".concat(i),
-        className: getRowClassName("row-".concat(i)),
-        onClick: function onClick() {
-          return setSelectedRowFn("row-".concat(i));
-        }
-      }, getRowLine(row, i));
-    }), showColumnTotals && getColumnTotalsRow());
-  };
-
-  return /*#__PURE__*/_react.default.createElement("div", null, /*#__PURE__*/_react.default.createElement("table", {
-    className: "simple-pivot-table",
+  return /*#__PURE__*/_react.default.createElement("div", null, JSONData && /*#__PURE__*/_react.default.createElement("textarea", {
     style: {
-      width: width,
-      height: height
-    }
-  }, cols && getHeader(), cols && pivotRows && getRows()));
+      width: '100%',
+      height: '500px'
+    },
+    value: JSON.stringify(JSONData, null, 4),
+    readOnly: true
+  }));
 }
 
-PivotTable.propTypes = {
+PivotJSON.propTypes = {
   data: _propTypes.default.array,
   rows: _propTypes.default.array,
   columns: _propTypes.default.array,
