@@ -14,21 +14,15 @@ export default function PivotCsv ({
   values,
   postprocessfn,
   showColumnTotals,
-  showRowsTotals,
-  totalsUnformatters
+  showRowsTotals
 }) {
   const [cols, setCols] = useState()
   const [pivotRows, setRows] = useState()
   const [colsTotals, setColsTotals] = useState()
 
   useEffect(() => {
-    const groupedData = getGroupedData({
-      data: getFilteredRows(data, filters),
-      rowAttributes: rows,
-      vals: values,
-      postprocessfn,
-      totalsUnformatters
-    })
+    const groupedData = getGroupedData(
+      getFilteredRows(data, filters), rows, values, postprocessfn)
     setColsTotals(groupedData.valueTotals)
     const denormalizedData = getDenormalized(groupedData)
     setCols(getColumns(columnsLabels, rows, values))

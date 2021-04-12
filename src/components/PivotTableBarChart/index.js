@@ -30,8 +30,7 @@ export default function PivotTableBarChart ({
   width,
   values,
   height,
-  postprocessfn,
-  totalsUnformatters
+  postprocessfn
 }) {
   const [cols, setCols] = useState()
   const [pivotRows, setRows] = useState()
@@ -39,14 +38,8 @@ export default function PivotTableBarChart ({
   const [colsTotals, setColsTotals] = useState()
 
   useEffect(() => {
-    const groupedData = getGroupedData({
-      data: getFilteredRows(data, filters),
-      rowAttributes: rows,
-      vals: values,
-      postprocessfn,
-      getOriginalsFlag: true,
-      totalsUnformatters
-    })
+    const groupedData = getGroupedData(
+      getFilteredRows(data, filters), rows, values, postprocessfn, true)
     setColsTotals(groupedData.valueTotals)
     setGroupedDataState(groupedData.groupedOriginals)
     const denormalizedData = getDenormalized(groupedData)

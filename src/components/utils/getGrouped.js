@@ -39,7 +39,7 @@ function getCombinedKeyBasedOnRowAttributes (dataItem, rowAttributes) {
 
 // Get the data combined by attribute including the mutations done by th postprocess function
 // with the originals if required.
-export default function getGroupedData ({ data, rowAttributes, vals, postprocessfn, getOriginalsFlag, totalsUnformatters }) {
+export default function getGroupedData (data, rowAttributes, vals, postprocessfn, getOriginalsFlag) {
   const grouped = {}
   data.forEach(dataItem => {
     const combinedKeyArray = getCombinedKeyBasedOnRowAttributes(dataItem, rowAttributes)
@@ -64,27 +64,11 @@ export default function getGroupedData ({ data, rowAttributes, vals, postprocess
       valueTotals
     }
   }
-
-  const totals = []
   // Get the reduced values by key.
   Object.keys(grouped).forEach(key => {
     grouped[key] = getAggregatedValues(grouped[key], vals, postprocessfn)
-    totals.push(grouped[key])
   })
-
-  const totalsUnformatted = totals.map(item => {
-    if (!totalsUnformatters) {
-      return item
-    }
-    return Object.keys(item).reduce((obj, key) => {
-      obj[key] = totalsUnformatters[key]
-        ? totalsUnformatters[key](item[key])
-        : item[key]
-      return obj
-    }, {})
-  })
-
-  const valueTotals = getAggregatedValues(totalsUnformatted, vals, postprocessfn)
+  const valueTotals = getAggregatedValues(data, vals, postprocessfn)
 
   return {
     grouped,

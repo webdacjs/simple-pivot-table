@@ -46,8 +46,7 @@ function PivotTable(_ref) {
       height = _ref.height,
       postprocessfn = _ref.postprocessfn,
       showColumnTotals = _ref.showColumnTotals,
-      showRowsTotals = _ref.showRowsTotals,
-      totalsUnformatters = _ref.totalsUnformatters;
+      showRowsTotals = _ref.showRowsTotals;
 
   var _useState = (0, _react.useState)(),
       _useState2 = _slicedToArray(_useState, 2),
@@ -70,13 +69,7 @@ function PivotTable(_ref) {
       setSelectedRow = _useState8[1];
 
   (0, _react.useEffect)(function () {
-    var groupedData = (0, _getGrouped.default)({
-      data: (0, _pivotCommon.getFilteredRows)(data, filters),
-      rowAttributes: rows,
-      vals: values,
-      postprocessfn: postprocessfn,
-      totalsUnformatters: totalsUnformatters
-    });
+    var groupedData = (0, _getGrouped.default)((0, _pivotCommon.getFilteredRows)(data, filters), rows, values, postprocessfn);
     setColsTotals(groupedData.valueTotals);
     var denormalizedData = (0, _getDenormalized.default)(groupedData);
     setCols((0, _pivotCommon.getColumns)(columnsLabels, rows, values));
@@ -137,7 +130,7 @@ function PivotTable(_ref) {
   var getColumnTotalsRow = function getColumnTotalsRow() {
     return /*#__PURE__*/_react.default.createElement("tr", null, /*#__PURE__*/_react.default.createElement("th", {
       key: "th-totals-col",
-      colSpan: rows.length,
+      colspan: rows.length,
       className: "pivotRowHeaderTotal"
     }, "Totals:"), Object.keys(colsTotals).map(function (item) {
       return /*#__PURE__*/_react.default.createElement("td", {

@@ -69,8 +69,7 @@ function PivotTableBarChart(_ref) {
       width = _ref.width,
       values = _ref.values,
       height = _ref.height,
-      postprocessfn = _ref.postprocessfn,
-      totalsUnformatters = _ref.totalsUnformatters;
+      postprocessfn = _ref.postprocessfn;
 
   var _useState = (0, _react.useState)(),
       _useState2 = _slicedToArray(_useState, 2),
@@ -93,14 +92,7 @@ function PivotTableBarChart(_ref) {
       setColsTotals = _useState8[1];
 
   (0, _react.useEffect)(function () {
-    var groupedData = (0, _getGrouped.default)({
-      data: (0, _pivotCommon.getFilteredRows)(data, filters),
-      rowAttributes: rows,
-      vals: values,
-      postprocessfn: postprocessfn,
-      getOriginalsFlag: true,
-      totalsUnformatters: totalsUnformatters
-    });
+    var groupedData = (0, _getGrouped.default)((0, _pivotCommon.getFilteredRows)(data, filters), rows, values, postprocessfn, true);
     setColsTotals(groupedData.valueTotals);
     setGroupedDataState(groupedData.groupedOriginals);
     var denormalizedData = (0, _getDenormalized.default)(groupedData);

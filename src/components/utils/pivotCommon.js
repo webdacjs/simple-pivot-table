@@ -1,7 +1,8 @@
 
 export function getColumns (columnsLabels, rows, values) {
+  const columnsCombined = [...rows, ...values.map(x => x.field)]
   if (columnsLabels) {
-    return columnsLabels
+    return columnsCombined.map((col, i) => columnsLabels[i] ? columnsLabels[i] : col )
   }
   return [...rows, ...values.map(x => x.field)]
 }
