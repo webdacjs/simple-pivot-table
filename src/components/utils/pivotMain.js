@@ -13,13 +13,19 @@ export default function getPivotDataColumns ({
   rows,
   values,
   columnsLabels,
-  postprocessfn
+  postprocessfn,
+  getOriginals
 }) {
   const groupedData = getGroupedData(
-    getFilteredRows(data, filters), rows, values, postprocessfn)
+    getFilteredRows(data, filters), rows, values, postprocessfn, getOriginals)
   const colsTotals = groupedData.valueTotals
   const colsValues = getColumns(columnsLabels, rows, values)
   const pivotData = getDenormalized(groupedData)
+
+  if (getOriginals) {
+    const {groupedOriginals} = groupedData
+    return { pivotData, colsValues, colsTotals, groupedOriginals}
+  }
 
   return { pivotData, colsValues, colsTotals }
 }
