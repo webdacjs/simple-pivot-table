@@ -52,7 +52,6 @@ export default function PivotTableBarChart ({
     setCols(colsValues)
     setRows(pivotData)
     setGroupedDataState(groupedOriginals)
-    
   }, [data, rows, values, columnsLabels]) // eslint-disable-line
 
   const getColumnLabel = (col, i) =>
