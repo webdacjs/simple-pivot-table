@@ -44,6 +44,7 @@ body {
     padding: 0.6em;
 }
 
+
 .simple-pivot-table th.pivotRowHeaderTotal {
     text-align: right;
     font-weight: bold;
@@ -79,7 +80,6 @@ body {
     text-align: left;
     border-top: 1px solid #ccc;
 }
-
 .simple-pivot-table th {
     vertical-align: top;
     background-color:#fff;
@@ -168,16 +168,21 @@ body {
     padding: 0.6em;
 }
 
-.simple-table th {
+.simple-table thead th {
     position: -webkit-sticky;
     position: sticky;
     top: 0;
     z-index: 2;
-    background-color: #fff;
-  }
+    vertical-align: top;
+    background-color:#fff;
+    font-weight: bold;
+    border-top: 1px solid #ccc;
+    text-align: left;
+    padding: 0.6em;
+}
 
 .simple-table tr:nth-child(even) {
     background-color: #f2f2f2;
 }
 
-/*# sourceMappingURL=main.db98533b.chunk.css.map*/
+/*# sourceMappingURL=main.252ff9dd.chunk.css.map*/
