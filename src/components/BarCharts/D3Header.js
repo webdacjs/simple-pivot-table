@@ -3,6 +3,7 @@ import useD3 from './d3hook.js'
 import d3chartBuilder from './d3chartBuilder'
 
 export default function D3Header ({ height, legendValues }) {
+
   const stepvalue = 100 / (legendValues.length - 1)
   const getWidth = i => stepvalue * i
 
@@ -12,7 +13,7 @@ export default function D3Header ({ height, legendValues }) {
     y: 0,
     width: i === 0 ? 0 : getWidth(i),
     x: 0,
-    textX: i === 0 ? 0 : getWidth(i),
+    textX:  i === 0 ? 0 : getWidth(i),
     height: height || 16,
     color: 'transparent',
     fontColor: '#495057'

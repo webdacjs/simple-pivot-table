@@ -20,8 +20,14 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToAr
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 
 function getColumns(columnsLabels, rows, values) {
+  var columnsCombined = [].concat(_toConsumableArray(rows), _toConsumableArray(values.map(function (x) {
+    return x.field;
+  })));
+
   if (columnsLabels) {
-    return columnsLabels;
+    return columnsCombined.map(function (col, i) {
+      return columnsLabels[i] ? columnsLabels[i] : col;
+    });
   }
 
   return [].concat(_toConsumableArray(rows), _toConsumableArray(values.map(function (x) {
