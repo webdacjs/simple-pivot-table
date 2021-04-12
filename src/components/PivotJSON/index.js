@@ -31,8 +31,10 @@ export default function PivotJSON ({
 
   return (
     <div>
-      {JSONData && <textarea style={{ width: '100%', height: '500px' }} value={
-        JSON.stringify(JSONData, null, 4)} readOnly />}
+      {JSONData && <textarea
+        style={{ width: '100%', height: '500px' }} 
+        value={JSON.stringify(JSONData, null, 4)} 
+        readOnly />}
     </div>
   )
 }
