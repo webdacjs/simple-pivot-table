@@ -23,6 +23,8 @@ var _D3Header = _interopRequireDefault(require("../BarCharts/D3Header"));
 
 var _d3getLinearScale = _interopRequireDefault(require("../BarCharts/d3getLinearScale"));
 
+var _getMinMaxValue = _interopRequireDefault(require("../BarCharts/getMinMaxValue"));
+
 var _PopOver = _interopRequireDefault(require("../PopOver/"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -51,8 +53,7 @@ function PivotTableBarChart(_ref) {
       columnsLabels = _ref.columnsLabels,
       _ref$barsMinValue = _ref.barsMinValue,
       barsMinValue = _ref$barsMinValue === void 0 ? 0 : _ref$barsMinValue,
-      _ref$barsMaxValue = _ref.barsMaxValue,
-      barsMaxValue = _ref$barsMaxValue === void 0 ? 100 : _ref$barsMaxValue,
+      barsMaxValue = _ref.barsMaxValue,
       _ref$barLegendSteps = _ref.barLegendSteps,
       barLegendSteps = _ref$barLegendSteps === void 0 ? 10 : _ref$barLegendSteps,
       _ref$barsHeight = _ref.barsHeight,
@@ -87,6 +88,16 @@ function PivotTableBarChart(_ref) {
       colsTotals = _useState8[0],
       setColsTotals = _useState8[1];
 
+  var _useState9 = (0, _react.useState)(),
+      _useState10 = _slicedToArray(_useState9, 2),
+      maxValue = _useState10[0],
+      setMaxValue = _useState10[1];
+
+  var _useState11 = (0, _react.useState)(),
+      _useState12 = _slicedToArray(_useState11, 2),
+      minValue = _useState12[0],
+      setMinValue = _useState12[1];
+
   var getOriginals = true;
   (0, _react.useEffect)(function () {
     var _getPivotDataColumns = (0, _pivotMain.default)({
@@ -107,6 +118,16 @@ function PivotTableBarChart(_ref) {
     setCols(colsValues);
     setRows(pivotData);
     setGroupedDataState(groupedOriginals);
+    setMinValue(barsMinValue);
+
+    if (!barsMaxValue) {
+      var _getMinMaxValues = (0, _getMinMaxValue.default)(pivotData),
+          calcMaxValue = _getMinMaxValues.calcMaxValue;
+
+      setMaxValue(calcMaxValue);
+    } else {
+      setMaxValue(barsMaxValue);
+    }
   }, [data, rows, values, columnsLabels]); // eslint-disable-line
 
   var getColumnLabel = function getColumnLabel(col, i) {
@@ -124,7 +145,7 @@ function PivotTableBarChart(_ref) {
       className: "bar-header"
     }, /*#__PURE__*/_react.default.createElement(_D3Header.default, {
       height: barsHeight,
-      legendValues: (0, _d3getLinearScale.default)(barsMinValue, barsMaxValue, barLegendSteps, barLegendFormatter)
+      legendValues: (0, _d3getLinearScale.default)(minValue, maxValue, barLegendSteps, barLegendFormatter)
     }))));
   };
 
@@ -154,8 +175,8 @@ function PivotTableBarChart(_ref) {
         dataElement: valuesObj,
         dimensions: valuesCols,
         height: barsHeight,
-        minValue: barsMinValue,
-        maxValue: barsMaxValue
+        minValue: minValue,
+        maxValue: maxValue
       }));
     }
   }
