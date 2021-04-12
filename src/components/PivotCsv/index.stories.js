@@ -20,7 +20,8 @@ const Template = ({
   height,
   postprocessfn,
   showColumnTotals,
-  showRowsTotals
+  showRowsTotals,
+  totalsUnformatters
 }) =>
   <PivotCsv
     data={data}
@@ -34,6 +35,7 @@ const Template = ({
     postprocessfn={postprocessfn}
     showColumnTotals={showColumnTotals}
     showRowsTotals={showRowsTotals}
+    totalsUnformatters={totalsUnformatters}
   />
 
 export const Default = Template.bind({})

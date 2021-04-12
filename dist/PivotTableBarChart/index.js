@@ -69,7 +69,8 @@ function PivotTableBarChart(_ref) {
       width = _ref.width,
       values = _ref.values,
       height = _ref.height,
-      postprocessfn = _ref.postprocessfn;
+      postprocessfn = _ref.postprocessfn,
+      totalsUnformatters = _ref.totalsUnformatters;
 
   var _useState = (0, _react.useState)(),
       _useState2 = _slicedToArray(_useState, 2),
@@ -92,14 +93,21 @@ function PivotTableBarChart(_ref) {
       setColsTotals = _useState8[1];
 
   (0, _react.useEffect)(function () {
-    var groupedData = (0, _getGrouped.default)((0, _pivotCommon.getFilteredRows)(data, filters), rows, values, postprocessfn, true);
+    var groupedData = (0, _getGrouped.default)({
+      data: (0, _pivotCommon.getFilteredRows)(data, filters),
+      rowAttributes: rows,
+      vals: values,
+      postprocessfn: postprocessfn,
+      getOriginalsFlag: true,
+      totalsUnformatters: totalsUnformatters
+    });
     setColsTotals(groupedData.valueTotals);
     setGroupedDataState(groupedData.groupedOriginals);
     var denormalizedData = (0, _getDenormalized.default)(groupedData);
     setCols((0, _pivotCommon.getColumns)(columnsLabels, rows, values));
     setRows(denormalizedData);
     (0, _d3getLinearScale.default)(0, 100, 15);
-  }, [data, rows, values]); // eslint-disable-line
+  }, [data, rows, values, columnsLabels]); // eslint-disable-line
 
   var getColumnLabel = function getColumnLabel(col, i) {
     return columnsLabels && columnsLabels[i] ? columnsLabels[i] : col;

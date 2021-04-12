@@ -16,7 +16,8 @@ export default function PivotTable ({
   height,
   postprocessfn,
   showColumnTotals,
-  showRowsTotals
+  showRowsTotals,
+  totalsUnformatters
 }) {
   const [cols, setCols] = useState()
   const [pivotRows, setRows] = useState()
@@ -24,13 +25,18 @@ export default function PivotTable ({
   const [selectedRow, setSelectedRow] = useState()
 
   useEffect(() => {
-    const groupedData = getGroupedData(
-      getFilteredRows(data, filters), rows, values, postprocessfn)
+    const groupedData = getGroupedData({
+      data: getFilteredRows(data, filters),
+      rowAttributes: rows,
+      vals: values,
+      postprocessfn,
+      totalsUnformatters
+    })
     setColsTotals(groupedData.valueTotals)
     const denormalizedData = getDenormalized(groupedData)
     setCols(getColumns(columnsLabels, rows, values))
     setRows(denormalizedData)
-  }, [data, rows, values]) // eslint-disable-line
+  }, [data, rows, values, columnsLabels]) // eslint-disable-line
 
   const getRowClassName = rowid => rowid === selectedRow ? 'selected' : null
 
@@ -72,7 +78,7 @@ export default function PivotTable ({
 
   const getColumnTotalsRow = () =>
     <tr>
-      <th key='th-totals-col' colspan={values.length} className='pivotRowHeaderTotal'>Totals:</th>
+      <th key='th-totals-col' colSpan={rows.length} className='pivotRowHeaderTotal'>Totals:</th>
       {Object.keys(colsTotals).map(item =>
         <td className='pivotRowValueTotal'>{colsTotals[item]}</td>)}
     </tr>

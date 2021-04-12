@@ -21,7 +21,8 @@ const Template = ({
   height,
   postprocessfn,
   showColumnTotals,
-  showRowsTotals
+  showRowsTotals,
+  totalsUnformatters
 }) =>
   <PivotTable
     data={data}
@@ -35,12 +36,14 @@ const Template = ({
     postprocessfn={postprocessfn}
     showColumnTotals={showColumnTotals}
     showRowsTotals={showRowsTotals}
+    totalsUnformatters={totalsUnformatters}
   />
 
 export const Default = Template.bind({})
 Default.args = {
   data: testData,
   rows: ['continent', 'country'],
+  showColumnTotals: true,
   values: [
     { field: 'population', aggregator: 'sum' }
   ]
@@ -51,6 +54,10 @@ ColumnLabelsAndFormatters.args = {
   data: testData,
   rows: ['continent', 'currency_code', 'government', 'country'],
   columnsLabels: ['Continent', 'Currency', 'Government', 'Country', 'Population Sum', 'Count'],
+  totalsUnformatters: {
+    population: x => parseFloat(String(x).replace(/,/g, ''))
+  },
+  showColumnTotals: true,
   values: [
     {
       field: 'population',
@@ -108,6 +115,10 @@ CustomFormatters.args = {
   rows: ['continent', 'country'],
   columnsLabels: ['Continent', 'country', 'Population Sum', 'Area Sum'],
   showColumnTotals: true,
+  totalsUnformatters: {
+    population: x => parseFloat(String(x).replace(' M. hab', '')) * 1000000,
+    area: x => parseFloat(String(x).replace(/,/g, '').replace('  km²', ''))
+  },
   values: [
     {
       field: 'population',

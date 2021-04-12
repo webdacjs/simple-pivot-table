@@ -62,7 +62,13 @@ function getCombinedKeyBasedOnRowAttributes(dataItem, rowAttributes) {
 // with the originals if required.
 
 
-function getGroupedData(data, rowAttributes, vals, postprocessfn, getOriginalsFlag) {
+function getGroupedData(_ref) {
+  var data = _ref.data,
+      rowAttributes = _ref.rowAttributes,
+      vals = _ref.vals,
+      postprocessfn = _ref.postprocessfn,
+      getOriginalsFlag = _ref.getOriginalsFlag,
+      totalsUnformatters = _ref.totalsUnformatters;
   var grouped = {};
   data.forEach(function (dataItem) {
     var combinedKeyArray = getCombinedKeyBasedOnRowAttributes(dataItem, rowAttributes);
@@ -90,13 +96,25 @@ function getGroupedData(data, rowAttributes, vals, postprocessfn, getOriginalsFl
       grouped: grouped,
       valueTotals: _valueTotals
     };
-  } // Get the reduced values by key.
+  }
 
+  var totals = []; // Get the reduced values by key.
 
   Object.keys(grouped).forEach(function (key) {
     grouped[key] = getAggregatedValues(grouped[key], vals, postprocessfn);
+    totals.push(grouped[key]);
   });
-  var valueTotals = getAggregatedValues(data, vals, postprocessfn);
+  var totalsUnformatted = totals.map(function (item) {
+    if (!totalsUnformatters) {
+      return item;
+    }
+
+    return Object.keys(item).reduce(function (obj, key) {
+      obj[key] = totalsUnformatters[key] ? totalsUnformatters[key](item[key]) : item[key];
+      return obj;
+    }, {});
+  });
+  var valueTotals = getAggregatedValues(totalsUnformatted, vals, postprocessfn);
   return {
     grouped: grouped,
     valueTotals: valueTotals

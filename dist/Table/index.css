@@ -20,7 +20,15 @@ body {
     text-align: left;
     padding: 0.6em;
 }
-  
+
+.simple-table th {
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    background-color: #fff;
+  }
+
 .simple-table tr:nth-child(even) {
     background-color: #f2f2f2;
 }
