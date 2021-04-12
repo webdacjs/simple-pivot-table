@@ -11,25 +11,13 @@ var _react = _interopRequireWildcard(require("react"));
 
 var _propTypes = _interopRequireDefault(require("prop-types"));
 
-var _getGrouped = _interopRequireDefault(require("../utils/getGrouped"));
-
-var _getDenormalized = _interopRequireDefault(require("../utils/getDenormalized"));
-
-var _pivotCommon = require("../utils/pivotCommon");
+var _pivotMain = require("../utils/pivotMain");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
-
-function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
-
-function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
-
-function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter); }
-
-function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
 
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 
@@ -56,59 +44,30 @@ function PivotCsv(_ref) {
 
   var _useState = (0, _react.useState)(),
       _useState2 = _slicedToArray(_useState, 2),
-      cols = _useState2[0],
-      setCols = _useState2[1];
-
-  var _useState3 = (0, _react.useState)(),
-      _useState4 = _slicedToArray(_useState3, 2),
-      pivotRows = _useState4[0],
-      setRows = _useState4[1];
-
-  var _useState5 = (0, _react.useState)(),
-      _useState6 = _slicedToArray(_useState5, 2),
-      colsTotals = _useState6[0],
-      setColsTotals = _useState6[1];
+      csvData = _useState2[0],
+      setCsvData = _useState2[1];
 
   (0, _react.useEffect)(function () {
-    var groupedData = (0, _getGrouped.default)((0, _pivotCommon.getFilteredRows)(data, filters), rows, values, postprocessfn);
-    setColsTotals(groupedData.valueTotals);
-    var denormalizedData = (0, _getDenormalized.default)(groupedData);
-    setCols((0, _pivotCommon.getColumns)(columnsLabels, rows, values));
-    setRows(denormalizedData);
+    var csvContents = (0, _pivotMain.getPivotCsvData)({
+      data: data,
+      filters: filters,
+      rows: rows,
+      values: values,
+      columnsLabels: columnsLabels,
+      postprocessfn: postprocessfn,
+      showColumnTotals: showColumnTotals
+    });
+    setCsvData(csvContents);
   }, [data, rows, values, columnsLabels]); // eslint-disable-line
 
-  function getCsvContents() {
-    var header = "\"".concat(cols.join('","'), "\"");
-    var thisRows = pivotRows.map(function (x) {
-      return x.map(function (y) {
-        return y.value;
-      }).map(function (z) {
-        return z;
-      });
-    }).map(function (x) {
-      return "\"".concat(x.join('","'), "\"");
-    });
-
-    if (showColumnTotals) {
-      var totalLine = new Array(rows.length).fill('totals');
-      Object.keys(colsTotals).forEach(function (item) {
-        totalLine.push(colsTotals[item]);
-      });
-      thisRows.push("\"".concat(totalLine.join('","'), "\""));
-    }
-
-    var combined = [header].concat(_toConsumableArray(thisRows)).join('\n');
-    return /*#__PURE__*/_react.default.createElement("textarea", {
-      style: {
-        width: '100%',
-        height: '500px'
-      },
-      value: combined,
-      readOnly: true
-    });
-  }
-
-  return /*#__PURE__*/_react.default.createElement("div", null, cols && pivotRows && getCsvContents());
+  return /*#__PURE__*/_react.default.createElement("div", null, csvData && /*#__PURE__*/_react.default.createElement("textarea", {
+    style: {
+      width: '100%',
+      height: '500px'
+    },
+    value: csvData,
+    readOnly: true
+  }));
 }
 
 PivotCsv.propTypes = {
