@@ -30,7 +30,8 @@ export default function PivotTableBarChart ({
   width,
   values,
   height,
-  postprocessfn
+  postprocessfn,
+  totalsUnformatters
 }) {
   const [cols, setCols] = useState()
   const [pivotRows, setRows] = useState()
@@ -38,15 +39,21 @@ export default function PivotTableBarChart ({
   const [colsTotals, setColsTotals] = useState()
 
   useEffect(() => {
-    const groupedData = getGroupedData(
-      getFilteredRows(data, filters), rows, values, postprocessfn, true)
+    const groupedData = getGroupedData({
+      data: getFilteredRows(data, filters),
+      rowAttributes: rows,
+      vals: values,
+      postprocessfn,
+      getOriginalsFlag: true,
+      totalsUnformatters
+    })
     setColsTotals(groupedData.valueTotals)
     setGroupedDataState(groupedData.groupedOriginals)
     const denormalizedData = getDenormalized(groupedData)
     setCols(getColumns(columnsLabels, rows, values))
     setRows(denormalizedData)
     getLinearScale(0, 100, 15)
-  }, [data, rows, values]) // eslint-disable-line
+  }, [data, rows, values, columnsLabels]) // eslint-disable-line
 
   const getColumnLabel = (col, i) =>
     columnsLabels && columnsLabels[i] ? columnsLabels[i] : col
