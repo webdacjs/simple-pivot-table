@@ -2,9 +2,8 @@ import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import filter from 'lodash.filter'
 
-import getGroupedData from '../utils/getGrouped'
-import getDenormalized from '../utils/getDenormalized'
-import { getColumns, getFilteredRows } from '../utils/pivotCommon'
+import getPivotDataColumns from '../utils/pivotMain'
+
 import { separator } from '../utils/settings'
 
 import GaugeChart from '../BarCharts/GaugeChart'
@@ -36,16 +35,24 @@ export default function PivotTableBarChart ({
   const [pivotRows, setRows] = useState()
   const [groupedDataState, setGroupedDataState] = useState()
   const [colsTotals, setColsTotals] = useState()
+  const getOriginals = true
 
   useEffect(() => {
-    const groupedData = getGroupedData(
-      getFilteredRows(data, filters), rows, values, postprocessfn, true)
-    setColsTotals(groupedData.valueTotals)
-    setGroupedDataState(groupedData.groupedOriginals)
-    const denormalizedData = getDenormalized(groupedData)
-    setCols(getColumns(columnsLabels, rows, values))
-    setRows(denormalizedData)
-    getLinearScale(0, 100, 15)
+    const { pivotData, colsValues, colsTotals, groupedOriginals } = getPivotDataColumns({
+      data,
+      filters,
+      rows,
+      values,
+      columnsLabels,
+      postprocessfn,
+      getOriginals
+    })
+
+    setColsTotals(colsTotals)
+    setCols(colsValues)
+    setRows(pivotData)
+    setGroupedDataState(groupedOriginals)
+    
   }, [data, rows, values, columnsLabels]) // eslint-disable-line
 
   const getColumnLabel = (col, i) =>
