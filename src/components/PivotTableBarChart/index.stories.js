@@ -55,8 +55,6 @@ Default.args = {
   rows: ['continent', 'country'],
   showPopOver: true,
   popOverFormatter: x => `${Math.round(x).toLocaleString()} hab`,
-  // China population
-  barsMaxValue: 1443622060,
   barLegendSteps: 5,
   values: [
     { field: 'population', aggregator: 'sum' }
@@ -69,6 +67,7 @@ TwoDimensions.args = {
   rows: ['continent', 'currency_code', 'government', 'country'],
   columnsLabels: ['Continent', 'Currency', 'Government', 'Country', 'Population Sum', 'Count'],
   barLegendSteps: 10,
+  barsMaxValue: 100,
   postprocessfn: result => {
     return {
       population: 100,

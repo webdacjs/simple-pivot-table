@@ -9,6 +9,7 @@ import { separator } from '../utils/settings'
 import GaugeChart from '../BarCharts/GaugeChart'
 import D3Header from '../BarCharts/D3Header'
 import getLinearScale from '../BarCharts/d3getLinearScale'
+import getMinMaxValues from '../BarCharts/getMinMaxValue'
 
 import PopOver from '../PopOver/'
 
@@ -19,7 +20,7 @@ export default function PivotTableBarChart ({
   columns,
   columnsLabels,
   barsMinValue = 0,
-  barsMaxValue = 100,
+  barsMaxValue,
   barLegendSteps = 10,
   barsHeight = 15,
   barType = 'gauge',
@@ -35,6 +36,9 @@ export default function PivotTableBarChart ({
   const [pivotRows, setRows] = useState()
   const [groupedDataState, setGroupedDataState] = useState()
   const [colsTotals, setColsTotals] = useState()
+  const [maxValue, setMaxValue] = useState()
+  const [minValue, setMinValue] = useState()
+
   const getOriginals = true
 
   useEffect(() => {
@@ -52,6 +56,13 @@ export default function PivotTableBarChart ({
     setCols(colsValues)
     setRows(pivotData)
     setGroupedDataState(groupedOriginals)
+    setMinValue(barsMinValue)
+    if (!barsMaxValue) {
+      const { calcMaxValue } = getMinMaxValues(pivotData)
+      setMaxValue(calcMaxValue)
+    } else {
+      setMaxValue(barsMaxValue)
+    }
   }, [data, rows, values, columnsLabels]) // eslint-disable-line
 
   const getColumnLabel = (col, i) =>
@@ -67,7 +78,7 @@ export default function PivotTableBarChart ({
         <th key='bar-header' className='bar-header'>
           <D3Header
             height={barsHeight}
-            legendValues={getLinearScale(barsMinValue, barsMaxValue, barLegendSteps, barLegendFormatter)}
+            legendValues={getLinearScale(minValue, maxValue, barLegendSteps, barLegendFormatter)}
           />
         </th>
       </tr>
@@ -88,8 +99,8 @@ export default function PivotTableBarChart ({
             dataElement={valuesObj}
             dimensions={valuesCols}
             height={barsHeight}
-            minValue={barsMinValue}
-            maxValue={barsMaxValue}
+            minValue={minValue}
+            maxValue={maxValue}
           />
         </PopOver>
       )
