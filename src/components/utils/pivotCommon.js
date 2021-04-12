@@ -39,11 +39,16 @@ function getMostCommonSeparator (val) {
   const possibleDelimiters = ['\t', ',', ';', '","']
   const delimitersCount = possibleDelimiters.reduce(
     (obj, key) => { obj[key] = val.split(key).length; return obj}, {})
-  return soa(delimitersCount, 'value', 'desc')[0] 
+  const sorted = soa(delimitersCount, 'value', 'desc')
+  // Deal with "," case
+  if ((sorted[1] || {}).key === '","' && sorted[0].key === ',') {
+    return sorted[1].key
+  } 
+  return sorted[0].key
 }
 
 export function csvToJson (val) {
-  const separator = getMostCommonSeparator(val).key
+  const separator = getMostCommonSeparator(val)
   const splitcsv = separator === '","'
     ? val.split('\n').filter(x => x).map(x => x.slice(1, -1))
     : val.split('\n').filter(x => x)
