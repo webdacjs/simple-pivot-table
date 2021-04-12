@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 
-import { getJsonData } from '../utils/pivotMain'
+import { getPivotJsonData } from '../utils/pivotMain'
 
 export default function PivotJSON ({
   data,
@@ -17,7 +17,7 @@ export default function PivotJSON ({
   const [JSONData, setJSONData] = useState()
 
   useEffect(() => {
-    const JSONContents = getJsonData({
+    const JSONContents = getPivotJsonData({
       data,
       filters,
       rows,

@@ -30,7 +30,7 @@ export default function getPivotDataColumns ({
   return { pivotData, colsValues, colsTotals }
 }
 
-export function getCsvData ({
+export function getPivotCsvData ({
   data,
   filters,
   rows,
@@ -52,7 +52,7 @@ export function getCsvData ({
   return csvData
 }
 
-export function getJsonData ({
+export function getPivotJsonData ({
   data,
   filters,
   rows,
@@ -61,7 +61,7 @@ export function getJsonData ({
   postprocessfn,
   showColumnTotals
 }) {
-  const csvData = getCsvData({
+  const csvData = getPivotCsvData({
     data,
     filters,
     rows,

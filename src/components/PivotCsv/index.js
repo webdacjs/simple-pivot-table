@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 
-import { getCsvData } from '../utils/pivotMain'
+import { getPivotCsvData } from '../utils/pivotMain'
 
 export default function PivotCsv ({
   data,
@@ -17,7 +17,7 @@ export default function PivotCsv ({
   const [csvData, setCsvData] = useState()
 
   useEffect(() => {
-    const csvContents = getCsvData({
+    const csvContents = getPivotCsvData({
       data,
       filters,
       rows,
