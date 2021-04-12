@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 
-import getGroupedData from '../utils/getGrouped'
-import getDenormalized from '../utils/getDenormalized'
-import { getColumns, getFilteredRows, getCsvContents } from '../utils/pivotCommon'
+import { getCsvData } from '../utils/pivotMain'
 
 export default function PivotCsv ({
   data,
@@ -16,27 +14,24 @@ export default function PivotCsv ({
   showColumnTotals,
   showRowsTotals
 }) {
-  const [cols, setCols] = useState()
-  const [pivotRows, setRows] = useState()
-  const [colsTotals, setColsTotals] = useState()
+  const [csvData, setCsvData] = useState()
 
   useEffect(() => {
-    const groupedData = getGroupedData(
-      getFilteredRows(data, filters), rows, values, postprocessfn)
-    setColsTotals(groupedData.valueTotals)
-    const denormalizedData = getDenormalized(groupedData)
-    setCols(getColumns(columnsLabels, rows, values))
-    setRows(denormalizedData)
+    const csvContents = getCsvData({
+      data,
+      filters,
+      rows,
+      values,
+      columnsLabels,
+      postprocessfn,
+      showColumnTotals
+    })
+    setCsvData(csvContents)
   }, [data, rows, values, columnsLabels]) // eslint-disable-line
-
-  function getCsvContentsTextarea () {
-    const csvContents = getCsvContents (pivotRows, cols, rows, showColumnTotals, colsTotals)
-    return <textarea style={{ width: '100%', height: '500px' }} value={csvContents} readOnly />
-  }
 
   return (
     <div>
-      {cols && pivotRows && getCsvContentsTextarea()}
+      {csvData && <textarea style={{ width: '100%', height: '500px' }} value={csvData} readOnly />}
     </div>
   )
 }
