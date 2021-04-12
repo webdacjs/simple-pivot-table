@@ -52,7 +52,8 @@ function PivotCsv(_ref) {
       values = _ref.values,
       postprocessfn = _ref.postprocessfn,
       showColumnTotals = _ref.showColumnTotals,
-      showRowsTotals = _ref.showRowsTotals;
+      showRowsTotals = _ref.showRowsTotals,
+      totalsUnformatters = _ref.totalsUnformatters;
 
   var _useState = (0, _react.useState)(),
       _useState2 = _slicedToArray(_useState, 2),
@@ -70,12 +71,18 @@ function PivotCsv(_ref) {
       setColsTotals = _useState6[1];
 
   (0, _react.useEffect)(function () {
-    var groupedData = (0, _getGrouped.default)((0, _pivotCommon.getFilteredRows)(data, filters), rows, values, postprocessfn);
+    var groupedData = (0, _getGrouped.default)({
+      data: (0, _pivotCommon.getFilteredRows)(data, filters),
+      rowAttributes: rows,
+      vals: values,
+      postprocessfn: postprocessfn,
+      totalsUnformatters: totalsUnformatters
+    });
     setColsTotals(groupedData.valueTotals);
     var denormalizedData = (0, _getDenormalized.default)(groupedData);
     setCols((0, _pivotCommon.getColumns)(columnsLabels, rows, values));
     setRows(denormalizedData);
-  }, [data, rows, values]); // eslint-disable-line
+  }, [data, rows, values, columnsLabels]); // eslint-disable-line
 
   function getCsvContents() {
     var header = "\"".concat(cols.join('","'), "\"");

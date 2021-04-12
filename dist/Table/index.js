@@ -74,7 +74,7 @@ function Table(_ref) {
     setCols(columns || Object.keys(data[0]));
     setRows(data);
     setAsc(true);
-  }, [data]); // eslint-disable-line
+  }, [data, columns, columnsLabels]); // eslint-disable-line
 
   function filterIterations(rawRows) {
     var filteredRows = _toConsumableArray(rawRows);
