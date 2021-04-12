@@ -8,7 +8,7 @@ export function removeNewLines (val) {
 export function getColumns (columnsLabels, rows, values) {
   const columnsCombined = [...rows, ...values.map(x => x.field)]
   if (columnsLabels) {
-    return columnsCombined.map((col, i) => columnsLabels[i] ? columnsLabels[i] : col )
+    return columnsCombined.map((col, i) => columnsLabels[i] ? columnsLabels[i] : col)
   }
   return [...rows, ...values.map(x => x.field)]
 }
@@ -38,12 +38,12 @@ export function timerFn (funtionName) {
 function getMostCommonSeparator (val) {
   const possibleDelimiters = ['\t', ',', ';', '","']
   const delimitersCount = possibleDelimiters.reduce(
-    (obj, key) => { obj[key] = val.split(key).length; return obj}, {})
+    (obj, key) => { obj[key] = val.split(key).length; return obj }, {})
   const sorted = soa(delimitersCount, 'value', 'desc')
   // Deal with "," case
   if ((sorted[1] || {}).key === '","' && sorted[0].key === ',') {
     return sorted[1].key
-  } 
+  }
   return sorted[0].key
 }
 
@@ -54,9 +54,9 @@ export function csvToJson (val) {
     : val.split('\n').filter(x => x)
   const header = splitcsv[0].split(separator).map(x => removeNewLines(x))
 
-  const json = splitcsv.slice(1).map(line => 
-   line.split(separator).map(x => removeNewLines(x)).reduce(
-    (obj, key, i) => { obj[header[i]] = key; return obj}, {})
+  const json = splitcsv.slice(1).map(line =>
+    line.split(separator).map(x => removeNewLines(x)).reduce(
+      (obj, key, i) => { obj[header[i]] = key; return obj }, {})
   )
   return json
 }
