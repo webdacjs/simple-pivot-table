@@ -23,8 +23,8 @@ export default function getPivotDataColumns ({
   const pivotData = getDenormalized(groupedData)
 
   if (getOriginals) {
-    const {groupedOriginals} = groupedData
-    return { pivotData, colsValues, colsTotals, groupedOriginals}
+    const { groupedOriginals } = groupedData
+    return { pivotData, colsValues, colsTotals, groupedOriginals }
   }
 
   return { pivotData, colsValues, colsTotals }
