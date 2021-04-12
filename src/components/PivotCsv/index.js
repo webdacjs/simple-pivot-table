@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 
 import getGroupedData from '../utils/getGrouped'
 import getDenormalized from '../utils/getDenormalized'
-import { getColumns, getFilteredRows } from '../utils/pivotCommon'
+import { getColumns, getFilteredRows, getCsvContents } from '../utils/pivotCommon'
 
 export default function PivotCsv ({
   data,
@@ -29,27 +29,14 @@ export default function PivotCsv ({
     setRows(denormalizedData)
   }, [data, rows, values, columnsLabels]) // eslint-disable-line
 
-  function getCsvContents () {
-    const header = `"${cols.join('","')}"`
-    const thisRows = pivotRows
-      .map(x =>
-        x.map(y => y.value)
-          .map(z => z)
-      ).map(x => `"${x.join('","')}"`)
-    if (showColumnTotals) {
-      const totalLine = new Array(rows.length).fill('totals')
-      Object.keys(colsTotals).forEach(item => {
-        totalLine.push(colsTotals[item])
-      })
-      thisRows.push(`"${totalLine.join('","')}"`)
-    }
-    const combined = [header, ...thisRows].join('\n')
-    return <textarea style={{ width: '100%', height: '500px' }} value={combined} readOnly />
+  function getCsvContentsTextarea () {
+    const csvContents = getCsvContents (pivotRows, cols, rows, showColumnTotals, colsTotals)
+    return <textarea style={{ width: '100%', height: '500px' }} value={csvContents} readOnly />
   }
 
   return (
     <div>
-      {cols && pivotRows && getCsvContents()}
+      {cols && pivotRows && getCsvContentsTextarea()}
     </div>
   )
 }
