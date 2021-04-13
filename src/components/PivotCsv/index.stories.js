@@ -3,6 +3,7 @@ import React from 'react'
 import PivotCsv from './index'
 
 import testData from '../../testData/'
+import getTestCsvData from '../../testData/data_csv'
 
 export default {
   title: 'PivotCsv',
@@ -39,6 +40,15 @@ const Template = ({
 export const Default = Template.bind({})
 Default.args = {
   data: testData,
+  rows: ['continent', 'country'],
+  values: [
+    { field: 'population', aggregator: 'sum' }
+  ]
+}
+
+export const LoadingCsvData = Template.bind({})
+LoadingCsvData.args = {
+  data: getTestCsvData(),
   rows: ['continent', 'country'],
   values: [
     { field: 'population', aggregator: 'sum' }
