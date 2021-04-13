@@ -54,8 +54,6 @@ export default function StackChart ({
     })
   )
 
-  console.log({builtDataObjectWithX})
-
   const ref = useD3(
     svg => {
       svg.selectAll('*').remove()
