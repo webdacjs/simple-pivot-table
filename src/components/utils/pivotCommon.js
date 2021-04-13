@@ -21,12 +21,6 @@ function filterIterations (rawRows, filters) {
   return filteredRows
 }
 
-export function getFilteredRows (rawRows, filters) {
-  return filters
-    ? filterIterations(rawRows, filters)
-    : rawRows
-}
-
 export function timerFn (funtionName) {
   const t0 = performance.now()
   return () => {
@@ -47,6 +41,11 @@ function getMostCommonSeparator (val) {
   return sorted[0].key
 }
 
+function getJsonValue(key) {
+  const numericValue = parseFloat(key)
+  return numericValue == key ? numericValue : key
+}
+
 export function csvToJson (val) {
   const separator = getMostCommonSeparator(val)
   const splitcsv = separator === '","'
@@ -56,7 +55,7 @@ export function csvToJson (val) {
 
   const json = splitcsv.slice(1).map(line =>
     line.split(separator).map(x => removeNewLines(x)).reduce(
-      (obj, key, i) => { obj[header[i]] = key; return obj }, {})
+      (obj, key, i) => { obj[header[i]] = getJsonValue(key); return obj }, {})
   )
   return json
 }
@@ -76,4 +75,17 @@ export function getCsvContents (pivotRows, cols, rows, showColumnTotals, colsTot
     thisRows.push(`"${totalLine.join('","')}"`)
   }
   return [header, ...thisRows].join('\n')
+}
+
+function checkValidJSON (val) {
+  const expectedConstructor = ([]).constructor
+  return val.constructor === expectedConstructor
+}
+
+export function getFilteredRows (rawRows, filters) {
+  const validJson = checkValidJSON(rawRows)
+  const loadedData = validJson ? rawRows : csvToJson(rawRows)
+  return filters
+    ? filterIterations(loadedData, filters)
+    : loadedData
 }

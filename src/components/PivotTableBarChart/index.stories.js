@@ -55,8 +55,6 @@ Default.args = {
   rows: ['continent', 'country'],
   showPopOver: true,
   popOverFormatter: x => `${Math.round(x).toLocaleString()} hab`,
-  // China population
-  barsMaxValue: 1443622060,
   barLegendSteps: 5,
   values: [
     { field: 'population', aggregator: 'sum' }
@@ -69,10 +67,37 @@ TwoDimensions.args = {
   rows: ['continent', 'currency_code', 'government', 'country'],
   columnsLabels: ['Continent', 'Currency', 'Government', 'Country', 'Population Sum', 'Count'],
   barLegendSteps: 10,
+  barsMaxValue: 100,
   postprocessfn: result => {
     return {
       population: 100,
       area: Math.round((result.population * 100) / (result.area || 1) / 1000)
+    }
+  },
+  values: [
+    {
+      field: 'population',
+      aggregator: 'sum'
+    },
+    {
+      field: 'area',
+      aggregator: 'sum'
+    }
+  ]
+}
+
+export const StackChart = Template.bind({})
+StackChart.args = {
+  data: testData,
+  rows: ['continent', 'currency_code', 'government', 'country'],
+  columnsLabels: ['Continent', 'Currency', 'Government', 'Country', 'Population Sum', 'Count'],
+  barLegendSteps: 10,
+  barsMaxValue: 100,
+  barType: 'stack',
+  postprocessfn: result => {
+    return {
+      population: 50,
+      area: 50
     }
   },
   values: [

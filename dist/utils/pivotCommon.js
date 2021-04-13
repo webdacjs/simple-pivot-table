@@ -5,10 +5,10 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.removeNewLines = removeNewLines;
 exports.getColumns = getColumns;
-exports.getFilteredRows = getFilteredRows;
 exports.timerFn = timerFn;
 exports.csvToJson = csvToJson;
 exports.getCsvContents = getCsvContents;
+exports.getFilteredRows = getFilteredRows;
 
 var _sortObjectsArray = _interopRequireDefault(require("sort-objects-array"));
 
@@ -55,10 +55,6 @@ function filterIterations(rawRows, filters) {
   return filteredRows;
 }
 
-function getFilteredRows(rawRows, filters) {
-  return filters ? filterIterations(rawRows, filters) : rawRows;
-}
-
 function timerFn(funtionName) {
   var t0 = performance.now();
   return function () {
@@ -82,6 +78,11 @@ function getMostCommonSeparator(val) {
   return sorted[0].key;
 }
 
+function getJsonValue(key) {
+  var numericValue = parseFloat(key);
+  return numericValue == key ? numericValue : key;
+}
+
 function csvToJson(val) {
   var separator = getMostCommonSeparator(val);
   var splitcsv = separator === '","' ? val.split('\n').filter(function (x) {
@@ -98,7 +99,7 @@ function csvToJson(val) {
     return line.split(separator).map(function (x) {
       return removeNewLines(x);
     }).reduce(function (obj, key, i) {
-      obj[header[i]] = key;
+      obj[header[i]] = getJsonValue(key);
       return obj;
     }, {});
   });
@@ -126,4 +127,15 @@ function getCsvContents(pivotRows, cols, rows, showColumnTotals, colsTotals) {
   }
 
   return [header].concat(_toConsumableArray(thisRows)).join('\n');
+}
+
+function checkValidJSON(val) {
+  var expectedConstructor = [].constructor;
+  return val.constructor === expectedConstructor;
+}
+
+function getFilteredRows(rawRows, filters) {
+  var validJson = checkValidJSON(rawRows);
+  var loadedData = validJson ? rawRows : csvToJson(rawRows);
+  return filters ? filterIterations(loadedData, filters) : loadedData;
 }

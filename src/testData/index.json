@@ -1680,7 +1680,9 @@
     "country": "Montenegro",
     "abbreviation": "ME",
     "population": 631219,
-    "continent": "Europe"
+    "continent": "Europe",
+    "currency_code": "EUR",
+    "government": "Republic"
   },
   {
     "country": "Montserrat",
@@ -2849,7 +2851,7 @@
     "population": 3139000,
     "continent": "Europe",
     "currency_code": "GBP",
-    "government": null
+    "government": "Constitutional Monarchy"
   },
   {
     "country": "Wallis and Futuna",
