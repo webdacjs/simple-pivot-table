@@ -13,19 +13,19 @@ var _propTypes = _interopRequireDefault(require("prop-types"));
 
 var _lodash = _interopRequireDefault(require("lodash.filter"));
 
-var _getGrouped = _interopRequireDefault(require("../utils/getGrouped"));
-
-var _getDenormalized = _interopRequireDefault(require("../utils/getDenormalized"));
-
-var _pivotCommon = require("../utils/pivotCommon");
+var _pivotMain = _interopRequireDefault(require("../utils/pivotMain"));
 
 var _settings = require("../utils/settings");
 
 var _GaugeChart = _interopRequireDefault(require("../BarCharts/GaugeChart"));
 
+var _StackChart = _interopRequireDefault(require("../BarCharts/StackChart"));
+
 var _D3Header = _interopRequireDefault(require("../BarCharts/D3Header"));
 
 var _d3getLinearScale = _interopRequireDefault(require("../BarCharts/d3getLinearScale"));
+
+var _getMinMaxValue = _interopRequireDefault(require("../BarCharts/getMinMaxValue"));
 
 var _PopOver = _interopRequireDefault(require("../PopOver/"));
 
@@ -55,8 +55,7 @@ function PivotTableBarChart(_ref) {
       columnsLabels = _ref.columnsLabels,
       _ref$barsMinValue = _ref.barsMinValue,
       barsMinValue = _ref$barsMinValue === void 0 ? 0 : _ref$barsMinValue,
-      _ref$barsMaxValue = _ref.barsMaxValue,
-      barsMaxValue = _ref$barsMaxValue === void 0 ? 100 : _ref$barsMaxValue,
+      barsMaxValue = _ref.barsMaxValue,
       _ref$barLegendSteps = _ref.barLegendSteps,
       barLegendSteps = _ref$barLegendSteps === void 0 ? 10 : _ref$barLegendSteps,
       _ref$barsHeight = _ref.barsHeight,
@@ -91,15 +90,47 @@ function PivotTableBarChart(_ref) {
       colsTotals = _useState8[0],
       setColsTotals = _useState8[1];
 
+  var _useState9 = (0, _react.useState)(),
+      _useState10 = _slicedToArray(_useState9, 2),
+      maxValue = _useState10[0],
+      setMaxValue = _useState10[1];
+
+  var _useState11 = (0, _react.useState)(),
+      _useState12 = _slicedToArray(_useState11, 2),
+      minValue = _useState12[0],
+      setMinValue = _useState12[1];
+
+  var getOriginals = true;
   (0, _react.useEffect)(function () {
-    var groupedData = (0, _getGrouped.default)((0, _pivotCommon.getFilteredRows)(data, filters), rows, values, postprocessfn, true);
-    setColsTotals(groupedData.valueTotals);
-    setGroupedDataState(groupedData.groupedOriginals);
-    var denormalizedData = (0, _getDenormalized.default)(groupedData);
-    setCols((0, _pivotCommon.getColumns)(columnsLabels, rows, values));
-    setRows(denormalizedData);
-    (0, _d3getLinearScale.default)(0, 100, 15);
-  }, [data]); // eslint-disable-line
+    var _getPivotDataColumns = (0, _pivotMain.default)({
+      data: data,
+      filters: filters,
+      rows: rows,
+      values: values,
+      columnsLabels: columnsLabels,
+      postprocessfn: postprocessfn,
+      getOriginals: getOriginals
+    }),
+        pivotData = _getPivotDataColumns.pivotData,
+        colsValues = _getPivotDataColumns.colsValues,
+        colsTotals = _getPivotDataColumns.colsTotals,
+        groupedOriginals = _getPivotDataColumns.groupedOriginals;
+
+    setColsTotals(colsTotals);
+    setCols(colsValues);
+    setRows(pivotData);
+    setGroupedDataState(groupedOriginals);
+    setMinValue(barsMinValue);
+
+    if (!barsMaxValue) {
+      var _getMinMaxValues = (0, _getMinMaxValue.default)(pivotData),
+          calcMaxValue = _getMinMaxValues.calcMaxValue;
+
+      setMaxValue(calcMaxValue);
+    } else {
+      setMaxValue(barsMaxValue);
+    }
+  }, [data, rows, values, columnsLabels]); // eslint-disable-line
 
   var getColumnLabel = function getColumnLabel(col, i) {
     return columnsLabels && columnsLabels[i] ? columnsLabels[i] : col;
@@ -116,7 +147,7 @@ function PivotTableBarChart(_ref) {
       className: "bar-header"
     }, /*#__PURE__*/_react.default.createElement(_D3Header.default, {
       height: barsHeight,
-      legendValues: (0, _d3getLinearScale.default)(barsMinValue, barsMaxValue, barLegendSteps, barLegendFormatter)
+      legendValues: (0, _d3getLinearScale.default)(minValue, maxValue, barLegendSteps, barLegendFormatter)
     }))));
   };
 
@@ -146,8 +177,19 @@ function PivotTableBarChart(_ref) {
         dataElement: valuesObj,
         dimensions: valuesCols,
         height: barsHeight,
-        minValue: barsMinValue,
-        maxValue: barsMaxValue
+        minValue: minValue,
+        maxValue: maxValue
+      }));
+    } else if (barType === 'stack') {
+      return /*#__PURE__*/_react.default.createElement(_PopOver.default, {
+        showPopOver: showPopOver,
+        dataArray: dataArray
+      }, /*#__PURE__*/_react.default.createElement(_StackChart.default, {
+        dataElement: valuesObj,
+        dimensions: valuesCols,
+        height: barsHeight,
+        minValue: minValue,
+        maxValue: maxValue
       }));
     }
   }
@@ -181,19 +223,14 @@ function PivotTableBarChart(_ref) {
   var getRowLine = function getRowLine(row, i) {
     var headerItems = (0, _lodash.default)(row, function (x) {
       return x.type === 'header';
-    }).map(function (x) {
-      return {
-        value: x.value,
-        visible: x.visible
-      };
     });
     var popOverDataArray = getPopOverDataArray(headerItems);
     var rowItems = headerItems.map(function (item, y) {
-      return /*#__PURE__*/_react.default.createElement("th", {
+      return item.visible ? /*#__PURE__*/_react.default.createElement("th", {
         key: "th-".concat(i, "-").concat(y),
-        rowspan: item.rowSpan,
+        rowSpan: item.rowSpan,
         className: "pivotRowHeader"
-      }, item.value);
+      }, item.value) : null;
     }).filter(function (x) {
       return x;
     });

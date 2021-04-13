@@ -2,7 +2,7 @@ import React from 'react'
 import useD3 from './d3hook.js'
 import d3chartBuilder from './d3chartBuilder'
 
-export default function GaugeChart ({
+export default function StackChart ({
   dataElement,
   maxValue,
   minValue,
@@ -31,30 +31,30 @@ export default function GaugeChart ({
   }
 
   const chartHeight = height || 30
-  const yOffset = chartHeight / 3 / 2.3
-  const innerheight = (chartHeight / 3) * 2
 
   const chartColors = colors || ['#4e79a7', '#e05759', '#f28e2c']
   const builtDataObject = dimensions.map((x, i) => ({
     dimension: x,
-    y: i === 0 ? 0 : yOffset,
+    y: 0,
     text: `${Math.round(dataElement[x])}${suffix}`,
     width: getWidth(dataElement[x]),
-    height: i === 0 ? chartHeight : innerheight,
+    height: chartHeight,
     color: chartColors[i] || randomColor()
   }))
   const widths = builtDataObject.map(x => x.width)
   const builtDataObjectWithX = builtDataObject.map((item, index) =>
     Object.assign(item, {
       x:
-        index <= 1
+        index === 0
           ? getAdustedX(0, item)
           : getAdustedX(
-            widths.slice(1, index).reduce((a, b) => a + b, 0),
+            widths.slice(0, index).reduce((a, b) => a + b, 0),
             item
           )
     })
   )
+
+  console.log({builtDataObjectWithX})
 
   const ref = useD3(
     svg => {

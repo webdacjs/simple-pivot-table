@@ -18,9 +18,11 @@ function defaultFormatter(x) {
     return "".concat((x / 1000000).toFixed(2), " M");
   } else if (x > 1000) {
     return "".concat((x / 1000).toFixed(2), " k");
-  }
+  } // Avoid many decimal points in the legend.
 
-  return x;
+
+  var value = Math.round(x) === x ? x : x.toFixed(2);
+  return value;
 }
 
 function getLinearScale(minVal, maxVal, steps, legendFormatter) {

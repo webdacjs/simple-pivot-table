@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 
-import { getPivotCsvData } from '../utils/pivotMain'
+import { getPivotJsonData } from '../utils/pivotMain'
 
-export default function PivotCsv ({
+export default function PivotJSON ({
   data,
   filters,
   rows,
@@ -14,10 +14,10 @@ export default function PivotCsv ({
   showColumnTotals,
   showRowsTotals
 }) {
-  const [csvData, setCsvData] = useState()
+  const [JSONData, setJSONData] = useState()
 
   useEffect(() => {
-    const csvContents = getPivotCsvData({
+    const JSONContents = getPivotJsonData({
       data,
       filters,
       rows,
@@ -26,17 +26,22 @@ export default function PivotCsv ({
       postprocessfn,
       showColumnTotals
     })
-    setCsvData(csvContents)
+    setJSONData(JSONContents)
   }, [data, rows, values, columnsLabels]) // eslint-disable-line
 
   return (
     <div>
-      {csvData && <textarea style={{ width: '100%', height: '500px' }} value={csvData} readOnly />}
+      {JSONData &&
+        <textarea
+          style={{ width: '100%', height: '500px' }}
+          value={JSON.stringify(JSONData, null, 4)}
+          readOnly
+        />}
     </div>
   )
 }
 
-PivotCsv.propTypes = {
+PivotJSON.propTypes = {
   data: PropTypes.array,
   rows: PropTypes.array,
   columns: PropTypes.array,

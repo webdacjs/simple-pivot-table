@@ -9,7 +9,7 @@ export default function PopOver ({
   const [hovered, setHovered] = useState()
 
   const getPopOver = () => (
-    <div className='popoverBox'>
+    <div className='popoverBox' onMouseOver={() => setHovered(true)} onMouseOut={() => setHovered()}>
       <table className='popOverBox-table'>
         <tbody>
           {dataArray.map((item, i) => (

@@ -2,14 +2,16 @@ import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import filter from 'lodash.filter'
 
-import getGroupedData from '../utils/getGrouped'
-import getDenormalized from '../utils/getDenormalized'
-import { getColumns, getFilteredRows } from '../utils/pivotCommon'
+import getPivotDataColumns from '../utils/pivotMain'
+
 import { separator } from '../utils/settings'
 
 import GaugeChart from '../BarCharts/GaugeChart'
+import StackChart from '../BarCharts/StackChart'
+
 import D3Header from '../BarCharts/D3Header'
 import getLinearScale from '../BarCharts/d3getLinearScale'
+import getMinMaxValues from '../BarCharts/getMinMaxValue'
 
 import PopOver from '../PopOver/'
 
@@ -20,7 +22,7 @@ export default function PivotTableBarChart ({
   columns,
   columnsLabels,
   barsMinValue = 0,
-  barsMaxValue = 100,
+  barsMaxValue,
   barLegendSteps = 10,
   barsHeight = 15,
   barType = 'gauge',
@@ -36,17 +38,34 @@ export default function PivotTableBarChart ({
   const [pivotRows, setRows] = useState()
   const [groupedDataState, setGroupedDataState] = useState()
   const [colsTotals, setColsTotals] = useState()
+  const [maxValue, setMaxValue] = useState()
+  const [minValue, setMinValue] = useState()
+
+  const getOriginals = true
 
   useEffect(() => {
-    const groupedData = getGroupedData(
-      getFilteredRows(data, filters), rows, values, postprocessfn, true)
-    setColsTotals(groupedData.valueTotals)
-    setGroupedDataState(groupedData.groupedOriginals)
-    const denormalizedData = getDenormalized(groupedData)
-    setCols(getColumns(columnsLabels, rows, values))
-    setRows(denormalizedData)
-    getLinearScale(0, 100, 15)
-  }, [data]) // eslint-disable-line
+    const { pivotData, colsValues, colsTotals, groupedOriginals } = getPivotDataColumns({
+      data,
+      filters,
+      rows,
+      values,
+      columnsLabels,
+      postprocessfn,
+      getOriginals
+    })
+
+    setColsTotals(colsTotals)
+    setCols(colsValues)
+    setRows(pivotData)
+    setGroupedDataState(groupedOriginals)
+    setMinValue(barsMinValue)
+    if (!barsMaxValue) {
+      const { calcMaxValue } = getMinMaxValues(pivotData)
+      setMaxValue(calcMaxValue)
+    } else {
+      setMaxValue(barsMaxValue)
+    }
+  }, [data, rows, values, columnsLabels]) // eslint-disable-line
 
   const getColumnLabel = (col, i) =>
     columnsLabels && columnsLabels[i] ? columnsLabels[i] : col
@@ -61,7 +80,7 @@ export default function PivotTableBarChart ({
         <th key='bar-header' className='bar-header'>
           <D3Header
             height={barsHeight}
-            legendValues={getLinearScale(barsMinValue, barsMaxValue, barLegendSteps, barLegendFormatter)}
+            legendValues={getLinearScale(minValue, maxValue, barLegendSteps, barLegendFormatter)}
           />
         </th>
       </tr>
@@ -82,11 +101,22 @@ export default function PivotTableBarChart ({
             dataElement={valuesObj}
             dimensions={valuesCols}
             height={barsHeight}
-            minValue={barsMinValue}
-            maxValue={barsMaxValue}
+            minValue={minValue}
+            maxValue={maxValue}
           />
         </PopOver>
       )
+    } else if (barType === 'stack') {
+      return <PopOver showPopOver={showPopOver} dataArray={dataArray}>
+      <StackChart
+        dataElement={valuesObj}
+        dimensions={valuesCols}
+        height={barsHeight}
+        minValue={minValue}
+        maxValue={maxValue}
+      />
+    </PopOver>
+
     }
   }
 
@@ -108,10 +138,12 @@ export default function PivotTableBarChart ({
   }
 
   const getRowLine = (row, i) => {
-    const headerItems = filter(row, x => x.type === 'header').map(x => ({ value: x.value, visible: x.visible }))
+    const headerItems = filter(row, x => x.type === 'header')
     const popOverDataArray = getPopOverDataArray(headerItems)
     const rowItems = headerItems.map(
-      (item, y) => <th key={`th-${i}-${y}`} rowspan={item.rowSpan} className='pivotRowHeader'>{item.value}</th>).filter(x => x)
+      (item, y) => item.visible
+        ? <th key={`th-${i}-${y}`} rowSpan={item.rowSpan} className='pivotRowHeader'>{item.value}</th>
+        : null).filter(x => x)
     const { valuesObj, valuesCols } = getValuesObj(row)
     rowItems.push(
       <td key={`bar-${i}`} className='bar'>

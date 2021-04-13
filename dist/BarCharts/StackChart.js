@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.default = GaugeChart;
+exports.default = StackChart;
 
 var _react = _interopRequireDefault(require("react"));
 
@@ -13,7 +13,7 @@ var _d3chartBuilder = _interopRequireDefault(require("./d3chartBuilder"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function GaugeChart(_ref) {
+function StackChart(_ref) {
   var dataElement = _ref.dataElement,
       maxValue = _ref.maxValue,
       minValue = _ref.minValue,
@@ -49,16 +49,14 @@ function GaugeChart(_ref) {
   }
 
   var chartHeight = height || 30;
-  var yOffset = chartHeight / 3 / 2.3;
-  var innerheight = chartHeight / 3 * 2;
   var chartColors = colors || ['#4e79a7', '#e05759', '#f28e2c'];
   var builtDataObject = dimensions.map(function (x, i) {
     return {
       dimension: x,
-      y: i === 0 ? 0 : yOffset,
+      y: 0,
       text: "".concat(Math.round(dataElement[x])).concat(suffix),
       width: getWidth(dataElement[x]),
-      height: i === 0 ? chartHeight : innerheight,
+      height: chartHeight,
       color: chartColors[i] || randomColor()
     };
   });
@@ -67,10 +65,13 @@ function GaugeChart(_ref) {
   });
   var builtDataObjectWithX = builtDataObject.map(function (item, index) {
     return Object.assign(item, {
-      x: index <= 1 ? getAdustedX(0, item) : getAdustedX(widths.slice(1, index).reduce(function (a, b) {
+      x: index === 0 ? getAdustedX(0, item) : getAdustedX(widths.slice(0, index).reduce(function (a, b) {
         return a + b;
       }, 0), item)
     });
+  });
+  console.log({
+    builtDataObjectWithX: builtDataObjectWithX
   });
   var ref = (0, _d3hook.default)(function (svg) {
     svg.selectAll('*').remove();

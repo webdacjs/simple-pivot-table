@@ -1,13 +1,12 @@
 import React from 'react'
 
-import PivotTable from './index'
-import './index.css'
+import PivotJSON from './index'
 
 import testData from '../../testData/'
 
 export default {
-  title: 'PivotTable',
-  component: PivotTable
+  title: 'PivotJSON',
+  component: PivotJSON
 }
 
 const Template = ({
@@ -23,7 +22,7 @@ const Template = ({
   showColumnTotals,
   showRowsTotals
 }) =>
-  <PivotTable
+  <PivotJSON
     data={data}
     columns={columns}
     rows={rows}
@@ -41,7 +40,6 @@ export const Default = Template.bind({})
 Default.args = {
   data: testData,
   rows: ['continent', 'country'],
-  showColumnTotals: true,
   values: [
     { field: 'population', aggregator: 'sum' }
   ]
@@ -95,7 +93,6 @@ CountAggregator.args = {
   data: testData,
   rows: ['continent'],
   columnsLabels: ['Continent', 'Country Count'],
-  showColumnTotals: true,
   values: [
     {
       field: 'country'
@@ -119,25 +116,6 @@ CustomFormatters.args = {
       field: 'area',
       aggregator: 'sum',
       formatter: x => `${Math.round(x).toLocaleString()} km²`
-    }
-  ]
-}
-
-export const PostProcessFunction = Template.bind({})
-PostProcessFunction.args = {
-  data: testData,
-  rows: ['continent'],
-  columnsLabels: ['Continent', 'Country Count', 'Custom Field'],
-  showColumnTotals: true,
-  postprocessfn: result => {
-    return {
-      country: result.country,
-      custom_field: 10
-    }
-  },
-  values: [
-    {
-      field: 'country'
     }
   ]
 }
