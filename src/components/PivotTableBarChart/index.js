@@ -7,6 +7,8 @@ import getPivotDataColumns from '../utils/pivotMain'
 import { separator } from '../utils/settings'
 
 import GaugeChart from '../BarCharts/GaugeChart'
+import StackChart from '../BarCharts/StackChart'
+
 import D3Header from '../BarCharts/D3Header'
 import getLinearScale from '../BarCharts/d3getLinearScale'
 import getMinMaxValues from '../BarCharts/getMinMaxValue'
@@ -104,6 +106,17 @@ export default function PivotTableBarChart ({
           />
         </PopOver>
       )
+    } else if (barType === 'stack') {
+      return <PopOver showPopOver={showPopOver} dataArray={dataArray}>
+      <StackChart
+        dataElement={valuesObj}
+        dimensions={valuesCols}
+        height={barsHeight}
+        minValue={minValue}
+        maxValue={maxValue}
+      />
+    </PopOver>
+
     }
   }
 

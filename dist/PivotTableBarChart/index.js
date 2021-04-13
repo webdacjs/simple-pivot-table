@@ -19,6 +19,8 @@ var _settings = require("../utils/settings");
 
 var _GaugeChart = _interopRequireDefault(require("../BarCharts/GaugeChart"));
 
+var _StackChart = _interopRequireDefault(require("../BarCharts/StackChart"));
+
 var _D3Header = _interopRequireDefault(require("../BarCharts/D3Header"));
 
 var _d3getLinearScale = _interopRequireDefault(require("../BarCharts/d3getLinearScale"));
@@ -172,6 +174,17 @@ function PivotTableBarChart(_ref) {
         showPopOver: showPopOver,
         dataArray: dataArray
       }, /*#__PURE__*/_react.default.createElement(_GaugeChart.default, {
+        dataElement: valuesObj,
+        dimensions: valuesCols,
+        height: barsHeight,
+        minValue: minValue,
+        maxValue: maxValue
+      }));
+    } else if (barType === 'stack') {
+      return /*#__PURE__*/_react.default.createElement(_PopOver.default, {
+        showPopOver: showPopOver,
+        dataArray: dataArray
+      }, /*#__PURE__*/_react.default.createElement(_StackChart.default, {
         dataElement: valuesObj,
         dimensions: valuesCols,
         height: barsHeight,
