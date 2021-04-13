@@ -7,6 +7,8 @@ exports.default = StackChart;
 
 var _react = _interopRequireDefault(require("react"));
 
+var _nanoid = require("nanoid");
+
 var _d3hook = _interopRequireDefault(require("./d3hook.js"));
 
 var _d3chartBuilder = _interopRequireDefault(require("./d3chartBuilder"));
@@ -70,9 +72,6 @@ function StackChart(_ref) {
       }, 0), item)
     });
   });
-  console.log({
-    builtDataObjectWithX: builtDataObjectWithX
-  });
   var ref = (0, _d3hook.default)(function (svg) {
     svg.selectAll('*').remove();
     (0, _d3chartBuilder.default)(svg, builtDataObjectWithX, showBarValues, function () {
@@ -81,6 +80,7 @@ function StackChart(_ref) {
   }, [dataElement]);
   return /*#__PURE__*/_react.default.createElement("svg", {
     ref: ref,
+    key: (0, _nanoid.nanoid)(),
     style: {
       height: chartHeight,
       width: '100%',

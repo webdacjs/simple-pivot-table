@@ -1,7 +1,7 @@
 import queue from 'queue'
 
 const q = queue()
-q.concurrency = 100
+q.concurrency = 150
 q.autostart = true
 
 export function setD3BuilderConcurrency (concurrency) {
@@ -36,6 +36,6 @@ export default function d3chartBuilder (svg, data, showBarValues) {
     }
     setTimeout(function () {
       cb()
-    }, 100)
+    }, 50)
   })
 }

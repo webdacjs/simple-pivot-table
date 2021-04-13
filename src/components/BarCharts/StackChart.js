@@ -1,4 +1,5 @@
 import React from 'react'
+import { nanoid } from 'nanoid'
 import useD3 from './d3hook.js'
 import d3chartBuilder from './d3chartBuilder'
 
@@ -54,8 +55,6 @@ export default function StackChart ({
     })
   )
 
-  console.log({builtDataObjectWithX})
-
   const ref = useD3(
     svg => {
       svg.selectAll('*').remove()
@@ -72,6 +71,7 @@ export default function StackChart ({
   return (
     <svg
       ref={ref}
+      key={nanoid()}
       style={{
         height: chartHeight,
         width: '100%',

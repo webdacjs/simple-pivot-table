@@ -11,7 +11,7 @@ var _queue = _interopRequireDefault(require("queue"));
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var q = (0, _queue.default)();
-q.concurrency = 100;
+q.concurrency = 150;
 q.autostart = true;
 
 function setD3BuilderConcurrency(concurrency) {
@@ -48,6 +48,6 @@ function d3chartBuilder(svg, data, showBarValues) {
 
     setTimeout(function () {
       cb();
-    }, 100);
+    }, 50);
   });
 }

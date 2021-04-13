@@ -9,6 +9,8 @@ var _react = _interopRequireDefault(require("react"));
 
 var _d3hook = _interopRequireDefault(require("./d3hook.js"));
 
+var _nanoid = require("nanoid");
+
 var _d3chartBuilder = _interopRequireDefault(require("./d3chartBuilder"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -44,6 +46,7 @@ function D3Header(_ref) {
   return /*#__PURE__*/_react.default.createElement("svg", {
     className: "svgHeader",
     ref: ref,
+    key: (0, _nanoid.nanoid)(),
     style: {
       height: height,
       width: '100%',
