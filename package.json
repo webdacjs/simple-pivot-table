@@ -6,7 +6,8 @@
   "description": "Simple pivot table library with basic functionality.",
   "files": [
     "dist",
-    "README.md"
+    "README.md",
+    "LICENSE"
   ],
   "homepage": "http://webdacjs.github.io/simple-pivot-table",
   "dependencies": {
