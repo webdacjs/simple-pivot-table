@@ -16,7 +16,7 @@ export default function getLinearScale (minVal, maxVal, steps, legendFormatter) 
     .domain([minVal, maxVal])
     .range([0, maxVal])
   const factor = maxVal / steps
-  const scaleValues = new Array()
+  const scaleValues = []
   for (let i = 0; i <= steps; i++) {
     scaleValues.push(getScale(i * factor))
   }

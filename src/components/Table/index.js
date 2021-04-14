@@ -2,7 +2,16 @@ import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import soa from 'sort-objects-array'
 
-export default function Table ({ data, filters, columns, columnsLabels, width, height }) {
+export default function Table ({
+  data,
+  filters,
+  columns,
+  columnsLabels,
+  maxWidth,
+  width,
+  maxHeight,
+  height
+}) {
   const [cols, setCols] = useState()
   const [rows, setRows] = useState()
   const [asc, setAsc] = useState()
@@ -56,7 +65,7 @@ export default function Table ({ data, filters, columns, columnsLabels, width, h
 
   return (
     <div>
-      <table className='simple-table' style={{ width, height }}>
+      <table className='simple-table' style={{ width, height, maxWidth, maxHeight }}>
         {cols && getHeader()}
         {cols && rows && getRows()}
       </table>
@@ -69,6 +78,9 @@ Table.propTypes = {
   columns: PropTypes.array,
   columnsLabels: PropTypes.array,
   filters: PropTypes.array,
-  height: PropTypes.number,
-  width: PropTypes.number
+  height: PropTypes.string,
+  maxHeight: PropTypes.string,
+  maxWidth: PropTypes.string,
+  width: PropTypes.string
+
 }

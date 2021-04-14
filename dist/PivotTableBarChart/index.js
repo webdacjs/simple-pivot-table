@@ -48,27 +48,28 @@ function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 function PivotTableBarChart(_ref) {
-  var data = _ref.data,
-      filters = _ref.filters,
-      rows = _ref.rows,
-      columns = _ref.columns,
-      columnsLabels = _ref.columnsLabels,
-      _ref$barsMinValue = _ref.barsMinValue,
-      barsMinValue = _ref$barsMinValue === void 0 ? 0 : _ref$barsMinValue,
-      barsMaxValue = _ref.barsMaxValue,
+  var barLegendFormatter = _ref.barLegendFormatter,
       _ref$barLegendSteps = _ref.barLegendSteps,
       barLegendSteps = _ref$barLegendSteps === void 0 ? 10 : _ref$barLegendSteps,
-      _ref$barsHeight = _ref.barsHeight,
-      barsHeight = _ref$barsHeight === void 0 ? 15 : _ref$barsHeight,
       _ref$barType = _ref.barType,
       barType = _ref$barType === void 0 ? 'gauge' : _ref$barType,
-      barLegendFormatter = _ref.barLegendFormatter,
-      showPopOver = _ref.showPopOver,
-      popOverFormatter = _ref.popOverFormatter,
-      width = _ref.width,
-      values = _ref.values,
+      _ref$barsHeight = _ref.barsHeight,
+      barsHeight = _ref$barsHeight === void 0 ? 15 : _ref$barsHeight,
+      barsMaxValue = _ref.barsMaxValue,
+      _ref$barsMinValue = _ref.barsMinValue,
+      barsMinValue = _ref$barsMinValue === void 0 ? 0 : _ref$barsMinValue,
+      columnsLabels = _ref.columnsLabels,
+      data = _ref.data,
+      filters = _ref.filters,
       height = _ref.height,
-      postprocessfn = _ref.postprocessfn;
+      maxHeight = _ref.maxHeight,
+      maxWidth = _ref.maxWidth,
+      popOverFormatter = _ref.popOverFormatter,
+      postprocessfn = _ref.postprocessfn,
+      rows = _ref.rows,
+      showPopOver = _ref.showPopOver,
+      values = _ref.values,
+      width = _ref.width;
 
   var _useState = (0, _react.useState)(),
       _useState2 = _slicedToArray(_useState, 2),
@@ -260,27 +261,30 @@ function PivotTableBarChart(_ref) {
     className: "simple-pivot-table",
     style: {
       width: width,
-      height: height
+      height: height,
+      maxWidth: maxWidth,
+      maxHeight: maxHeight
     }
   }, cols && getHeader(), cols && pivotRows && getRows()));
 }
 
 PivotTableBarChart.propTypes = {
-  data: _propTypes.default.array,
-  rows: _propTypes.default.array,
-  columns: _propTypes.default.array,
-  columnsLabels: _propTypes.default.array,
-  barType: _propTypes.default.string,
   barLegendFormatter: _propTypes.default.func,
   barLegendSteps: _propTypes.default.number,
+  barType: _propTypes.default.string,
   barsHeight: _propTypes.default.number,
-  barsMinValue: _propTypes.default.number,
   barsMaxValue: _propTypes.default.number,
-  showPopOver: _propTypes.default.bool,
-  popOverFormatter: _propTypes.default.func,
-  values: _propTypes.default.array,
+  barsMinValue: _propTypes.default.number,
+  columnsLabels: _propTypes.default.array,
+  data: _propTypes.default.array,
   filters: _propTypes.default.array,
-  height: _propTypes.default.number,
+  height: _propTypes.default.string,
+  maxHeight: _propTypes.default.string,
+  maxWidth: _propTypes.default.string,
+  popOverFormatter: _propTypes.default.func,
   postprocessfn: _propTypes.default.func,
-  width: _propTypes.default.number
+  rows: _propTypes.default.array,
+  showPopOver: _propTypes.default.bool,
+  values: _propTypes.default.array,
+  width: _propTypes.default.string
 };

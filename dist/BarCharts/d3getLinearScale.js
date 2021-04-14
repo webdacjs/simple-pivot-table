@@ -28,7 +28,7 @@ function defaultFormatter(x) {
 function getLinearScale(minVal, maxVal, steps, legendFormatter) {
   var getScale = d3.scaleLinear().domain([minVal, maxVal]).range([0, maxVal]);
   var factor = maxVal / steps;
-  var scaleValues = new Array();
+  var scaleValues = [];
 
   for (var i = 0; i <= steps; i++) {
     scaleValues.push(getScale(i * factor));

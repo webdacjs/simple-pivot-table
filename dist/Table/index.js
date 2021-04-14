@@ -44,7 +44,9 @@ function Table(_ref) {
       filters = _ref.filters,
       columns = _ref.columns,
       columnsLabels = _ref.columnsLabels,
+      maxWidth = _ref.maxWidth,
       width = _ref.width,
+      maxHeight = _ref.maxHeight,
       height = _ref.height;
 
   var _useState = (0, _react.useState)(),
@@ -120,7 +122,9 @@ function Table(_ref) {
     className: "simple-table",
     style: {
       width: width,
-      height: height
+      height: height,
+      maxWidth: maxWidth,
+      maxHeight: maxHeight
     }
   }, cols && getHeader(), cols && rows && getRows()));
 }
@@ -130,6 +134,8 @@ Table.propTypes = {
   columns: _propTypes.default.array,
   columnsLabels: _propTypes.default.array,
   filters: _propTypes.default.array,
-  height: _propTypes.default.number,
-  width: _propTypes.default.number
+  height: _propTypes.default.string,
+  maxHeight: _propTypes.default.string,
+  maxWidth: _propTypes.default.string,
+  width: _propTypes.default.string
 };

@@ -22,9 +22,9 @@ function filterIterations (rawRows, filters) {
 }
 
 export function timerFn (funtionName) {
-  const t0 = performance.now()
+  const t0 = performance.now() // eslint-disable-line
   return () => {
-    const t1 = performance.now()
+    const t1 = performance.now() // eslint-disable-line
     console.log(`TIMER (${funtionName}) took ${(t1 - t0)}  milliseconds.`)
   }
 }
@@ -41,9 +41,9 @@ function getMostCommonSeparator (val) {
   return sorted[0].key
 }
 
-function getJsonValue(key) {
+function getJsonValue (key) {
   const numericValue = parseFloat(key)
-  return numericValue == key ? numericValue : key
+  return numericValue == key ? numericValue : key // eslint-disable-line
 }
 
 export function csvToJson (val) {

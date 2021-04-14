@@ -4,17 +4,18 @@ import PropTypes from 'prop-types'
 import getPivotDataColumns from '../utils/pivotMain'
 
 export default function PivotTable ({
+  columnsLabels,
   data,
   filters,
-  rows,
-  columns,
-  columnsLabels,
-  width,
-  values,
   height,
+  maxHeight,
+  maxWidth,
   postprocessfn,
+  rows,
   showColumnTotals,
-  showRowsTotals
+  showRowsTotals,
+  values,
+  width
 }) {
   const [cols, setCols] = useState()
   const [pivotRows, setRows] = useState()
@@ -75,9 +76,9 @@ export default function PivotTable ({
 
   const getColumnTotalsRow = () =>
     <tr>
-      <th key='th-totals-col' colspan={rows.length} className='pivotRowHeaderTotal'>Totals:</th>
-      {Object.keys(colsTotals).map(item =>
-        <td className='pivotRowValueTotal'>{colsTotals[item]}</td>)}
+      <th key='th-totals-col' colSpan={rows.length} className='pivotRowHeaderTotal'>Totals:</th>
+      {Object.keys(colsTotals).map((item, i) =>
+        <td key={`td-totals-td-${i}`} className='pivotRowValueTotal'>{colsTotals[item]}</td>)}
     </tr>
 
   const getRows = () =>
@@ -95,7 +96,7 @@ export default function PivotTable ({
 
   return (
     <div>
-      <table className='simple-pivot-table' style={{ width, height }}>
+      <table className='simple-pivot-table' style={{ width, height, maxWidth, maxHeight }}>
         {cols && getHeader()}
         {cols && pivotRows && getRows()}
       </table>
@@ -104,15 +105,16 @@ export default function PivotTable ({
 }
 
 PivotTable.propTypes = {
-  data: PropTypes.array,
-  rows: PropTypes.array,
-  columns: PropTypes.array,
   columnsLabels: PropTypes.array,
-  values: PropTypes.array,
+  data: PropTypes.array,
   filters: PropTypes.array,
-  height: PropTypes.number,
+  height: PropTypes.string,
+  maxHeight: PropTypes.string,
+  maxWidth: PropTypes.string,
   postprocessfn: PropTypes.func,
+  rows: PropTypes.array,
   showColumnTotals: PropTypes.bool,
   showRowsTotals: PropTypes.bool,
-  width: PropTypes.number
+  values: PropTypes.array,
+  width: PropTypes.string
 }
