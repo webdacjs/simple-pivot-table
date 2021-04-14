@@ -9,6 +9,20 @@
     "README.md",
     "LICENSE"
   ],
+  "keywords": [
+    "pivot",
+    "pivot table",
+    "react library"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/webdacjs/simple-pivot-table.git"
+  },
+  "author": "Juan Convers",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/webdacjs/simple-pivot-table/issues"
+  },
   "homepage": "http://webdacjs.github.io/simple-pivot-table",
   "dependencies": {
     "d3": "6.6.2",
