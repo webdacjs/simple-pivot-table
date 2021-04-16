@@ -32,17 +32,18 @@ function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 function PivotTable(_ref) {
-  var data = _ref.data,
+  var columnsLabels = _ref.columnsLabels,
+      data = _ref.data,
       filters = _ref.filters,
-      rows = _ref.rows,
-      columns = _ref.columns,
-      columnsLabels = _ref.columnsLabels,
-      width = _ref.width,
-      values = _ref.values,
       height = _ref.height,
+      maxHeight = _ref.maxHeight,
+      maxWidth = _ref.maxWidth,
       postprocessfn = _ref.postprocessfn,
+      rows = _ref.rows,
       showColumnTotals = _ref.showColumnTotals,
-      showRowsTotals = _ref.showRowsTotals;
+      showRowsTotals = _ref.showRowsTotals,
+      values = _ref.values,
+      width = _ref.width;
 
   var _useState = (0, _react.useState)(),
       _useState2 = _slicedToArray(_useState, 2),
@@ -136,10 +137,11 @@ function PivotTable(_ref) {
   var getColumnTotalsRow = function getColumnTotalsRow() {
     return /*#__PURE__*/_react.default.createElement("tr", null, /*#__PURE__*/_react.default.createElement("th", {
       key: "th-totals-col",
-      colspan: rows.length,
+      colSpan: rows.length,
       className: "pivotRowHeaderTotal"
-    }, "Totals:"), Object.keys(colsTotals).map(function (item) {
+    }, "Totals:"), Object.keys(colsTotals).map(function (item, i) {
       return /*#__PURE__*/_react.default.createElement("td", {
+        key: "td-totals-td-".concat(i),
         className: "pivotRowValueTotal"
       }, colsTotals[item]);
     }));
@@ -161,21 +163,24 @@ function PivotTable(_ref) {
     className: "simple-pivot-table",
     style: {
       width: width,
-      height: height
+      height: height,
+      maxWidth: maxWidth,
+      maxHeight: maxHeight
     }
   }, cols && getHeader(), cols && pivotRows && getRows()));
 }
 
 PivotTable.propTypes = {
-  data: _propTypes.default.array,
-  rows: _propTypes.default.array,
-  columns: _propTypes.default.array,
   columnsLabels: _propTypes.default.array,
-  values: _propTypes.default.array,
+  data: _propTypes.default.array,
   filters: _propTypes.default.array,
-  height: _propTypes.default.number,
+  height: _propTypes.default.string,
+  maxHeight: _propTypes.default.string,
+  maxWidth: _propTypes.default.string,
   postprocessfn: _propTypes.default.func,
+  rows: _propTypes.default.array,
   showColumnTotals: _propTypes.default.bool,
   showRowsTotals: _propTypes.default.bool,
-  width: _propTypes.default.number
+  values: _propTypes.default.array,
+  width: _propTypes.default.string
 };

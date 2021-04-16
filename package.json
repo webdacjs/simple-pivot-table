@@ -1,19 +1,34 @@
 {
   "name": "simple-pivot-table",
-  "version": "2.2.0",
-  "private": true,
+  "version": "2.3.2",
   "main": "dist/index.js",
   "module": "dist/index.js",
-  "description": "Simple pivot table library with basic functions.",
+  "description": "Simple pivot table library with basic functionality.",
   "files": [
     "dist",
-    "README.md"
+    "README.md",
+    "LICENSE"
   ],
+  "keywords": [
+    "pivot",
+    "pivot table",
+    "react library"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/webdacjs/simple-pivot-table.git"
+  },
+  "author": "Juan Convers",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/webdacjs/simple-pivot-table/issues"
+  },
   "homepage": "http://webdacjs.github.io/simple-pivot-table",
   "dependencies": {
     "d3": "6.6.2",
     "dayjs": "1.10.4",
     "lodash.filter": "4.6.0",
+    "nanoid": "^3.1.22",
     "queue": "6.0.2",
     "react-popover": "^0.5.10",
     "rimraf": "3.0.2",

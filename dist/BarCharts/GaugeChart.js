@@ -7,6 +7,8 @@ exports.default = GaugeChart;
 
 var _react = _interopRequireDefault(require("react"));
 
+var _nanoid = require("nanoid");
+
 var _d3hook = _interopRequireDefault(require("./d3hook.js"));
 
 var _d3chartBuilder = _interopRequireDefault(require("./d3chartBuilder"));
@@ -80,6 +82,7 @@ function GaugeChart(_ref) {
   }, [dataElement]);
   return /*#__PURE__*/_react.default.createElement("svg", {
     ref: ref,
+    key: (0, _nanoid.nanoid)(),
     style: {
       height: chartHeight,
       width: '100%',

@@ -1,5 +1,7 @@
 import React from 'react'
 import useD3 from './d3hook.js'
+import { nanoid } from 'nanoid'
+
 import d3chartBuilder from './d3chartBuilder'
 
 export default function D3Header ({ height, legendValues }) {
@@ -35,6 +37,7 @@ export default function D3Header ({ height, legendValues }) {
     <svg
       className='svgHeader'
       ref={ref}
+      key={nanoid()}
       style={{
         height: height,
         width: '100%',

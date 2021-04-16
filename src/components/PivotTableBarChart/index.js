@@ -16,23 +16,24 @@ import getMinMaxValues from '../BarCharts/getMinMaxValue'
 import PopOver from '../PopOver/'
 
 export default function PivotTableBarChart ({
+  barLegendFormatter,
+  barLegendSteps = 10,
+  barType = 'gauge',
+  barsHeight = 15,
+  barsMaxValue,
+  barsMinValue = 0,
+  columnsLabels,
   data,
   filters,
-  rows,
-  columns,
-  columnsLabels,
-  barsMinValue = 0,
-  barsMaxValue,
-  barLegendSteps = 10,
-  barsHeight = 15,
-  barType = 'gauge',
-  barLegendFormatter,
-  showPopOver,
-  popOverFormatter,
-  width,
-  values,
   height,
-  postprocessfn
+  maxHeight,
+  maxWidth,
+  popOverFormatter,
+  postprocessfn,
+  rows,
+  showPopOver,
+  values,
+  width
 }) {
   const [cols, setCols] = useState()
   const [pivotRows, setRows] = useState()
@@ -107,16 +108,17 @@ export default function PivotTableBarChart ({
         </PopOver>
       )
     } else if (barType === 'stack') {
-      return <PopOver showPopOver={showPopOver} dataArray={dataArray}>
-      <StackChart
-        dataElement={valuesObj}
-        dimensions={valuesCols}
-        height={barsHeight}
-        minValue={minValue}
-        maxValue={maxValue}
-      />
-    </PopOver>
-
+      return (
+        <PopOver showPopOver={showPopOver} dataArray={dataArray}>
+          <StackChart
+            dataElement={valuesObj}
+            dimensions={valuesCols}
+            height={barsHeight}
+            minValue={minValue}
+            maxValue={maxValue}
+          />
+        </PopOver>
+      )
     }
   }
 
@@ -163,7 +165,7 @@ export default function PivotTableBarChart ({
 
   return (
     <div>
-      <table className='simple-pivot-table' style={{ width, height }}>
+      <table className='simple-pivot-table' style={{ width, height, maxWidth, maxHeight }}>
         {cols && getHeader()}
         {cols && pivotRows && getRows()}
       </table>
@@ -172,21 +174,22 @@ export default function PivotTableBarChart ({
 }
 
 PivotTableBarChart.propTypes = {
-  data: PropTypes.array,
-  rows: PropTypes.array,
-  columns: PropTypes.array,
-  columnsLabels: PropTypes.array,
-  barType: PropTypes.string,
   barLegendFormatter: PropTypes.func,
   barLegendSteps: PropTypes.number,
+  barType: PropTypes.string,
   barsHeight: PropTypes.number,
-  barsMinValue: PropTypes.number,
   barsMaxValue: PropTypes.number,
-  showPopOver: PropTypes.bool,
-  popOverFormatter: PropTypes.func,
-  values: PropTypes.array,
+  barsMinValue: PropTypes.number,
+  columnsLabels: PropTypes.array,
+  data: PropTypes.array,
   filters: PropTypes.array,
-  height: PropTypes.number,
+  height: PropTypes.string,
+  maxHeight: PropTypes.string,
+  maxWidth: PropTypes.string,
+  popOverFormatter: PropTypes.func,
   postprocessfn: PropTypes.func,
-  width: PropTypes.number
+  rows: PropTypes.array,
+  showPopOver: PropTypes.bool,
+  values: PropTypes.array,
+  width: PropTypes.string
 }

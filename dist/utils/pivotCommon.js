@@ -56,9 +56,11 @@ function filterIterations(rawRows, filters) {
 }
 
 function timerFn(funtionName) {
-  var t0 = performance.now();
+  var t0 = performance.now(); // eslint-disable-line
+
   return function () {
-    var t1 = performance.now();
+    var t1 = performance.now(); // eslint-disable-line
+
     console.log("TIMER (".concat(funtionName, ") took ").concat(t1 - t0, "  milliseconds."));
   };
 }
@@ -80,7 +82,7 @@ function getMostCommonSeparator(val) {
 
 function getJsonValue(key) {
   var numericValue = parseFloat(key);
-  return numericValue == key ? numericValue : key;
+  return numericValue == key ? numericValue : key; // eslint-disable-line
 }
 
 function csvToJson(val) {
