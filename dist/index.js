@@ -39,10 +39,10 @@ Object.defineProperty(exports, "getPivotCsvData", {
     return _pivotMain.getPivotCsvData;
   }
 });
-Object.defineProperty(exports, "getPivotJonsData", {
+Object.defineProperty(exports, "getPivotJsonData", {
   enumerable: true,
   get: function get() {
-    return _pivotMain.getPivotJonsData;
+    return _pivotMain.getPivotJsonData;
   }
 });
 
