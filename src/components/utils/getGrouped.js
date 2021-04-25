@@ -2,11 +2,11 @@ import { separator } from './settings'
 
 function getReducedValue (values, aggregator, formatter) {
   if (aggregator === 'sum') {
-    const rawValue = values.reduce((a, b) => a + (b || 0), 0)
+    const rawValue = values.reduce((a, b) => parseFloat(a) + (b || 0), 0)
     return formatter ? formatter(rawValue) : rawValue
   }
   if (aggregator === 'avg') {
-    const rawValue = values.reduce((a, b) => a + (b || a), 0) / values.length
+    const rawValue = values.reduce((a, b) => parseFloat(a) + (b || a), 0) / values.length
     return formatter ? formatter(rawValue) : rawValue
   }
   if (aggregator === 'median') {
