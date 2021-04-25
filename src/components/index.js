@@ -3,7 +3,7 @@ import PivotCsv from './PivotCsv'
 import PivotJSON from './PivotJSON'
 import PivotTable from './PivotTable'
 import PivotTableBarChart from './PivotTableBarChart'
-import { getPivotCsvData, getPivotJonsData } from './utils/pivotMain'
+import { getPivotCsvData, getPivotJsonData } from './utils/pivotMain'
 
 export {
   Table,
@@ -12,5 +12,5 @@ export {
   PivotTable,
   PivotTableBarChart,
   getPivotCsvData,
-  getPivotJonsData
+  getPivotJsonData
 }
