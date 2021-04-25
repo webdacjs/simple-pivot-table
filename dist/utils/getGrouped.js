@@ -16,14 +16,14 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 function getReducedValue(values, aggregator, formatter) {
   if (aggregator === 'sum') {
     var rawValue = values.reduce(function (a, b) {
-      return a + (b || 0);
+      return parseFloat(a) + (b || 0);
     }, 0);
     return formatter ? formatter(rawValue) : rawValue;
   }
 
   if (aggregator === 'avg') {
     var _rawValue = values.reduce(function (a, b) {
-      return a + (b || a);
+      return parseFloat(a) + (b || a);
     }, 0) / values.length;
 
     return formatter ? formatter(_rawValue) : _rawValue;
