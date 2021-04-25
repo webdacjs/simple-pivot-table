@@ -21,6 +21,10 @@ export function getReducedValue (values, aggregator, formatter) {
     const rawValue = values[Math.round(values.length / 2)]
     return formatter ? formatter(rawValue) : rawValue
   }
+  if (typeof aggregator === 'function') {
+    const rawValue = values.reduce((a, b) => aggregator(a, b))
+    return formatter ? formatter(rawValue) : rawValue
+  }
   // default count
   return values.length
 }
