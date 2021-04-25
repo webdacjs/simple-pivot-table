@@ -44,6 +44,14 @@ function getReducedValue(values, aggregator, formatter) {
   if (aggregator === 'median') {
     var _rawValue2 = values[Math.round(values.length / 2)];
     return formatter ? formatter(_rawValue2) : _rawValue2;
+  }
+
+  if (typeof aggregator === 'function') {
+    var _rawValue3 = values.reduce(function (a, b) {
+      return aggregator(a, b);
+    });
+
+    return formatter ? formatter(_rawValue3) : _rawValue3;
   } // default count
 
 
