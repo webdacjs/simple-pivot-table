@@ -62,6 +62,20 @@ ColumnLabelsAndFormatters.args = {
   ]
 }
 
+export const SumAggregatorCastingStr = Template.bind({})
+SumAggregatorCastingStr.args = {
+  data: testData.map(x => ({...x, population: String(x.population)})),
+  rows: ['continent'],
+  columnsLabels: ['Continent', 'Population Avg'],
+  values: [
+    {
+      field: 'population',
+      aggregator: 'sum',
+      formatter: x => Math.round(x).toLocaleString()
+    }
+  ]
+}
+
 export const AverageAggregator = Template.bind({})
 AverageAggregator.args = {
   data: testData,

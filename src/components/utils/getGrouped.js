@@ -1,12 +1,20 @@
 import { separator } from './settings'
 
-function getReducedValue (values, aggregator, formatter) {
+export function getNumericValue (value) {
+  const numValue = parseFloat(value)
+  if (isNaN(numValue)) {
+    return 0
+  }
+  return numValue
+}
+
+export function getReducedValue (values, aggregator, formatter) {
   if (aggregator === 'sum') {
-    const rawValue = values.reduce((a, b) => parseFloat(a) + (b || 0), 0)
+    const rawValue = values.reduce((a, b) => a + (getNumericValue(b) || 0), 0)
     return formatter ? formatter(rawValue) : rawValue
   }
   if (aggregator === 'avg') {
-    const rawValue = values.reduce((a, b) => parseFloat(a) + (b || a), 0) / values.length
+    const rawValue = values.reduce((a, b) => a + (getNumericValue(b) || a), 0) / values.length
     return formatter ? formatter(rawValue) : rawValue
   }
   if (aggregator === 'median') {
