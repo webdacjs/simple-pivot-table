@@ -1,6 +1,6 @@
 {
   "name": "simple-pivot-table",
-  "version": "2.3.5",
+  "version": "2.3.4",
   "main": "dist/index.js",
   "module": "dist/index.js",
   "description": "Simple pivot table library with basic functionality.",
@@ -43,7 +43,7 @@
     "deploy-storybook": "gh-pages -d storybook-static",
     "clean": "rimraf dist",
     "test": "jest .",
-    "compile": "npm run clean && cross-env NODE_ENV=production babel src/components --out-dir dist --copy-files --no-copy-ignored --ignore __tests__,spec.js,test.js,**/*.stories.js,__snapshots__"
+    "compile": "npm run clean && cross-env NODE_ENV=production babel src/components --out-dir dist --copy-files --no-copy-ignored --ignore __tests__,spec.js,test.js,**/*.test.js,**/*.stories.js,__snapshots__"
   },
   "eslintConfig": {
     "extends": [

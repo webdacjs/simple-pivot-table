@@ -3,6 +3,8 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports.getNumericValue = getNumericValue;
+exports.getReducedValue = getReducedValue;
 exports.default = getGroupedData;
 
 var _settings = require("./settings");
@@ -13,17 +15,27 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
+function getNumericValue(value) {
+  var numValue = parseFloat(value);
+
+  if (isNaN(numValue)) {
+    return 0;
+  }
+
+  return numValue;
+}
+
 function getReducedValue(values, aggregator, formatter) {
   if (aggregator === 'sum') {
     var rawValue = values.reduce(function (a, b) {
-      return parseFloat(a) + (b || 0);
+      return a + (getNumericValue(b) || 0);
     }, 0);
     return formatter ? formatter(rawValue) : rawValue;
   }
 
   if (aggregator === 'avg') {
     var _rawValue = values.reduce(function (a, b) {
-      return parseFloat(a) + (b || a);
+      return a + (getNumericValue(b) || a);
     }, 0) / values.length;
 
     return formatter ? formatter(_rawValue) : _rawValue;
