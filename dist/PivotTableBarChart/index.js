@@ -276,7 +276,7 @@ PivotTableBarChart.propTypes = {
   barsMaxValue: _propTypes.default.number,
   barsMinValue: _propTypes.default.number,
   columnsLabels: _propTypes.default.array,
-  data: _propTypes.default.array,
+  data: _propTypes.default.oneOfType([_propTypes.default.string, _propTypes.default.array]),
   filters: _propTypes.default.array,
   height: _propTypes.default.string,
   maxHeight: _propTypes.default.string,

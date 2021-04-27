@@ -5,6 +5,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.getNumericValue = getNumericValue;
 exports.getReducedValue = getReducedValue;
+exports.getGroups = getGroups;
 exports.default = getGroupedData;
 
 var _settings = require("./settings");
@@ -44,6 +45,14 @@ function getReducedValue(values, aggregator, formatter) {
   if (aggregator === 'median') {
     var _rawValue2 = values[Math.round(values.length / 2)];
     return formatter ? formatter(_rawValue2) : _rawValue2;
+  }
+
+  if (typeof aggregator === 'function') {
+    var _rawValue3 = values.reduce(function (a, b) {
+      return aggregator(a, b);
+    });
+
+    return formatter ? formatter(_rawValue3) : _rawValue3;
   } // default count
 
 
@@ -70,17 +79,22 @@ function getCombinedKeyBasedOnRowAttributes(dataItem, rowAttributes) {
   });
   var combinedKeyArray = keyArray.join(_settings.separator);
   return combinedKeyArray;
-} // Get the data combined by attribute including the mutations done by th postprocess function
-// with the originals if required.
+}
 
-
-function getGroupedData(data, rowAttributes, vals, postprocessfn, getOriginalsFlag) {
+function getGroups(data, rowAttributes) {
   var grouped = {};
   data.forEach(function (dataItem) {
     var combinedKeyArray = getCombinedKeyBasedOnRowAttributes(dataItem, rowAttributes);
     grouped[combinedKeyArray] = grouped[combinedKeyArray] || [];
     grouped[combinedKeyArray].push(dataItem);
   });
+  return grouped;
+} // Get the data combined by attribute including the mutations done by th postprocess function
+// with the originals if required.
+
+
+function getGroupedData(data, rowAttributes, vals, postprocessfn, getOriginalsFlag) {
+  var grouped = getGroups(data, rowAttributes);
 
   if (getOriginalsFlag) {
     var groupedOriginals = _objectSpread({}, grouped);

@@ -106,7 +106,10 @@ export default function PivotTable ({
 
 PivotTable.propTypes = {
   columnsLabels: PropTypes.array,
-  data: PropTypes.array,
+  data: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.array
+  ]),
   filters: PropTypes.array,
   height: PropTypes.string,
   maxHeight: PropTypes.string,
