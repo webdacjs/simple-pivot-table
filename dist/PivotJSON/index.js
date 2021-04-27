@@ -35,13 +35,13 @@ function PivotJSON(_ref) {
   var data = _ref.data,
       filters = _ref.filters,
       rows = _ref.rows,
-      columns = _ref.columns,
       columnsLabels = _ref.columnsLabels,
       values = _ref.values,
       postprocessfn = _ref.postprocessfn,
       showColumnTotals = _ref.showColumnTotals,
       showRowsTotals = _ref.showRowsTotals,
-      sectionTotals = _ref.sectionTotals;
+      sectionTotals = _ref.sectionTotals,
+      getTree = _ref.getTree;
 
   var _useState = (0, _react.useState)(),
       _useState2 = _slicedToArray(_useState, 2),
@@ -57,7 +57,8 @@ function PivotJSON(_ref) {
       columnsLabels: columnsLabels,
       postprocessfn: postprocessfn,
       showColumnTotals: showColumnTotals,
-      sectionTotals: sectionTotals
+      sectionTotals: sectionTotals,
+      getTree: getTree
     });
     setJSONData(JSONContents);
   }, [data, rows, values, columnsLabels]); // eslint-disable-line
@@ -80,6 +81,7 @@ PivotJSON.propTypes = {
   values: _propTypes.default.array,
   filters: _propTypes.default.array,
   height: _propTypes.default.number,
+  getTree: _propTypes.default.bool,
   postprocessfn: _propTypes.default.func,
   showColumnTotals: _propTypes.default.bool,
   showRowsTotals: _propTypes.default.bool,

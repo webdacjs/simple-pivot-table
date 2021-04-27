@@ -7,13 +7,13 @@ export default function PivotJSON ({
   data,
   filters,
   rows,
-  columns,
   columnsLabels,
   values,
   postprocessfn,
   showColumnTotals,
   showRowsTotals,
-  sectionTotals
+  sectionTotals,
+  getTree
 }) {
   const [JSONData, setJSONData] = useState()
 
@@ -26,7 +26,8 @@ export default function PivotJSON ({
       columnsLabels,
       postprocessfn,
       showColumnTotals,
-      sectionTotals
+      sectionTotals,
+      getTree
     })
     setJSONData(JSONContents)
   }, [data, rows, values, columnsLabels]) // eslint-disable-line
@@ -54,6 +55,7 @@ PivotJSON.propTypes = {
   values: PropTypes.array,
   filters: PropTypes.array,
   height: PropTypes.number,
+  getTree: PropTypes.bool,
   postprocessfn: PropTypes.func,
   showColumnTotals: PropTypes.bool,
   showRowsTotals: PropTypes.bool,
