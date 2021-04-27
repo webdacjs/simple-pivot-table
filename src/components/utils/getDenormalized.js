@@ -1,4 +1,4 @@
-import { separator } from './settings'
+import { separator, subtotalsSuffix } from './settings'
 
 function checkVisibility (previousItemSplit, keyCounts, partialK, prevK) {
   if (!previousItemSplit) {
@@ -22,7 +22,7 @@ function getDenormalizedLine (key, data, previousItem, keyCounts, valuesFields) 
     const prevK = previousItemSplit ? previousItemSplit.slice(0, norm + 1).join(separator) : null
     line.push({
       type: 'header',
-      value: splitKey[norm],
+      value: splitKey[norm].replace(subtotalsSuffix, ''),
       rowSpan: keyCounts[partialK],
       visible: checkVisibility(previousItemSplit, keyCounts, partialK, prevK)
     })

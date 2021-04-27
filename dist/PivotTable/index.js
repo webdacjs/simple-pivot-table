@@ -42,6 +42,7 @@ function PivotTable(_ref) {
       rows = _ref.rows,
       showColumnTotals = _ref.showColumnTotals,
       showRowsTotals = _ref.showRowsTotals,
+      sectionTotals = _ref.sectionTotals,
       values = _ref.values,
       width = _ref.width;
 
@@ -72,7 +73,8 @@ function PivotTable(_ref) {
       rows: rows,
       values: values,
       columnsLabels: columnsLabels,
-      postprocessfn: postprocessfn
+      postprocessfn: postprocessfn,
+      sectionTotals: sectionTotals
     }),
         pivotData = _getPivotDataColumns.pivotData,
         colsValues = _getPivotDataColumns.colsValues,
@@ -181,6 +183,7 @@ PivotTable.propTypes = {
   rows: _propTypes.default.array,
   showColumnTotals: _propTypes.default.bool,
   showRowsTotals: _propTypes.default.bool,
+  sectionTotals: _propTypes.default.bool,
   values: _propTypes.default.array,
   width: _propTypes.default.string
 };

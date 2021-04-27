@@ -54,9 +54,19 @@ test('Testing the getGroups fn', () => {
     expect(Object.keys(groups).length).toBe(244)
 })
 
+test('Testing the getGroups fn getting section totals', () => {
+    const groups = getGroups(data, ['continent', 'country'], true)
+    expect(Object.keys(groups).length).toBe(251)
+})
+
+
 test('Testing the main grouped data fn', () => {
     const {grouped} = getGroupedData(data, ['continent'], [{field: 'population'}])
     expect(grouped.Asia.population).toBe(50)
     expect(grouped.Europe.population).toBe(51)
 })
 
+test('Testing the main grouped data fn', () => {
+    const {grouped} = getGroupedData(data, ['continent', 'country'], [{field: 'population', aggregator: 'sum'}], null, null, true)
+    expect(grouped['Africa-----______Totals'].population).toBe(1278740761)
+})

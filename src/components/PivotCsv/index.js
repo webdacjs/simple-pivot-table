@@ -12,7 +12,8 @@ export default function PivotCsv ({
   values,
   postprocessfn,
   showColumnTotals,
-  showRowsTotals
+  showRowsTotals,
+  sectionTotals
 }) {
   const [csvData, setCsvData] = useState()
 
@@ -24,7 +25,8 @@ export default function PivotCsv ({
       values,
       columnsLabels,
       postprocessfn,
-      showColumnTotals
+      showColumnTotals,
+      sectionTotals
     })
     setCsvData(csvContents)
   }, [data, rows, values, columnsLabels]) // eslint-disable-line
@@ -50,5 +52,6 @@ PivotCsv.propTypes = {
   postprocessfn: PropTypes.func,
   showColumnTotals: PropTypes.bool,
   showRowsTotals: PropTypes.bool,
+  sectionTotals: PropTypes.bool,
   width: PropTypes.number
 }
