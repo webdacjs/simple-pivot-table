@@ -81,20 +81,34 @@ function getCombinedKeyBasedOnRowAttributes(dataItem, rowAttributes) {
   return combinedKeyArray;
 }
 
-function getGroups(data, rowAttributes) {
+function getGroups(data, rowAttributes, sectionTotals) {
   var grouped = {};
   data.forEach(function (dataItem) {
     var combinedKeyArray = getCombinedKeyBasedOnRowAttributes(dataItem, rowAttributes);
     grouped[combinedKeyArray] = grouped[combinedKeyArray] || [];
     grouped[combinedKeyArray].push(dataItem);
+
+    if (sectionTotals && rowAttributes.length > 1) {
+      var combinedSplit = combinedKeyArray.split(_settings.separator);
+
+      var getTotalLabel = function getTotalLabel(i) {
+        return i === combinedSplit.length - 1 ? "".concat(_settings.subtotalsSuffix, "Totals") : _settings.subtotalsSuffix;
+      };
+
+      var combinedKeySectionTotals = combinedSplit.map(function (x, i) {
+        return i === 0 ? x : getTotalLabel(i);
+      }).join(_settings.separator);
+      grouped[combinedKeySectionTotals] = grouped[combinedKeySectionTotals] || [];
+      grouped[combinedKeySectionTotals].push(dataItem);
+    }
   });
   return grouped;
 } // Get the data combined by attribute including the mutations done by th postprocess function
 // with the originals if required.
 
 
-function getGroupedData(data, rowAttributes, vals, postprocessfn, getOriginalsFlag) {
-  var grouped = getGroups(data, rowAttributes);
+function getGroupedData(data, rowAttributes, vals, postprocessfn, getOriginalsFlag, sectionTotals) {
+  var grouped = getGroups(data, rowAttributes, sectionTotals);
 
   if (getOriginalsFlag) {
     var groupedOriginals = _objectSpread({}, grouped);

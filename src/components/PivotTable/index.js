@@ -14,6 +14,7 @@ export default function PivotTable ({
   rows,
   showColumnTotals,
   showRowsTotals,
+  sectionTotals,
   values,
   width
 }) {
@@ -29,7 +30,8 @@ export default function PivotTable ({
       rows,
       values,
       columnsLabels,
-      postprocessfn
+      postprocessfn,
+      sectionTotals
     })
     setColsTotals(colsTotals)
     setCols(colsValues)
@@ -118,6 +120,7 @@ PivotTable.propTypes = {
   rows: PropTypes.array,
   showColumnTotals: PropTypes.bool,
   showRowsTotals: PropTypes.bool,
+  sectionTotals: PropTypes.bool,
   values: PropTypes.array,
   width: PropTypes.string
 }

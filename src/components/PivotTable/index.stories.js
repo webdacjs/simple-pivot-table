@@ -21,7 +21,8 @@ const Template = ({
   height,
   postprocessfn,
   showColumnTotals,
-  showRowsTotals
+  showRowsTotals,
+  sectionTotals
 }) =>
   <PivotTable
     data={data}
@@ -35,6 +36,7 @@ const Template = ({
     postprocessfn={postprocessfn}
     showColumnTotals={showColumnTotals}
     showRowsTotals={showRowsTotals}
+    sectionTotals={sectionTotals}
   />
 
 export const Default = Template.bind({})
@@ -42,6 +44,7 @@ Default.args = {
   data: testData,
   rows: ['continent', 'country'],
   showColumnTotals: true,
+  sectionTotals: true,
   values: [
     { field: 'population', aggregator: 'sum' }
   ]
@@ -52,6 +55,7 @@ ColumnLabelsAndFormatters.args = {
   data: testData,
   rows: ['continent', 'currency_code', 'government', 'country'],
   columnsLabels: ['Continent', 'Currency', 'Government', 'Country', 'Population Sum', 'Count'],
+  sectionTotals: true,
   values: [
     {
       field: 'population',

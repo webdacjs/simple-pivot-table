@@ -11,6 +11,8 @@ export default function PivotJSON ({
   values,
   postprocessfn,
   showColumnTotals,
+  showRowsTotals,
+  sectionTotals,
   getTree
 }) {
   const [JSONData, setJSONData] = useState()
@@ -24,6 +26,7 @@ export default function PivotJSON ({
       columnsLabels,
       postprocessfn,
       showColumnTotals,
+      sectionTotals,
       getTree
     })
     setJSONData(JSONContents)
@@ -52,8 +55,10 @@ PivotJSON.propTypes = {
   values: PropTypes.array,
   filters: PropTypes.array,
   height: PropTypes.number,
+  getTree: PropTypes.bool,
   postprocessfn: PropTypes.func,
   showColumnTotals: PropTypes.bool,
   showRowsTotals: PropTypes.bool,
+  sectionTotals: PropTypes.bool,
   width: PropTypes.number
 }

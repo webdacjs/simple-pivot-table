@@ -1,4 +1,4 @@
-import { separator } from './settings'
+import { separator, subtotalsSuffix } from './settings'
 
 export function getNumericValue (value) {
   const numValue = parseFloat(value)
@@ -49,20 +49,28 @@ function getCombinedKeyBasedOnRowAttributes (dataItem, rowAttributes) {
   return combinedKeyArray
 }
 
-export function getGroups (data, rowAttributes) {
+export function getGroups (data, rowAttributes, sectionTotals) {
   const grouped = {}
   data.forEach(dataItem => {
     const combinedKeyArray = getCombinedKeyBasedOnRowAttributes(dataItem, rowAttributes)
     grouped[combinedKeyArray] = grouped[combinedKeyArray] || []
     grouped[combinedKeyArray].push(dataItem)
+    if (sectionTotals && rowAttributes.length > 1) {
+      const combinedSplit = combinedKeyArray.split(separator)
+      const getTotalLabel = i => i === combinedSplit.length - 1 ? `${subtotalsSuffix}Totals` : subtotalsSuffix
+      const combinedKeySectionTotals = combinedSplit.map
+      ((x, i) => i === 0 ? x : getTotalLabel(i)).join(separator)
+      grouped[combinedKeySectionTotals] = grouped[combinedKeySectionTotals] || []
+      grouped[combinedKeySectionTotals].push(dataItem)
+    }
   })
   return grouped
 }
 
 // Get the data combined by attribute including the mutations done by th postprocess function
 // with the originals if required.
-export default function getGroupedData (data, rowAttributes, vals, postprocessfn, getOriginalsFlag) {
-  const grouped = getGroups(data, rowAttributes)
+export default function getGroupedData (data, rowAttributes, vals, postprocessfn, getOriginalsFlag, sectionTotals) {
+  const grouped = getGroups(data, rowAttributes, sectionTotals)
   if (getOriginalsFlag) {
     const groupedOriginals = { ...grouped }
     Object.keys(grouped).forEach(key => {

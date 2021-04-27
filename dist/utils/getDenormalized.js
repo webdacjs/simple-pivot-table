@@ -31,7 +31,7 @@ function getDenormalizedLine(key, data, previousItem, keyCounts, valuesFields) {
     var prevK = previousItemSplit ? previousItemSplit.slice(0, norm + 1).join(_settings.separator) : null;
     line.push({
       type: 'header',
-      value: splitKey[norm],
+      value: splitKey[norm].replace(_settings.subtotalsSuffix, ''),
       rowSpan: keyCounts[partialK],
       visible: checkVisibility(previousItemSplit, keyCounts, partialK, prevK)
     });

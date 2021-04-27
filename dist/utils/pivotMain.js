@@ -25,8 +25,9 @@ function getPivotDataColumns(_ref) {
       columnsLabels = _ref.columnsLabels,
       postprocessfn = _ref.postprocessfn,
       getOriginals = _ref.getOriginals,
+      sectionTotals = _ref.sectionTotals,
       getTree = _ref.getTree;
-  var groupedData = (0, _getGrouped.default)((0, _pivotCommon.getFilteredRows)(data, filters), rows, values, postprocessfn, getOriginals);
+  var groupedData = (0, _getGrouped.default)((0, _pivotCommon.getFilteredRows)(data, filters), rows, values, postprocessfn, getOriginals, sectionTotals);
   var colsTotals = groupedData.valueTotals;
   var colsValues = (0, _pivotCommon.getColumns)(columnsLabels, rows, values);
   var pivotData = (0, _getDenormalized.default)(groupedData);
@@ -60,7 +61,8 @@ function getPivotCsvData(_ref2) {
       values = _ref2.values,
       columnsLabels = _ref2.columnsLabels,
       postprocessfn = _ref2.postprocessfn,
-      showColumnTotals = _ref2.showColumnTotals;
+      showColumnTotals = _ref2.showColumnTotals,
+      sectionTotals = _ref2.sectionTotals;
 
   var _getPivotDataColumns = getPivotDataColumns({
     data: data,
@@ -68,7 +70,8 @@ function getPivotCsvData(_ref2) {
     rows: rows,
     values: values,
     columnsLabels: columnsLabels,
-    postprocessfn: postprocessfn
+    postprocessfn: postprocessfn,
+    sectionTotals: sectionTotals
   }),
       pivotData = _getPivotDataColumns.pivotData,
       colsValues = _getPivotDataColumns.colsValues,
@@ -86,6 +89,7 @@ function getPivotJsonData(_ref3) {
       columnsLabels = _ref3.columnsLabels,
       postprocessfn = _ref3.postprocessfn,
       showColumnTotals = _ref3.showColumnTotals,
+      sectionTotals = _ref3.sectionTotals,
       getTree = _ref3.getTree;
 
   if (!getTree) {
@@ -96,7 +100,8 @@ function getPivotJsonData(_ref3) {
       values: values,
       columnsLabels: columnsLabels,
       postprocessfn: postprocessfn,
-      showColumnTotals: showColumnTotals
+      showColumnTotals: showColumnTotals,
+      sectionTotals: sectionTotals
     });
     var jsonData = (0, _pivotCommon.csvToJson)(csvData);
     return jsonData;
@@ -109,6 +114,8 @@ function getPivotJsonData(_ref3) {
     values: values,
     columnsLabels: columnsLabels,
     postprocessfn: postprocessfn,
+    showColumnTotals: showColumnTotals,
+    sectionTotals: sectionTotals,
     getTree: getTree
   });
   return tree;

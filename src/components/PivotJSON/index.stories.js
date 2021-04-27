@@ -21,7 +21,8 @@ const Template = ({
   postprocessfn,
   showColumnTotals,
   showRowsTotals,
-  getTree
+  getTree,
+  sectionTotals
 }) =>
   <PivotJSON
     data={data}
@@ -36,12 +37,14 @@ const Template = ({
     showColumnTotals={showColumnTotals}
     showRowsTotals={showRowsTotals}
     getTree={getTree}
+    sectionTotals={sectionTotals}
   />
 
 export const Default = Template.bind({})
 Default.args = {
   data: testData,
   rows: ['continent', 'country'],
+  sectionTotals: true,
   values: [
     { field: 'population', aggregator: 'sum' }
   ]
@@ -127,6 +130,7 @@ getTree.args = {
   data: testData,
   rows: ['continent', 'country'],
   showColumnTotals: true,
+  sectionTotals: true,
   getTree: true,
   values: [
     {
