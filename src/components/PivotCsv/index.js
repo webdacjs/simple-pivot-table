@@ -37,7 +37,10 @@ export default function PivotCsv ({
 }
 
 PivotCsv.propTypes = {
-  data: PropTypes.array,
+  data: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.array
+  ]),
   rows: PropTypes.array,
   columns: PropTypes.array,
   columnsLabels: PropTypes.array,
