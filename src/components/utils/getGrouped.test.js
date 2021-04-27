@@ -1,7 +1,12 @@
 import {
     getNumericValue,
-    getReducedValue
+    getReducedValue,
+    getGroups
 } from './getGrouped'
+
+import getGroupedData from './getGrouped'
+
+import data from '../../testData/index.json'
 
 test('Testing the getNumericValue function', () => {
     const fromStr = getNumericValue('30')
@@ -43,3 +48,15 @@ test('Testing the custom reducer (max)', () => {
     const maxReduced = getReducedValue(testArray, customAg)
     expect(maxReduced).toBe(15)
 })
+
+test('Testing the getGroups fn', () => {
+    const groups = getGroups(data, ['continent', 'country'])
+    expect(Object.keys(groups).length).toBe(244)
+})
+
+test('Testing the main grouped data fn', () => {
+    const {grouped} = getGroupedData(data, ['continent'], [{field: 'population'}])
+    expect(grouped.Asia.population).toBe(50)
+    expect(grouped.Europe.population).toBe(51)
+})
+

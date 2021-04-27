@@ -49,15 +49,20 @@ function getCombinedKeyBasedOnRowAttributes (dataItem, rowAttributes) {
   return combinedKeyArray
 }
 
-// Get the data combined by attribute including the mutations done by th postprocess function
-// with the originals if required.
-export default function getGroupedData (data, rowAttributes, vals, postprocessfn, getOriginalsFlag) {
+export function getGroups (data, rowAttributes) {
   const grouped = {}
   data.forEach(dataItem => {
     const combinedKeyArray = getCombinedKeyBasedOnRowAttributes(dataItem, rowAttributes)
     grouped[combinedKeyArray] = grouped[combinedKeyArray] || []
     grouped[combinedKeyArray].push(dataItem)
   })
+  return grouped
+}
+
+// Get the data combined by attribute including the mutations done by th postprocess function
+// with the originals if required.
+export default function getGroupedData (data, rowAttributes, vals, postprocessfn, getOriginalsFlag) {
+  const grouped = getGroups(data, rowAttributes)
   if (getOriginalsFlag) {
     const groupedOriginals = { ...grouped }
     Object.keys(grouped).forEach(key => {
