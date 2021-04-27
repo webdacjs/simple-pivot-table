@@ -1,6 +1,6 @@
 {
   "name": "simple-pivot-table",
-  "version": "2.3.8",
+  "version": "2.4.0",
   "main": "dist/index.js",
   "module": "dist/index.js",
   "description": "Simple pivot table library with basic functionality.",
@@ -28,6 +28,7 @@
     "d3": "6.6.2",
     "dayjs": "1.10.4",
     "lodash.filter": "4.6.0",
+    "lodash.set": "^4.3.2",
     "nanoid": "^3.1.22",
     "queue": "6.0.2",
     "react-popover": "^0.5.10",

@@ -13,6 +13,8 @@ var _getGrouped = _interopRequireDefault(require("./getGrouped"));
 
 var _getDenormalized = _interopRequireDefault(require("./getDenormalized"));
 
+var _getFullTree = _interopRequireDefault(require("./getFullTree"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function getPivotDataColumns(_ref) {
@@ -22,7 +24,8 @@ function getPivotDataColumns(_ref) {
       values = _ref.values,
       columnsLabels = _ref.columnsLabels,
       postprocessfn = _ref.postprocessfn,
-      getOriginals = _ref.getOriginals;
+      getOriginals = _ref.getOriginals,
+      getTree = _ref.getTree;
   var groupedData = (0, _getGrouped.default)((0, _pivotCommon.getFilteredRows)(data, filters), rows, values, postprocessfn, getOriginals);
   var colsTotals = groupedData.valueTotals;
   var colsValues = (0, _pivotCommon.getColumns)(columnsLabels, rows, values);
@@ -36,6 +39,11 @@ function getPivotDataColumns(_ref) {
       colsTotals: colsTotals,
       groupedOriginals: groupedOriginals
     };
+  }
+
+  if (getTree) {
+    var tree = (0, _getFullTree.default)(groupedData);
+    return tree;
   }
 
   return {
@@ -77,16 +85,31 @@ function getPivotJsonData(_ref3) {
       values = _ref3.values,
       columnsLabels = _ref3.columnsLabels,
       postprocessfn = _ref3.postprocessfn,
-      showColumnTotals = _ref3.showColumnTotals;
-  var csvData = getPivotCsvData({
+      showColumnTotals = _ref3.showColumnTotals,
+      getTree = _ref3.getTree;
+
+  if (!getTree) {
+    var csvData = getPivotCsvData({
+      data: data,
+      filters: filters,
+      rows: rows,
+      values: values,
+      columnsLabels: columnsLabels,
+      postprocessfn: postprocessfn,
+      showColumnTotals: showColumnTotals
+    });
+    var jsonData = (0, _pivotCommon.csvToJson)(csvData);
+    return jsonData;
+  }
+
+  var tree = getPivotDataColumns({
     data: data,
     filters: filters,
     rows: rows,
     values: values,
     columnsLabels: columnsLabels,
     postprocessfn: postprocessfn,
-    showColumnTotals: showColumnTotals
+    getTree: getTree
   });
-  var jsonData = (0, _pivotCommon.csvToJson)(csvData);
-  return jsonData;
+  return tree;
 }
