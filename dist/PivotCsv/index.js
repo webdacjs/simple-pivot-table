@@ -71,7 +71,7 @@ function PivotCsv(_ref) {
 }
 
 PivotCsv.propTypes = {
-  data: _propTypes.default.array,
+  data: _propTypes.default.oneOfType([_propTypes.default.string, _propTypes.default.array]),
   rows: _propTypes.default.array,
   columns: _propTypes.default.array,
   columnsLabels: _propTypes.default.array,
