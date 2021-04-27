@@ -53,10 +53,9 @@ test('Testing the getGroups fn', () => {
 })
 
 test('Testing the getGroups fn getting section totals', () => {
-    const groups = getGroups(data, ['continent', 'country'], true)
-    expect(Object.keys(groups).length).toBe(251)
+  const groups = getGroups(data, ['continent', 'country'], true)
+  expect(Object.keys(groups).length).toBe(251)
 })
-
 
 test('Testing the main grouped data fn', () => {
   const { grouped } = getGroupedData(data, ['continent'], [{ field: 'population' }])
@@ -65,6 +64,6 @@ test('Testing the main grouped data fn', () => {
 })
 
 test('Testing the main grouped data fn', () => {
-    const {grouped} = getGroupedData(data, ['continent', 'country'], [{field: 'population', aggregator: 'sum'}], null, null, true)
-    expect(grouped['Africa-----______Totals'].population).toBe(1278740761)
+  const { grouped } = getGroupedData(data, ['continent', 'country'], [{ field: 'population', aggregator: 'sum' }], null, null, true)
+  expect(grouped['Africa-----______Totals'].population).toBe(1278740761)
 })

@@ -22,7 +22,7 @@ const Template = ({
   postprocessfn,
   sectionTotals,
   showColumnTotals,
-  showRowsTotals,
+  showRowsTotals
 }) =>
   <PivotCsv
     data={data}
