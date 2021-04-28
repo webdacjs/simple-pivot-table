@@ -68,9 +68,12 @@ export function getGroups (data, rowAttributes, showSectionTotals) {
   return grouped
 }
 
-function calculateSectionPercentageValue (value, key, subTotalsSet, valKey) {
+export function calculateSectionPercentageValue (value, key, subTotalsSet, valKey) {
   const keyPrefix = key.split(separator)[0]
-  const subtotalSectionKey = filter(Object.keys(subTotalsSet), x => x.includes(keyPrefix))[0]
+  const subtotalSectionKey = filter(Object.keys(subTotalsSet), x => x.includes(`${keyPrefix}${separator}`))[0]
+  if (key === subtotalSectionKey) {
+    return '100.00%'
+  }
   return `${(value / subTotalsSet[subtotalSectionKey][valKey] * 100).toFixed(2)}%`
 }
 
@@ -131,8 +134,8 @@ export default function getGroupedData ({
     }, {})
     const valueTotalsPerc = {
       ...valueTotals,
-      perc_total: calculateTotalsPercentage ? '100%' : null,
-      perc_section: calculateSectionPercentage && showSectionTotals ? '100%' : null
+      perc_total: calculateTotalsPercentage ? '100.00%' : null,
+      perc_section: calculateSectionPercentage && showSectionTotals ? '100.00%' : null
     }
     return {
       grouped: groupedPerc,

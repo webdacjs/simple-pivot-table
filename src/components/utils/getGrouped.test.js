@@ -1,7 +1,8 @@
 import getGroupedData, {
   getNumericValue,
   getReducedValue,
-  getGroups
+  getGroups,
+  calculateSectionPercentageValue
 } from './getGrouped'
 
 import data from '../../testData/index.json'
@@ -101,4 +102,23 @@ test('Testing calculate totals and sections percentage', () => {
   expect(grouped['Africa-----______Totals'].population).toBe(1278740761)
   expect(grouped['Africa-----______Totals'].perc_total).toBe('16.74%')
   expect(grouped['Africa-----______Totals'].perc_section).toBe('100.00%')
+})
+
+test('Testing calculateSectionPercentageValue function', () => {
+  const testData = {
+    value: 50,
+    key: 'Test1-----AnotherField',
+    subTotalsSet: {
+      'Test1-----______Totals': { sampleValue: 100 },
+      'Test2-----______Totals': { sampleValue: 200 },
+      'Test3-----______Totals': { sampleValue: 300 }
+    },
+    valKey: 'sampleValue'
+  }
+  const {value, key, subTotalsSet, valKey} = testData
+  const subTotalKeys = Object.keys(subTotalsSet)
+  const results = calculateSectionPercentageValue(value, key, subTotalsSet, valKey)
+  const resultTotalKey = calculateSectionPercentageValue(subTotalsSet[subTotalKeys[0]], subTotalKeys[0], subTotalsSet, valKey)
+  expect(results).toBe('50.00%')
+  expect(resultTotalKey).toBe('100.00%')
 })
