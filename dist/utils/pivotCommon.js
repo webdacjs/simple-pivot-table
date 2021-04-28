@@ -42,7 +42,7 @@ function getColumns(columnsLabels, rows, values, calculateTotalsPercentage, calc
   }
 
   if (values.length === 1 && calculateTotalsPercentage && calculateSectionPercentage) {
-    return [].concat(_toConsumableArray(rows), [values[0].field, 'totals_percentage', 'totals_section_percentage']);
+    return [].concat(_toConsumableArray(rows), [values[0].field, 'totals_section_percentage', 'totals_percentage']);
   }
 
   if (values.length === 1 && calculateTotalsPercentage) {

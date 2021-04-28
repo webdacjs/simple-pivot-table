@@ -69,12 +69,14 @@ export default function PivotTable ({
       </tr>
     </thead>
 
+  const getLineClass = (baseClass, item) => item.totalsLine ? `${baseClass} pivotSubtotal` : baseClass
+
   const getRowLine = (row, i) => {
     const rowItems = row.map((item, y) => {
       if (item.type === 'header' && item.visible) {
-        return <th key={`th-${i}-${y}`} rowSpan={item.rowSpan} className='pivotRowHeader'>{item.value}</th>
+        return <th key={`th-${i}-${y}`} rowSpan={item.rowSpan} className={getLineClass('pivotRowHeader', item)}>{item.value}</th>
       } else if (item.type === 'value') {
-        return <td key={`td-${i}-${y}`} className='pivotValue'>{item.value}</td>
+        return <td key={`td-${i}-${y}`} className={getLineClass('pivotValue', item)}>{item.value}</td>
       }
     })
     return rowItems.filter(x => x)

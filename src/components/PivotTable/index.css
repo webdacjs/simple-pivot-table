@@ -50,6 +50,10 @@ body {
     font-weight: bold;
 }
 
+.pivotSubtotal, .pivotRowValueTotal {
+    font-weight: bold ! important;
+}
+
 .simple-pivot-table tr:nth-child(even) {
     background-color: #f2f2f2;
 }
