@@ -48,6 +48,27 @@ Default.args = {
   data: testData,
   rows: ['continent', 'country'],
   showColumnTotals: true,
+  values: [
+    { field: 'population', aggregator: 'sum' }
+  ]
+}
+
+export const ShowSectionTotals = Template.bind({})
+ShowSectionTotals.args = {
+  data: testData,
+  rows: ['continent', 'country'],
+  showColumnTotals: true,
+  showSectionTotals: true,
+  values: [
+    { field: 'population', aggregator: 'sum' }
+  ]
+}
+
+export const CalculatePercentages = Template.bind({})
+CalculatePercentages.args = {
+  data: testData,
+  rows: ['continent', 'country'],
+  showColumnTotals: true,
   showSectionTotals: true,
   calculateTotalsPercentage: true,
   calculateSectionPercentage: true,
