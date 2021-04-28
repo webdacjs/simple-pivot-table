@@ -115,7 +115,7 @@ test('Testing calculateSectionPercentageValue function', () => {
     },
     valKey: 'sampleValue'
   }
-  const {value, key, subTotalsSet, valKey} = testData
+  const { value, key, subTotalsSet, valKey } = testData
   const subTotalKeys = Object.keys(subTotalsSet)
   const results = calculateSectionPercentageValue(value, key, subTotalsSet, valKey)
   const resultTotalKey = calculateSectionPercentageValue(subTotalsSet[subTotalKeys[0]], subTotalKeys[0], subTotalsSet, valKey)

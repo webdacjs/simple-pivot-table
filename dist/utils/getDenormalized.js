@@ -20,6 +20,7 @@ function checkVisibility(previousItemSplit, keyCounts, partialK, prevK) {
 }
 
 function getDenormalizedLine(key, data, previousItem, keyCounts, valuesFields) {
+  var totalsLine = key.includes(_settings.subtotalsSuffix);
   var line = []; // Add Header
 
   var previousItemSplit = previousItem ? previousItem.split(_settings.separator) : null;
@@ -33,7 +34,8 @@ function getDenormalizedLine(key, data, previousItem, keyCounts, valuesFields) {
       type: 'header',
       value: splitKey[norm].replace(_settings.subtotalsSuffix, ''),
       rowSpan: keyCounts[partialK],
-      visible: checkVisibility(previousItemSplit, keyCounts, partialK, prevK)
+      visible: checkVisibility(previousItemSplit, keyCounts, partialK, prevK),
+      totalsLine: totalsLine
     });
   } // Add values.
 
@@ -42,7 +44,8 @@ function getDenormalizedLine(key, data, previousItem, keyCounts, valuesFields) {
     line.push({
       type: 'value',
       value: data[v],
-      visible: true
+      visible: true,
+      totalsLine: totalsLine
     });
   });
   return line;

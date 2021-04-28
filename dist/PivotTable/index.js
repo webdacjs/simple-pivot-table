@@ -120,18 +120,22 @@ function PivotTable(_ref) {
     })));
   };
 
+  var getLineClass = function getLineClass(baseClass, item) {
+    return item.totalsLine ? "".concat(baseClass, " pivotSubtotal") : baseClass;
+  };
+
   var getRowLine = function getRowLine(row, i) {
     var rowItems = row.map(function (item, y) {
       if (item.type === 'header' && item.visible) {
         return /*#__PURE__*/_react.default.createElement("th", {
           key: "th-".concat(i, "-").concat(y),
           rowSpan: item.rowSpan,
-          className: "pivotRowHeader"
+          className: getLineClass('pivotRowHeader', item)
         }, item.value);
       } else if (item.type === 'value') {
         return /*#__PURE__*/_react.default.createElement("td", {
           key: "td-".concat(i, "-").concat(y),
-          className: "pivotValue"
+          className: getLineClass('pivotValue', item)
         }, item.value);
       }
     });

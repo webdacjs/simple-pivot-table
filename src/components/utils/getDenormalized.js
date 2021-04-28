@@ -12,6 +12,7 @@ function checkVisibility (previousItemSplit, keyCounts, partialK, prevK) {
 }
 
 function getDenormalizedLine (key, data, previousItem, keyCounts, valuesFields) {
+  const totalsLine = key.includes(subtotalsSuffix)
   const line = []
   // Add Header
   const previousItemSplit = previousItem ? previousItem.split(separator) : null
@@ -24,7 +25,8 @@ function getDenormalizedLine (key, data, previousItem, keyCounts, valuesFields) 
       type: 'header',
       value: splitKey[norm].replace(subtotalsSuffix, ''),
       rowSpan: keyCounts[partialK],
-      visible: checkVisibility(previousItemSplit, keyCounts, partialK, prevK)
+      visible: checkVisibility(previousItemSplit, keyCounts, partialK, prevK),
+      totalsLine
     })
   }
   // Add values.
@@ -32,7 +34,8 @@ function getDenormalizedLine (key, data, previousItem, keyCounts, valuesFields) 
     line.push({
       type: 'value',
       value: data[v],
-      visible: true
+      visible: true,
+      totalsLine
     })
   })
   return line
