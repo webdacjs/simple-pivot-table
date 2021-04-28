@@ -10,6 +10,10 @@ exports.default = getGroupedData;
 
 var _settings = require("./settings");
 
+var _lodash = _interopRequireDefault(require("lodash.filter"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
@@ -103,6 +107,14 @@ function getGroups(data, rowAttributes, showSectionTotals) {
     }
   });
   return grouped;
+}
+
+function calculateSectionPercentageValue(value, key, subTotalsSet, valKey) {
+  var keyPrefix = key.split(_settings.separator)[0];
+  var subtotalSectionKey = (0, _lodash.default)(Object.keys(subTotalsSet), function (x) {
+    return x.includes(keyPrefix);
+  })[0];
+  return "".concat((value / subTotalsSet[subtotalSectionKey][valKey] * 100).toFixed(2), "%");
 } // Get the data combined by attribute including the mutations done by th postprocess function
 // with the originals if required.
 
@@ -146,17 +158,31 @@ function getGroupedData(_ref) {
   });
   var valueTotals = getAggregatedValues(data, vals, postprocessfn);
 
-  if (vals.length === 1 && calculateTotalsPercentage) {
+  if (vals.length === 1 && (calculateTotalsPercentage || calculateSectionPercentage && showSectionTotals)) {
+    var subTotalsSet;
     var valKey = vals[0].field;
+
+    if (showSectionTotals && calculateSectionPercentage) {
+      subTotalsSet = (0, _lodash.default)(Object.keys(grouped), function (key) {
+        return key.includes(_settings.subtotalsSuffix);
+      }).reduce(function (obj, key) {
+        obj[key] = grouped[key];
+        return obj;
+      }, {});
+    }
+
     var groupedPerc = Object.keys(grouped).reduce(function (obj, key) {
+      var value = grouped[key][valKey];
       obj[key] = _objectSpread(_objectSpread({}, grouped[key]), {}, {
-        perc_total: "".concat((grouped[key][valKey] / valueTotals[valKey] * 100).toFixed(2), "%")
+        perc_total: calculateTotalsPercentage ? "".concat((value / valueTotals[valKey] * 100).toFixed(2), "%") : null,
+        perc_section: calculateSectionPercentage && showSectionTotals ? calculateSectionPercentageValue(value, key, subTotalsSet, valKey) : null
       });
       return obj;
     }, {});
 
     var valueTotalsPerc = _objectSpread(_objectSpread({}, valueTotals), {}, {
-      perc_total: '100%'
+      perc_total: calculateTotalsPercentage ? '100%' : null,
+      perc_section: calculateSectionPercentage && showSectionTotals ? '100%' : null
     });
 
     return {

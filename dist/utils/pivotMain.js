@@ -40,7 +40,7 @@ function getPivotDataColumns(_ref) {
     calculateTotalsPercentage: calculateTotalsPercentage
   });
   var colsTotals = groupedData.valueTotals;
-  var colsValues = (0, _pivotCommon.getColumns)(columnsLabels, rows, values, calculateTotalsPercentage);
+  var colsValues = (0, _pivotCommon.getColumns)(columnsLabels, rows, values, calculateTotalsPercentage, calculateSectionPercentage);
   var pivotData = (0, _getDenormalized.default)(groupedData);
 
   if (getOriginals) {
@@ -101,6 +101,8 @@ function getPivotJsonData(_ref3) {
       postprocessfn = _ref3.postprocessfn,
       showColumnTotals = _ref3.showColumnTotals,
       showSectionTotals = _ref3.showSectionTotals,
+      calculateSectionPercentage = _ref3.calculateSectionPercentage,
+      calculateTotalsPercentage = _ref3.calculateTotalsPercentage,
       getTree = _ref3.getTree;
 
   if (!getTree) {
@@ -112,7 +114,9 @@ function getPivotJsonData(_ref3) {
       columnsLabels: columnsLabels,
       postprocessfn: postprocessfn,
       showColumnTotals: showColumnTotals,
-      showSectionTotals: showSectionTotals
+      showSectionTotals: showSectionTotals,
+      calculateSectionPercentage: calculateSectionPercentage,
+      calculateTotalsPercentage: calculateTotalsPercentage
     });
     var jsonData = (0, _pivotCommon.csvToJson)(csvData);
     return jsonData;
@@ -127,6 +131,8 @@ function getPivotJsonData(_ref3) {
     postprocessfn: postprocessfn,
     showColumnTotals: showColumnTotals,
     showSectionTotals: showSectionTotals,
+    calculateSectionPercentage: calculateSectionPercentage,
+    calculateTotalsPercentage: calculateTotalsPercentage,
     getTree: getTree
   });
   return tree;

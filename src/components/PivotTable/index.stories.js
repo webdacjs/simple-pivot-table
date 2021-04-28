@@ -50,6 +50,7 @@ Default.args = {
   showColumnTotals: true,
   showSectionTotals: true,
   calculateTotalsPercentage: true,
+  calculateSectionPercentage: true,
   values: [
     { field: 'population', aggregator: 'sum' }
   ]

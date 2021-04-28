@@ -189,6 +189,7 @@ PivotTable.propTypes = {
   showRowsTotals: _propTypes.default.bool,
   showSectionTotals: _propTypes.default.bool,
   calculateSectionPercentage: _propTypes.default.bool,
+  calculateTotalsPercentage: _propTypes.default.bool,
   values: _propTypes.default.array,
   width: _propTypes.default.string
 };

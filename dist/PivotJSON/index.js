@@ -41,6 +41,8 @@ function PivotJSON(_ref) {
       showColumnTotals = _ref.showColumnTotals,
       showRowsTotals = _ref.showRowsTotals,
       showSectionTotals = _ref.showSectionTotals,
+      calculateSectionPercentage = _ref.calculateSectionPercentage,
+      calculateTotalsPercentage = _ref.calculateTotalsPercentage,
       getTree = _ref.getTree;
 
   var _useState = (0, _react.useState)(),
@@ -58,6 +60,8 @@ function PivotJSON(_ref) {
       postprocessfn: postprocessfn,
       showColumnTotals: showColumnTotals,
       showSectionTotals: showSectionTotals,
+      calculateSectionPercentage: calculateSectionPercentage,
+      calculateTotalsPercentage: calculateTotalsPercentage,
       getTree: getTree
     });
     setJSONData(JSONContents);
@@ -86,5 +90,7 @@ PivotJSON.propTypes = {
   showColumnTotals: _propTypes.default.bool,
   showRowsTotals: _propTypes.default.bool,
   showSectionTotals: _propTypes.default.bool,
+  calculateSectionPercentage: _propTypes.default.bool,
+  calculateTotalsPercentage: _propTypes.default.bool,
   width: _propTypes.default.number
 };

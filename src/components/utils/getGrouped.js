@@ -1,4 +1,5 @@
 import { separator, subtotalsSuffix } from './settings'
+import filter from 'lodash.filter'
 
 export function getNumericValue (value) {
   const numValue = parseFloat(value)
@@ -67,10 +68,16 @@ export function getGroups (data, rowAttributes, showSectionTotals) {
   return grouped
 }
 
+function calculateSectionPercentageValue (value, key, subTotalsSet, valKey) {
+  const keyPrefix = key.split(separator)[0]
+  const subtotalSectionKey = filter(Object.keys(subTotalsSet), x => x.includes(keyPrefix))[0]
+  return `${(value / subTotalsSet[subtotalSectionKey][valKey] * 100).toFixed(2)}%`
+}
+
 // Get the data combined by attribute including the mutations done by th postprocess function
 // with the originals if required.
 export default function getGroupedData ({
-  data, 
+  data,
   rowAttributes,
   vals,
   postprocessfn,
@@ -104,15 +111,29 @@ export default function getGroupedData ({
   })
   const valueTotals = getAggregatedValues(data, vals, postprocessfn)
 
-  if (vals.length === 1 && calculateTotalsPercentage) {
+  if (vals.length === 1 && (calculateTotalsPercentage || calculateSectionPercentage && showSectionTotals)) {
+    let subTotalsSet
     const valKey = vals[0].field
+    if (showSectionTotals && calculateSectionPercentage) {
+      subTotalsSet = filter(Object.keys(grouped), key => key.includes(subtotalsSuffix)).reduce((obj, key) => {
+        obj[key] = grouped[key]
+        return obj
+      }, {})
+    }
+
     const groupedPerc = Object.keys(grouped).reduce((obj, key) => {
+      const value = grouped[key][valKey]
       obj[key] = {
         ...grouped[key],
-        perc_total: `${(grouped[key][valKey] / valueTotals[valKey] * 100).toFixed(2)}%`
+        perc_total: calculateTotalsPercentage ? `${(value / valueTotals[valKey] * 100).toFixed(2)}%` : null,
+        perc_section: calculateSectionPercentage && showSectionTotals ? calculateSectionPercentageValue(value, key, subTotalsSet, valKey) : null
       }; return obj
     }, {})
-    const valueTotalsPerc = { ...valueTotals, perc_total: '100%' }
+    const valueTotalsPerc = {
+      ...valueTotals,
+      perc_total: calculateTotalsPercentage ? '100%' : null,
+      perc_section: calculateSectionPercentage && showSectionTotals ? '100%' : null
+    }
     return {
       grouped: groupedPerc,
       valueTotals: valueTotalsPerc
