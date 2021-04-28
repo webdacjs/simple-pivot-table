@@ -128,14 +128,14 @@ export default function getGroupedData ({
       const value = grouped[key][valKey]
       obj[key] = {
         ...grouped[key],
-        perc_total: calculateTotalsPercentage ? `${(value / valueTotals[valKey] * 100).toFixed(2)}%` : null,
-        perc_section: calculateSectionPercentage && showSectionTotals ? calculateSectionPercentageValue(value, key, subTotalsSet, valKey) : null
+        perc_section: calculateSectionPercentage && showSectionTotals ? calculateSectionPercentageValue(value, key, subTotalsSet, valKey) : null,
+        perc_total: calculateTotalsPercentage ? `${(value / valueTotals[valKey] * 100).toFixed(2)}%` : null
       }; return obj
     }, {})
     const valueTotalsPerc = {
       ...valueTotals,
-      perc_total: calculateTotalsPercentage ? '100.00%' : null,
-      perc_section: calculateSectionPercentage && showSectionTotals ? '100.00%' : null
+      perc_section: calculateSectionPercentage && showSectionTotals ? '100.00%' : null,
+      perc_total: calculateTotalsPercentage ? '100.00%' : null
     }
     return {
       grouped: groupedPerc,

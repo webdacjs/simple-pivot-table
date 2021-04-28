@@ -6,6 +6,7 @@ Object.defineProperty(exports, "__esModule", {
 exports.getNumericValue = getNumericValue;
 exports.getReducedValue = getReducedValue;
 exports.getGroups = getGroups;
+exports.calculateSectionPercentageValue = calculateSectionPercentageValue;
 exports.default = getGroupedData;
 
 var _settings = require("./settings");
@@ -112,8 +113,13 @@ function getGroups(data, rowAttributes, showSectionTotals) {
 function calculateSectionPercentageValue(value, key, subTotalsSet, valKey) {
   var keyPrefix = key.split(_settings.separator)[0];
   var subtotalSectionKey = (0, _lodash.default)(Object.keys(subTotalsSet), function (x) {
-    return x.includes(keyPrefix);
+    return x.includes("".concat(keyPrefix).concat(_settings.separator));
   })[0];
+
+  if (key === subtotalSectionKey) {
+    return '100.00%';
+  }
+
   return "".concat((value / subTotalsSet[subtotalSectionKey][valKey] * 100).toFixed(2), "%");
 } // Get the data combined by attribute including the mutations done by th postprocess function
 // with the originals if required.
@@ -174,15 +180,15 @@ function getGroupedData(_ref) {
     var groupedPerc = Object.keys(grouped).reduce(function (obj, key) {
       var value = grouped[key][valKey];
       obj[key] = _objectSpread(_objectSpread({}, grouped[key]), {}, {
-        perc_total: calculateTotalsPercentage ? "".concat((value / valueTotals[valKey] * 100).toFixed(2), "%") : null,
-        perc_section: calculateSectionPercentage && showSectionTotals ? calculateSectionPercentageValue(value, key, subTotalsSet, valKey) : null
+        perc_section: calculateSectionPercentage && showSectionTotals ? calculateSectionPercentageValue(value, key, subTotalsSet, valKey) : null,
+        perc_total: calculateTotalsPercentage ? "".concat((value / valueTotals[valKey] * 100).toFixed(2), "%") : null
       });
       return obj;
     }, {});
 
     var valueTotalsPerc = _objectSpread(_objectSpread({}, valueTotals), {}, {
-      perc_total: calculateTotalsPercentage ? '100%' : null,
-      perc_section: calculateSectionPercentage && showSectionTotals ? '100%' : null
+      perc_section: calculateSectionPercentage && showSectionTotals ? '100.00%' : null,
+      perc_total: calculateTotalsPercentage ? '100.00%' : null
     });
 
     return {
