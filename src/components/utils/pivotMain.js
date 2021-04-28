@@ -16,13 +16,25 @@ export default function getPivotDataColumns ({
   columnsLabels,
   postprocessfn,
   getOriginals,
-  sectionTotals,
+  showSectionTotals,
+  calculateSectionPercentage,
+  calculateTotalsPercentage,
   getTree
 }) {
   const groupedData = getGroupedData(
-    getFilteredRows(data, filters), rows, values, postprocessfn, getOriginals, sectionTotals)
+    {
+      data: getFilteredRows(data, filters), 
+      rowAttributes: rows,
+      vals: values,
+      postprocessfn,
+      getOriginalsFlag: getOriginals,
+      showSectionTotals,
+      calculateSectionPercentage,
+      calculateTotalsPercentage
+    }
+  )
   const colsTotals = groupedData.valueTotals
-  const colsValues = getColumns(columnsLabels, rows, values)
+  const colsValues = getColumns(columnsLabels, rows, values, calculateTotalsPercentage)
   const pivotData = getDenormalized(groupedData)
 
   if (getOriginals) {
@@ -46,7 +58,7 @@ export function getPivotCsvData ({
   columnsLabels,
   postprocessfn,
   showColumnTotals,
-  sectionTotals
+  showSectionTotals
 }) {
   const { pivotData, colsValues, colsTotals } = getPivotDataColumns({
     data,
@@ -55,7 +67,7 @@ export function getPivotCsvData ({
     values,
     columnsLabels,
     postprocessfn,
-    sectionTotals
+    showSectionTotals
   })
   const csvData = getCsvContents(
     pivotData, colsValues, rows, showColumnTotals, colsTotals)
@@ -70,7 +82,7 @@ export function getPivotJsonData ({
   columnsLabels,
   postprocessfn,
   showColumnTotals,
-  sectionTotals,
+  showSectionTotals,
   getTree
 }) {
   if (!getTree) {
@@ -82,7 +94,7 @@ export function getPivotJsonData ({
       columnsLabels,
       postprocessfn,
       showColumnTotals,
-      sectionTotals
+      showSectionTotals
     })
     const jsonData = csvToJson(csvData)
     return jsonData
@@ -95,7 +107,7 @@ export function getPivotJsonData ({
     columnsLabels,
     postprocessfn,
     showColumnTotals,
-    sectionTotals,
+    showSectionTotals,
     getTree
   })
   return tree

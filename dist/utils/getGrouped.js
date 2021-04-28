@@ -81,25 +81,25 @@ function getCombinedKeyBasedOnRowAttributes(dataItem, rowAttributes) {
   return combinedKeyArray;
 }
 
-function getGroups(data, rowAttributes, sectionTotals) {
+function getGroups(data, rowAttributes, showSectionTotals) {
   var grouped = {};
   data.forEach(function (dataItem) {
     var combinedKeyArray = getCombinedKeyBasedOnRowAttributes(dataItem, rowAttributes);
     grouped[combinedKeyArray] = grouped[combinedKeyArray] || [];
     grouped[combinedKeyArray].push(dataItem);
 
-    if (sectionTotals && rowAttributes.length > 1) {
+    if (showSectionTotals && rowAttributes.length > 1) {
       var combinedSplit = combinedKeyArray.split(_settings.separator);
 
       var getTotalLabel = function getTotalLabel(i) {
         return i === combinedSplit.length - 1 ? "".concat(_settings.subtotalsSuffix, "Totals") : _settings.subtotalsSuffix;
       };
 
-      var combinedKeySectionTotals = combinedSplit.map(function (x, i) {
+      var combinedKeyshowSectionTotals = combinedSplit.map(function (x, i) {
         return i === 0 ? x : getTotalLabel(i);
       }).join(_settings.separator);
-      grouped[combinedKeySectionTotals] = grouped[combinedKeySectionTotals] || [];
-      grouped[combinedKeySectionTotals].push(dataItem);
+      grouped[combinedKeyshowSectionTotals] = grouped[combinedKeyshowSectionTotals] || [];
+      grouped[combinedKeyshowSectionTotals].push(dataItem);
     }
   });
   return grouped;
@@ -107,8 +107,16 @@ function getGroups(data, rowAttributes, sectionTotals) {
 // with the originals if required.
 
 
-function getGroupedData(data, rowAttributes, vals, postprocessfn, getOriginalsFlag, sectionTotals) {
-  var grouped = getGroups(data, rowAttributes, sectionTotals);
+function getGroupedData(_ref) {
+  var data = _ref.data,
+      rowAttributes = _ref.rowAttributes,
+      vals = _ref.vals,
+      postprocessfn = _ref.postprocessfn,
+      getOriginalsFlag = _ref.getOriginalsFlag,
+      showSectionTotals = _ref.showSectionTotals,
+      calculateSectionPercentage = _ref.calculateSectionPercentage,
+      calculateTotalsPercentage = _ref.calculateTotalsPercentage;
+  var grouped = getGroups(data, rowAttributes, showSectionTotals);
 
   if (getOriginalsFlag) {
     var groupedOriginals = _objectSpread({}, grouped);
@@ -137,6 +145,26 @@ function getGroupedData(data, rowAttributes, vals, postprocessfn, getOriginalsFl
     grouped[key] = getAggregatedValues(grouped[key], vals, postprocessfn);
   });
   var valueTotals = getAggregatedValues(data, vals, postprocessfn);
+
+  if (vals.length === 1 && calculateTotalsPercentage) {
+    var valKey = vals[0].field;
+    var groupedPerc = Object.keys(grouped).reduce(function (obj, key) {
+      obj[key] = _objectSpread(_objectSpread({}, grouped[key]), {}, {
+        perc_total: "".concat((grouped[key][valKey] / valueTotals[valKey] * 100).toFixed(2), "%")
+      });
+      return obj;
+    }, {});
+
+    var valueTotalsPerc = _objectSpread(_objectSpread({}, valueTotals), {}, {
+      perc_total: '100%'
+    });
+
+    return {
+      grouped: groupedPerc,
+      valueTotals: valueTotalsPerc
+    };
+  }
+
   return {
     grouped: grouped,
     valueTotals: valueTotals

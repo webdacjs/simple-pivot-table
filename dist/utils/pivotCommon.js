@@ -30,7 +30,7 @@ function removeNewLines(val) {
   return val.replace(/(\r\n|\n|\r)/gm, '');
 }
 
-function getColumns(columnsLabels, rows, values) {
+function getColumns(columnsLabels, rows, values, calculateTotalsPercentage) {
   var columnsCombined = [].concat(_toConsumableArray(rows), _toConsumableArray(values.map(function (x) {
     return x.field;
   })));
@@ -39,6 +39,10 @@ function getColumns(columnsLabels, rows, values) {
     return columnsCombined.map(function (col, i) {
       return columnsLabels[i] ? columnsLabels[i] : col;
     });
+  }
+
+  if (values.length === 1 && calculateTotalsPercentage) {
+    return [].concat(_toConsumableArray(rows), [values[0].field, 'totals_percentage']);
   }
 
   return [].concat(_toConsumableArray(rows), _toConsumableArray(values.map(function (x) {

@@ -41,7 +41,7 @@ function PivotCsv(_ref) {
       postprocessfn = _ref.postprocessfn,
       showColumnTotals = _ref.showColumnTotals,
       showRowsTotals = _ref.showRowsTotals,
-      sectionTotals = _ref.sectionTotals;
+      showSectionTotals = _ref.showSectionTotals;
 
   var _useState = (0, _react.useState)(),
       _useState2 = _slicedToArray(_useState, 2),
@@ -57,7 +57,7 @@ function PivotCsv(_ref) {
       columnsLabels: columnsLabels,
       postprocessfn: postprocessfn,
       showColumnTotals: showColumnTotals,
-      sectionTotals: sectionTotals
+      showSectionTotals: showSectionTotals
     });
     setCsvData(csvContents);
   }, [data, rows, values, columnsLabels]); // eslint-disable-line
@@ -83,6 +83,6 @@ PivotCsv.propTypes = {
   postprocessfn: _propTypes.default.func,
   showColumnTotals: _propTypes.default.bool,
   showRowsTotals: _propTypes.default.bool,
-  sectionTotals: _propTypes.default.bool,
+  showSectionTotals: _propTypes.default.bool,
   width: _propTypes.default.number
 };

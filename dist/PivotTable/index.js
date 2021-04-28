@@ -42,7 +42,9 @@ function PivotTable(_ref) {
       rows = _ref.rows,
       showColumnTotals = _ref.showColumnTotals,
       showRowsTotals = _ref.showRowsTotals,
-      sectionTotals = _ref.sectionTotals,
+      showSectionTotals = _ref.showSectionTotals,
+      calculateSectionPercentage = _ref.calculateSectionPercentage,
+      calculateTotalsPercentage = _ref.calculateTotalsPercentage,
       values = _ref.values,
       width = _ref.width;
 
@@ -74,7 +76,9 @@ function PivotTable(_ref) {
       values: values,
       columnsLabels: columnsLabels,
       postprocessfn: postprocessfn,
-      sectionTotals: sectionTotals
+      showSectionTotals: showSectionTotals,
+      calculateSectionPercentage: calculateSectionPercentage,
+      calculateTotalsPercentage: calculateTotalsPercentage
     }),
         pivotData = _getPivotDataColumns.pivotData,
         colsValues = _getPivotDataColumns.colsValues,
@@ -183,7 +187,8 @@ PivotTable.propTypes = {
   rows: _propTypes.default.array,
   showColumnTotals: _propTypes.default.bool,
   showRowsTotals: _propTypes.default.bool,
-  sectionTotals: _propTypes.default.bool,
+  showSectionTotals: _propTypes.default.bool,
+  calculateSectionPercentage: _propTypes.default.bool,
   values: _propTypes.default.array,
   width: _propTypes.default.string
 };

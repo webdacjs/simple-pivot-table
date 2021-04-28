@@ -5,10 +5,13 @@ export function removeNewLines (val) {
   return val.replace(/(\r\n|\n|\r)/gm, '')
 }
 
-export function getColumns (columnsLabels, rows, values) {
+export function getColumns (columnsLabels, rows, values, calculateTotalsPercentage) {
   const columnsCombined = [...rows, ...values.map(x => x.field)]
   if (columnsLabels) {
     return columnsCombined.map((col, i) => columnsLabels[i] ? columnsLabels[i] : col)
+  }
+  if (values.length === 1 && calculateTotalsPercentage) {
+    return [...rows, values[0].field, 'totals_percentage']
   }
   return [...rows, ...values.map(x => x.field)]
 }

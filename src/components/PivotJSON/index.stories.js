@@ -22,7 +22,7 @@ const Template = ({
   showColumnTotals,
   showRowsTotals,
   getTree,
-  sectionTotals
+  showSectionTotals
 }) =>
   <PivotJSON
     data={data}
@@ -37,14 +37,14 @@ const Template = ({
     showColumnTotals={showColumnTotals}
     showRowsTotals={showRowsTotals}
     getTree={getTree}
-    sectionTotals={sectionTotals}
+    showSectionTotals={showSectionTotals}
   />
 
 export const Default = Template.bind({})
 Default.args = {
   data: testData,
   rows: ['continent', 'country'],
-  sectionTotals: true,
+  showSectionTotals: true,
   values: [
     { field: 'population', aggregator: 'sum' }
   ]
@@ -130,7 +130,7 @@ getTree.args = {
   data: testData,
   rows: ['continent', 'country'],
   showColumnTotals: true,
-  sectionTotals: true,
+  showSectionTotals: true,
   getTree: true,
   values: [
     {
