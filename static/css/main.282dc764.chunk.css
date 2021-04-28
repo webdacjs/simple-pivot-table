@@ -50,6 +50,10 @@ body {
     font-weight: bold;
 }
 
+.pivotSubtotal, .pivotRowValueTotal {
+    font-weight: bold ! important;
+}
+
 .simple-pivot-table tr:nth-child(even) {
     background-color: #f2f2f2;
 }
@@ -185,4 +189,4 @@ body {
     background-color: #f2f2f2;
 }
 
-/*# sourceMappingURL=main.252ff9dd.chunk.css.map*/
+/*# sourceMappingURL=main.282dc764.chunk.css.map*/
