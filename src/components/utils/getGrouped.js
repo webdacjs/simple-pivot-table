@@ -1,4 +1,5 @@
 import { separator, subtotalsSuffix } from './settings'
+import filter from 'lodash.filter'
 
 export function getNumericValue (value) {
   const numValue = parseFloat(value)
@@ -49,28 +50,43 @@ function getCombinedKeyBasedOnRowAttributes (dataItem, rowAttributes) {
   return combinedKeyArray
 }
 
-export function getGroups (data, rowAttributes, sectionTotals) {
+export function getGroups (data, rowAttributes, showSectionTotals) {
   const grouped = {}
   data.forEach(dataItem => {
     const combinedKeyArray = getCombinedKeyBasedOnRowAttributes(dataItem, rowAttributes)
     grouped[combinedKeyArray] = grouped[combinedKeyArray] || []
     grouped[combinedKeyArray].push(dataItem)
-    if (sectionTotals && rowAttributes.length > 1) {
+    if (showSectionTotals && rowAttributes.length > 1) {
       const combinedSplit = combinedKeyArray.split(separator)
       const getTotalLabel = i => i === combinedSplit.length - 1 ? `${subtotalsSuffix}Totals` : subtotalsSuffix
-      const combinedKeySectionTotals = combinedSplit.map
+      const combinedKeyshowSectionTotals = combinedSplit.map
       ((x, i) => i === 0 ? x : getTotalLabel(i)).join(separator)
-      grouped[combinedKeySectionTotals] = grouped[combinedKeySectionTotals] || []
-      grouped[combinedKeySectionTotals].push(dataItem)
+      grouped[combinedKeyshowSectionTotals] = grouped[combinedKeyshowSectionTotals] || []
+      grouped[combinedKeyshowSectionTotals].push(dataItem)
     }
   })
   return grouped
 }
 
+function calculateSectionPercentageValue (value, key, subTotalsSet, valKey) {
+  const keyPrefix = key.split(separator)[0]
+  const subtotalSectionKey = filter(Object.keys(subTotalsSet), x => x.includes(keyPrefix))[0]
+  return `${(value / subTotalsSet[subtotalSectionKey][valKey] * 100).toFixed(2)}%`
+}
+
 // Get the data combined by attribute including the mutations done by th postprocess function
 // with the originals if required.
-export default function getGroupedData (data, rowAttributes, vals, postprocessfn, getOriginalsFlag, sectionTotals) {
-  const grouped = getGroups(data, rowAttributes, sectionTotals)
+export default function getGroupedData ({
+  data,
+  rowAttributes,
+  vals,
+  postprocessfn,
+  getOriginalsFlag,
+  showSectionTotals,
+  calculateSectionPercentage,
+  calculateTotalsPercentage
+}) {
+  const grouped = getGroups(data, rowAttributes, showSectionTotals)
   if (getOriginalsFlag) {
     const groupedOriginals = { ...grouped }
     Object.keys(grouped).forEach(key => {
@@ -94,6 +110,35 @@ export default function getGroupedData (data, rowAttributes, vals, postprocessfn
     grouped[key] = getAggregatedValues(grouped[key], vals, postprocessfn)
   })
   const valueTotals = getAggregatedValues(data, vals, postprocessfn)
+
+  if (vals.length === 1 && (calculateTotalsPercentage || calculateSectionPercentage && showSectionTotals)) {
+    let subTotalsSet
+    const valKey = vals[0].field
+    if (showSectionTotals && calculateSectionPercentage) {
+      subTotalsSet = filter(Object.keys(grouped), key => key.includes(subtotalsSuffix)).reduce((obj, key) => {
+        obj[key] = grouped[key]
+        return obj
+      }, {})
+    }
+
+    const groupedPerc = Object.keys(grouped).reduce((obj, key) => {
+      const value = grouped[key][valKey]
+      obj[key] = {
+        ...grouped[key],
+        perc_total: calculateTotalsPercentage ? `${(value / valueTotals[valKey] * 100).toFixed(2)}%` : null,
+        perc_section: calculateSectionPercentage && showSectionTotals ? calculateSectionPercentageValue(value, key, subTotalsSet, valKey) : null
+      }; return obj
+    }, {})
+    const valueTotalsPerc = {
+      ...valueTotals,
+      perc_total: calculateTotalsPercentage ? '100%' : null,
+      perc_section: calculateSectionPercentage && showSectionTotals ? '100%' : null
+    }
+    return {
+      grouped: groupedPerc,
+      valueTotals: valueTotalsPerc
+    }
+  }
 
   return {
     grouped,

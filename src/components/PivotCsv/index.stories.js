@@ -20,7 +20,7 @@ const Template = ({
   values,
   height,
   postprocessfn,
-  sectionTotals,
+  showSectionTotals,
   showColumnTotals,
   showRowsTotals
 }) =>
@@ -34,7 +34,7 @@ const Template = ({
     values={values}
     width={width}
     postprocessfn={postprocessfn}
-    sectionTotals={sectionTotals}
+    showSectionTotals={showSectionTotals}
     showColumnTotals={showColumnTotals}
     showRowsTotals={showRowsTotals}
   />
@@ -43,7 +43,7 @@ export const Default = Template.bind({})
 Default.args = {
   data: testData,
   rows: ['continent', 'country'],
-  sectionTotals: true,
+  showSectionTotals: true,
   showColumnTotals: true,
   values: [
     { field: 'population', aggregator: 'sum' }

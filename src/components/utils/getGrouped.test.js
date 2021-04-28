@@ -58,12 +58,47 @@ test('Testing the getGroups fn getting section totals', () => {
 })
 
 test('Testing the main grouped data fn', () => {
-  const { grouped } = getGroupedData(data, ['continent'], [{ field: 'population' }])
+  const { grouped } = getGroupedData({
+    data,
+    rowAttributes: ['continent'],
+    vals: [{ field: 'population' }]
+  })
   expect(grouped.Asia.population).toBe(50)
   expect(grouped.Europe.population).toBe(51)
 })
 
 test('Testing the main grouped data fn', () => {
-  const { grouped } = getGroupedData(data, ['continent', 'country'], [{ field: 'population', aggregator: 'sum' }], null, null, true)
+  const { grouped } = getGroupedData({
+    data,
+    rowAttributes: ['continent', 'country'],
+    vals: [{ field: 'population', aggregator: 'sum' }],
+    showSectionTotals: true
+  })
   expect(grouped['Africa-----______Totals'].population).toBe(1278740761)
+})
+
+test('Testing calculate totals percentage', () => {
+  const { grouped } = getGroupedData({
+    data,
+    rowAttributes: ['continent', 'country'],
+    vals: [{ field: 'population', aggregator: 'sum' }],
+    showSectionTotals: true,
+    calculateTotalsPercentage: true
+  })
+  expect(grouped['Africa-----______Totals'].population).toBe(1278740761)
+  expect(grouped['Africa-----______Totals'].perc_total).toBe('16.74%')
+})
+
+test('Testing calculate totals and sections percentage', () => {
+  const { grouped } = getGroupedData({
+    data,
+    rowAttributes: ['continent', 'country'],
+    vals: [{ field: 'population', aggregator: 'sum' }],
+    showSectionTotals: true,
+    calculateTotalsPercentage: true,
+    calculateSectionPercentage: true
+  })
+  expect(grouped['Africa-----______Totals'].population).toBe(1278740761)
+  expect(grouped['Africa-----______Totals'].perc_total).toBe('16.74%')
+  expect(grouped['Africa-----______Totals'].perc_section).toBe('100.00%')
 })
