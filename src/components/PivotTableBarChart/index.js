@@ -151,7 +151,7 @@ export default function PivotTableBarChart ({
       return []
     }
     if (popOverFunction) {
-      return popOverFunction (row)
+      return popOverFunction(row)
     }
     const rowKey = headerItems.map(x => x.value).join(separator)
     const originalValue = groupedDataState[rowKey]
