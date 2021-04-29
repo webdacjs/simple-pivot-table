@@ -32,6 +32,7 @@ export default function PivotTableBarChart ({
   maxWidth,
   multiStackSplit = 2,
   popOverFormatter,
+  popOverFunction,
   postprocessfn,
   rows,
   showPopOver,
@@ -145,9 +146,12 @@ export default function PivotTableBarChart ({
     }
   }
 
-  const getPopOverDataArray = headerItems => {
+  const getPopOverDataArray = (headerItems, row) => {
     if (!showPopOver) {
       return []
+    }
+    if (popOverFunction) {
+      return popOverFunction (row)
     }
     const rowKey = headerItems.map(x => x.value).join(separator)
     const originalValue = groupedDataState[rowKey]
@@ -164,7 +168,7 @@ export default function PivotTableBarChart ({
 
   const getRowLine = (row, i) => {
     const headerItems = filter(row, x => x.type === 'header')
-    const popOverDataArray = getPopOverDataArray(headerItems)
+    const popOverDataArray = getPopOverDataArray(headerItems, row)
     const rowItems = headerItems.map(
       (item, y) => item.visible
         ? <th key={`th-${i}-${y}`} rowSpan={item.rowSpan} className='pivotRowHeader'>{item.value}</th>
@@ -215,6 +219,7 @@ PivotTableBarChart.propTypes = {
   maxHeight: PropTypes.string,
   maxWidth: PropTypes.string,
   popOverFormatter: PropTypes.func,
+  popOverFunction: PropTypes.func,
   postprocessfn: PropTypes.func,
   rows: PropTypes.array,
   showPopOver: PropTypes.bool,
