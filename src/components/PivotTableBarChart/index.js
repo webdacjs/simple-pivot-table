@@ -140,15 +140,6 @@ export default function PivotTableBarChart ({
               maxValue={maxValue}
             />
           )}
-
-          {/* <StackChart
-            dataElement={valuesObj}
-            dimensions={valuesCols.slice(2, 1000)}
-            height={barsHeight}
-            colors={colors.slice(2, 100)}
-            minValue={minValue}
-            maxValue={maxValue}
-          /> */}
         </PopOver>
       )
     }
