@@ -25,6 +25,7 @@ const Template = ({
   barsHeight,
   showPopOver,
   popOverFormatter,
+  popOverFunction,
   width,
   values,
   height,
@@ -45,6 +46,7 @@ const Template = ({
     barsMaxValue={barsMaxValue}
     showPopOver={showPopOver}
     popOverFormatter={popOverFormatter}
+    popOverFunction={popOverFunction}
     barsHeight={barsHeight}
     values={values}
     width={width}
@@ -123,6 +125,7 @@ MultiStackChart.args = {
   barLegendSteps: 10,
   barsMaxValue: 100,
   barType: 'multistack',
+  showPopOver: true,
   postprocessfn: result => {
     return {
       bar1: getRandomInt(25),
@@ -130,6 +133,19 @@ MultiStackChart.args = {
       bar3: getRandomInt(25),
       bar4: getRandomInt(25)
     }
+  },
+  popOverFunction: thisrow => {
+    const thisRowValues = thisrow.filter(x => x.type === 'value')
+    const headerItems = ['Continent', 'Currency', 'Government', 'Country'].map((key, i) => ({
+      key, value: thisrow[i].value
+    }))
+    const valueItems = ['Bar1', 'Bar2', 'Bar3', 'Bar4'].map((key, i) => ({
+      key, value: thisRowValues[i].value
+    }))
+    return [
+      ...headerItems,
+      ...valueItems
+    ]
   },
   values: [
     {
