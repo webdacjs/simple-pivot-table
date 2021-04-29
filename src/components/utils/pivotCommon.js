@@ -6,10 +6,8 @@ export function removeNewLines (val) {
 }
 
 export function getColumns (columnsLabels, rows, values, calculateTotalsPercentage, calculateSectionPercentage) {
-  const columnsCombined = [
-    ...rows, ...values.map(x => x.field), calculateTotalsPercentage, calculateSectionPercentage].filter(x => x)
   if (columnsLabels) {
-    return columnsCombined.map((col, i) => columnsLabels[i] ? columnsLabels[i] : col)
+    return columnsLabels
   }
   if (values.length === 1 && calculateTotalsPercentage && calculateSectionPercentage) {
     return [...rows, values[0].field, 'totals_section_percentage', 'totals_percentage']

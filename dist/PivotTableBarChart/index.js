@@ -17,6 +17,8 @@ var _pivotMain = _interopRequireDefault(require("../utils/pivotMain"));
 
 var _settings = require("../utils/settings");
 
+var _getChunks = _interopRequireDefault(require("../utils/getChunks"));
+
 var _GaugeChart = _interopRequireDefault(require("../BarCharts/GaugeChart"));
 
 var _StackChart = _interopRequireDefault(require("../BarCharts/StackChart"));
@@ -59,12 +61,16 @@ function PivotTableBarChart(_ref) {
       _ref$barsMinValue = _ref.barsMinValue,
       barsMinValue = _ref$barsMinValue === void 0 ? 0 : _ref$barsMinValue,
       columnsLabels = _ref.columnsLabels,
+      colors = _ref.colors,
       data = _ref.data,
       filters = _ref.filters,
       height = _ref.height,
       maxHeight = _ref.maxHeight,
       maxWidth = _ref.maxWidth,
+      _ref$multiStackSplit = _ref.multiStackSplit,
+      multiStackSplit = _ref$multiStackSplit === void 0 ? 2 : _ref$multiStackSplit,
       popOverFormatter = _ref.popOverFormatter,
+      popOverFunction = _ref.popOverFunction,
       postprocessfn = _ref.postprocessfn,
       rows = _ref.rows,
       showPopOver = _ref.showPopOver,
@@ -178,6 +184,7 @@ function PivotTableBarChart(_ref) {
         dataElement: valuesObj,
         dimensions: valuesCols,
         height: barsHeight,
+        colors: colors,
         minValue: minValue,
         maxValue: maxValue
       }));
@@ -189,15 +196,37 @@ function PivotTableBarChart(_ref) {
         dataElement: valuesObj,
         dimensions: valuesCols,
         height: barsHeight,
+        colors: colors,
         minValue: minValue,
         maxValue: maxValue
+      }));
+    } else if (barType === 'multistack') {
+      var valuesColsChunks = (0, _getChunks.default)(valuesCols, multiStackSplit);
+      var colorsChunks = (0, _getChunks.default)(colors);
+      return /*#__PURE__*/_react.default.createElement(_PopOver.default, {
+        showPopOver: showPopOver,
+        dataArray: dataArray
+      }, valuesColsChunks.map(function (chunk, index) {
+        return /*#__PURE__*/_react.default.createElement(_StackChart.default, {
+          key: "multiStack-".concat(index),
+          dataElement: valuesObj,
+          dimensions: chunk,
+          height: barsHeight,
+          colors: colorsChunks[index],
+          minValue: minValue,
+          maxValue: maxValue
+        });
       }));
     }
   }
 
-  var getPopOverDataArray = function getPopOverDataArray(headerItems) {
+  var getPopOverDataArray = function getPopOverDataArray(headerItems, row) {
     if (!showPopOver) {
       return [];
+    }
+
+    if (popOverFunction) {
+      return popOverFunction(row);
     }
 
     var rowKey = headerItems.map(function (x) {
@@ -225,7 +254,7 @@ function PivotTableBarChart(_ref) {
     var headerItems = (0, _lodash.default)(row, function (x) {
       return x.type === 'header';
     });
-    var popOverDataArray = getPopOverDataArray(headerItems);
+    var popOverDataArray = getPopOverDataArray(headerItems, row);
     var rowItems = headerItems.map(function (item, y) {
       return item.visible ? /*#__PURE__*/_react.default.createElement("th", {
         key: "th-".concat(i, "-").concat(y),
@@ -276,12 +305,15 @@ PivotTableBarChart.propTypes = {
   barsMaxValue: _propTypes.default.number,
   barsMinValue: _propTypes.default.number,
   columnsLabels: _propTypes.default.array,
+  colors: _propTypes.default.array,
   data: _propTypes.default.oneOfType([_propTypes.default.string, _propTypes.default.array]),
   filters: _propTypes.default.array,
   height: _propTypes.default.string,
+  multiStackSplit: _propTypes.default.number,
   maxHeight: _propTypes.default.string,
   maxWidth: _propTypes.default.string,
   popOverFormatter: _propTypes.default.func,
+  popOverFunction: _propTypes.default.func,
   postprocessfn: _propTypes.default.func,
   rows: _propTypes.default.array,
   showPopOver: _propTypes.default.bool,

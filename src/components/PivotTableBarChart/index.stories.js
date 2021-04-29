@@ -16,6 +16,7 @@ const Template = ({
   rows,
   columns,
   columnsLabels,
+  colors,
   barLegendSteps,
   barLegendFormatter,
   barType,
@@ -24,6 +25,7 @@ const Template = ({
   barsHeight,
   showPopOver,
   popOverFormatter,
+  popOverFunction,
   width,
   values,
   height,
@@ -32,6 +34,7 @@ const Template = ({
   <PivotTableBarChart
     data={data}
     columns={columns}
+    colors={colors}
     rows={rows}
     columnsLabels={columnsLabels}
     barType={barType}
@@ -43,11 +46,14 @@ const Template = ({
     barsMaxValue={barsMaxValue}
     showPopOver={showPopOver}
     popOverFormatter={popOverFormatter}
+    popOverFunction={popOverFunction}
     barsHeight={barsHeight}
     values={values}
     width={width}
     postprocessfn={postprocessfn}
   />
+
+const getRandomInt = max => Math.floor(Math.random() * max)
 
 export const Default = Template.bind({})
 Default.args = {
@@ -90,24 +96,60 @@ export const StackChart = Template.bind({})
 StackChart.args = {
   data: testData,
   rows: ['continent', 'currency_code', 'government', 'country'],
-  columnsLabels: ['Continent', 'Currency', 'Government', 'Country', 'Population Sum', 'Count'],
+  columnsLabels: ['Continent', 'Currency', 'Government', 'Country', 'bar1', 'bar2', 'bar3', 'bar4'],
+  colors: ['#4e79a7', '#e05759', '#59a14f', '#f28e2c'],
   barLegendSteps: 10,
   barsMaxValue: 100,
   barType: 'stack',
   postprocessfn: result => {
     return {
-      population: 50,
-      area: 50
+      bar1: getRandomInt(25),
+      bar2: getRandomInt(25),
+      bar3: getRandomInt(25),
+      bar4: getRandomInt(25)
     }
   },
   values: [
     {
-      field: 'population',
-      aggregator: 'sum'
-    },
+      field: 'population'
+    }
+  ]
+}
+
+export const MultiStackChart = Template.bind({})
+MultiStackChart.args = {
+  data: testData,
+  rows: ['continent', 'currency_code', 'government', 'country'],
+  columnsLabels: ['Continent', 'Currency', 'Government', 'Country', 'bar1', 'bar2', 'bar3', 'bar4'],
+  colors: ['#4e79a7', '#e05759', '#59a14f', '#f28e2c'],
+  barLegendSteps: 10,
+  barsMaxValue: 100,
+  barType: 'multistack',
+  showPopOver: true,
+  postprocessfn: result => {
+    return {
+      bar1: getRandomInt(25),
+      bar2: getRandomInt(25),
+      bar3: getRandomInt(25),
+      bar4: getRandomInt(25)
+    }
+  },
+  popOverFunction: thisrow => {
+    const thisRowValues = thisrow.filter(x => x.type === 'value')
+    const headerItems = ['Continent', 'Currency', 'Government', 'Country'].map((key, i) => ({
+      key, value: thisrow[i].value
+    }))
+    const valueItems = ['Bar1', 'Bar2', 'Bar3', 'Bar4'].map((key, i) => ({
+      key, value: thisRowValues[i].value
+    }))
+    return [
+      ...headerItems,
+      ...valueItems
+    ]
+  },
+  values: [
     {
-      field: 'area',
-      aggregator: 'sum'
+      field: 'population'
     }
   ]
 }

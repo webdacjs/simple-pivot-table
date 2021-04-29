@@ -5,6 +5,7 @@ import filter from 'lodash.filter'
 import getPivotDataColumns from '../utils/pivotMain'
 
 import { separator } from '../utils/settings'
+import getChunks from '../utils/getChunks'
 
 import GaugeChart from '../BarCharts/GaugeChart'
 import StackChart from '../BarCharts/StackChart'
@@ -23,12 +24,15 @@ export default function PivotTableBarChart ({
   barsMaxValue,
   barsMinValue = 0,
   columnsLabels,
+  colors,
   data,
   filters,
   height,
   maxHeight,
   maxWidth,
+  multiStackSplit = 2,
   popOverFormatter,
+  popOverFunction,
   postprocessfn,
   rows,
   showPopOver,
@@ -102,6 +106,7 @@ export default function PivotTableBarChart ({
             dataElement={valuesObj}
             dimensions={valuesCols}
             height={barsHeight}
+            colors={colors}
             minValue={minValue}
             maxValue={maxValue}
           />
@@ -114,17 +119,39 @@ export default function PivotTableBarChart ({
             dataElement={valuesObj}
             dimensions={valuesCols}
             height={barsHeight}
+            colors={colors}
             minValue={minValue}
             maxValue={maxValue}
           />
         </PopOver>
       )
+    } else if (barType === 'multistack') {
+      const valuesColsChunks = getChunks(valuesCols, multiStackSplit)
+      const colorsChunks = getChunks(colors)
+      return (
+        <PopOver showPopOver={showPopOver} dataArray={dataArray}>
+          {valuesColsChunks.map((chunk, index) =>
+            <StackChart
+              key={`multiStack-${index}`}
+              dataElement={valuesObj}
+              dimensions={chunk}
+              height={barsHeight}
+              colors={colorsChunks[index]}
+              minValue={minValue}
+              maxValue={maxValue}
+            />
+          )}
+        </PopOver>
+      )
     }
   }
 
-  const getPopOverDataArray = headerItems => {
+  const getPopOverDataArray = (headerItems, row) => {
     if (!showPopOver) {
       return []
+    }
+    if (popOverFunction) {
+      return popOverFunction(row)
     }
     const rowKey = headerItems.map(x => x.value).join(separator)
     const originalValue = groupedDataState[rowKey]
@@ -141,7 +168,7 @@ export default function PivotTableBarChart ({
 
   const getRowLine = (row, i) => {
     const headerItems = filter(row, x => x.type === 'header')
-    const popOverDataArray = getPopOverDataArray(headerItems)
+    const popOverDataArray = getPopOverDataArray(headerItems, row)
     const rowItems = headerItems.map(
       (item, y) => item.visible
         ? <th key={`th-${i}-${y}`} rowSpan={item.rowSpan} className='pivotRowHeader'>{item.value}</th>
@@ -181,15 +208,18 @@ PivotTableBarChart.propTypes = {
   barsMaxValue: PropTypes.number,
   barsMinValue: PropTypes.number,
   columnsLabels: PropTypes.array,
+  colors: PropTypes.array,
   data: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.array
   ]),
   filters: PropTypes.array,
   height: PropTypes.string,
+  multiStackSplit: PropTypes.number,
   maxHeight: PropTypes.string,
   maxWidth: PropTypes.string,
   popOverFormatter: PropTypes.func,
+  popOverFunction: PropTypes.func,
   postprocessfn: PropTypes.func,
   rows: PropTypes.array,
   showPopOver: PropTypes.bool,
