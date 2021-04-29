@@ -4,6 +4,7 @@ import getGroupedData, {
 } from './getGrouped'
 
 import data from '../../testData/index.json'
+import { separator, subtotalsSuffix } from './settings'
 
 test('Testing the getGroups fn', () => {
   const groups = getGroups(data, ['continent', 'country'])
@@ -32,7 +33,7 @@ test('Testing the main grouped data fn', () => {
     vals: [{ field: 'population', aggregator: 'sum' }],
     showSectionTotals: true
   })
-  expect(grouped['Africa-----______Totals'].population).toBe(1278740761)
+  expect(grouped[`Africa${separator}${subtotalsSuffix}Totals`].population).toBe(1278740761)
 })
 
 test('Testing calculate totals percentage', () => {
@@ -43,8 +44,8 @@ test('Testing calculate totals percentage', () => {
     showSectionTotals: true,
     calculateTotalsPercentage: true
   })
-  expect(grouped['Africa-----______Totals'].population).toBe(1278740761)
-  expect(grouped['Africa-----______Totals'].perc_total).toBe('16.74%')
+  expect(grouped[`Africa${separator}${subtotalsSuffix}Totals`].population).toBe(1278740761)
+  expect(grouped[`Africa${separator}${subtotalsSuffix}Totals`].perc_total).toBe('16.74%')
 })
 
 test('Testing calculate totals and sections percentage', () => {
@@ -56,19 +57,19 @@ test('Testing calculate totals and sections percentage', () => {
     calculateTotalsPercentage: true,
     calculateSectionPercentage: true
   })
-  expect(grouped['Africa-----______Totals'].population).toBe(1278740761)
-  expect(grouped['Africa-----______Totals'].perc_total).toBe('16.74%')
-  expect(grouped['Africa-----______Totals'].perc_section).toBe('100.00%')
+  expect(grouped[`Africa${separator}${subtotalsSuffix}Totals`].population).toBe(1278740761)
+  expect(grouped[`Africa${separator}${subtotalsSuffix}Totals`].perc_total).toBe('16.74%')
+  expect(grouped[`Africa${separator}${subtotalsSuffix}Totals`].perc_section).toBe('100.00%')
 })
 
 test('Testing calculateSectionPercentageValue function', () => {
   const testData = {
     value: 50,
-    key: 'Test1-----AnotherField',
+    key: `Test1${separator}AnotherField`,
     subTotalsSet: {
-      'Test1-----______Totals': { sampleValue: 100 },
-      'Test2-----______Totals': { sampleValue: 200 },
-      'Test3-----______Totals': { sampleValue: 300 }
+      [`Test1${separator}${subtotalsSuffix}Totals`] : { sampleValue: 100 },
+      [`Test2${separator}${subtotalsSuffix}Totals`] : { sampleValue: 200 },
+      [`Test3${separator}${subtotalsSuffix}Totals`]: { sampleValue: 300 }
     },
     valKey: 'sampleValue'
   }
