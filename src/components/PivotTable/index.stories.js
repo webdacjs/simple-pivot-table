@@ -72,6 +72,7 @@ CalculatePercentages.args = {
   showSectionTotals: true,
   calculateTotalsPercentage: true,
   calculateSectionPercentage: true,
+  columnsLabels: ['Continent', 'Country', 'Population Sum', 'Section %', 'Totals %'],
   values: [
     { field: 'population', aggregator: 'sum' }
   ]

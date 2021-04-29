@@ -33,7 +33,9 @@ function removeNewLines(val) {
 function getColumns(columnsLabels, rows, values, calculateTotalsPercentage, calculateSectionPercentage) {
   var columnsCombined = [].concat(_toConsumableArray(rows), _toConsumableArray(values.map(function (x) {
     return x.field;
-  })));
+  })), [calculateTotalsPercentage, calculateSectionPercentage]).filter(function (x) {
+    return x;
+  });
 
   if (columnsLabels) {
     return columnsCombined.map(function (col, i) {
