@@ -67,8 +67,8 @@ test('Testing calculateSectionPercentageValue function', () => {
     value: 50,
     key: `Test1${separator}AnotherField`,
     subTotalsSet: {
-      [`Test1${separator}${subtotalsSuffix}Totals`] : { sampleValue: 100 },
-      [`Test2${separator}${subtotalsSuffix}Totals`] : { sampleValue: 200 },
+      [`Test1${separator}${subtotalsSuffix}Totals`]: { sampleValue: 100 },
+      [`Test2${separator}${subtotalsSuffix}Totals`]: { sampleValue: 200 },
       [`Test3${separator}${subtotalsSuffix}Totals`]: { sampleValue: 300 }
     },
     valKey: 'sampleValue'
