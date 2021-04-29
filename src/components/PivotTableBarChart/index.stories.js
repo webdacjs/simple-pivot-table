@@ -51,6 +51,8 @@ const Template = ({
     postprocessfn={postprocessfn}
   />
 
+const getRandomInt = max => Math.floor(Math.random() * max)
+
 export const Default = Template.bind({})
 Default.args = {
   data: testData,
@@ -89,7 +91,6 @@ TwoDimensions.args = {
 }
 
 export const StackChart = Template.bind({})
-const getRandomInt = max => Math.floor(Math.random() * max)
 StackChart.args = {
   data: testData,
   rows: ['continent', 'currency_code', 'government', 'country'],
@@ -108,7 +109,31 @@ StackChart.args = {
   },
   values: [
     {
-      field: 'population',
+      field: 'population'
+    }
+  ]
+}
+
+export const MultiStackChart = Template.bind({})
+MultiStackChart.args = {
+  data: testData,
+  rows: ['continent', 'currency_code', 'government', 'country'],
+  columnsLabels: ['Continent', 'Currency', 'Government', 'Country', 'bar1', 'bar2', 'bar3', 'bar4'],
+  colors: ['#4e79a7', '#e05759', '#59a14f', '#f28e2c'],
+  barLegendSteps: 10,
+  barsMaxValue: 100,
+  barType: 'multistack',
+  postprocessfn: result => {
+    return {
+      bar1: getRandomInt(25),
+      bar2: getRandomInt(25),
+      bar3: getRandomInt(25),
+      bar4: getRandomInt(25)
+    }
+  },
+  values: [
+    {
+      field: 'population'
     }
   ]
 }

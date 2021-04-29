@@ -5,6 +5,7 @@ import filter from 'lodash.filter'
 import getPivotDataColumns from '../utils/pivotMain'
 
 import { separator } from '../utils/settings'
+import getChunks from '../utils/getChunks'
 
 import GaugeChart from '../BarCharts/GaugeChart'
 import StackChart from '../BarCharts/StackChart'
@@ -29,6 +30,7 @@ export default function PivotTableBarChart ({
   height,
   maxHeight,
   maxWidth,
+  multiStackSplit = 2,
   popOverFormatter,
   postprocessfn,
   rows,
@@ -122,6 +124,33 @@ export default function PivotTableBarChart ({
           />
         </PopOver>
       )
+    } else if (barType === 'multistack') {
+      const valuesColsChunks = getChunks(valuesCols, multiStackSplit)
+      const colorsChunks = getChunks(colors)
+      return (
+        <PopOver showPopOver={showPopOver} dataArray={dataArray}>
+          {valuesColsChunks.map((chunk, index) =>
+            <StackChart
+              key={`multiStack-${index}`}
+              dataElement={valuesObj}
+              dimensions={chunk}
+              height={barsHeight}
+              colors={colorsChunks[index]}
+              minValue={minValue}
+              maxValue={maxValue}
+            />
+          )}
+
+          {/* <StackChart
+            dataElement={valuesObj}
+            dimensions={valuesCols.slice(2, 1000)}
+            height={barsHeight}
+            colors={colors.slice(2, 100)}
+            minValue={minValue}
+            maxValue={maxValue}
+          /> */}
+        </PopOver>
+      )
     }
   }
 
@@ -191,6 +220,7 @@ PivotTableBarChart.propTypes = {
   ]),
   filters: PropTypes.array,
   height: PropTypes.string,
+  multiStackSplit: PropTypes.number,
   maxHeight: PropTypes.string,
   maxWidth: PropTypes.string,
   popOverFormatter: PropTypes.func,
