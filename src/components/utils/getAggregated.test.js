@@ -45,37 +45,37 @@ test('Testing the custom reducer (max)', () => {
 })
 
 test('Testing getAggregatedValues', () => {
-  const items  = [{val: 1}, {val: 2}, {val: 3}]
-  const vals = [{field: 'val', aggregator: 'sum'}]
+  const items = [{ val: 1 }, { val: 2 }, { val: 3 }]
+  const vals = [{ field: 'val', aggregator: 'sum' }]
   const reduced = getAggregatedValues(items, vals)
   expect(reduced.val).toBe(6)
 })
 
 test('Testing getAggregatedValues', () => {
-  const items  = [{val: 1}, {val: 2}, {val: 3}]
-  const vals = [{field: 'val', aggregator: 'sum'}]
+  const items = [{ val: 1 }, { val: 2 }, { val: 3 }]
+  const vals = [{ field: 'val', aggregator: 'sum' }]
   const reduced = getAggregatedValues(items, vals)
   expect(reduced.val).toBe(6)
 })
 
 test('Testing postprocessfn in getAggregatedValues reduced', () => {
-  const items  = [{val: 1}, {val: 2}, {val: 3}]
-  const vals = [{field: 'val', aggregator: 'sum'}]
-  const postprocessfn = (res) => ({val: res.val * 2})
+  const items = [{ val: 1 }, { val: 2 }, { val: 3 }]
+  const vals = [{ field: 'val', aggregator: 'sum' }]
+  const postprocessfn = (res) => ({ val: res.val * 2 })
   const reduced = getAggregatedValues(items, vals, postprocessfn)
   expect(reduced.val).toBe(12)
 })
 
 test('Testing postprocessfn in getAggregatedValues mutating completely the reply', () => {
-  const items  = [{val: 1, label: 'x'}, {val: 2, label: 'x'}, {val: 3, label: 'y'}]
-  const vals = [{field: 'val', aggregator: 'sum'}]
+  const items = [{ val: 1, label: 'x' }, { val: 2, label: 'x' }, { val: 3, label: 'y' }]
+  const vals = [{ field: 'val', aggregator: 'sum' }]
   const postprocessfn = (res, items) => {
     const labels = Array.from(new Set(items.map(x => x.label)))
     const reducedByFn = labels.reduce((obj, label) => {
       obj[label] = items.filter(x => x.label === label).map(x => x.val).reduce((a, b) => a + b, 0)
       return obj
     }, {})
-    return {...reducedByFn, ...res}
+    return { ...reducedByFn, ...res }
   }
   const reduced = getAggregatedValues(items, vals, postprocessfn)
   expect(reduced.x).toBe(3)
