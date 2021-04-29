@@ -33,5 +33,5 @@ export default function getAggregatedValues (items, vals, postprocessfn) {
     const values = items.map(item => item[val.field])
     reduced[val.field] = getReducedValue(values, val.aggregator, val.formatter)
   })
-  return postprocessfn ? postprocessfn(reduced) : reduced
+  return postprocessfn ? postprocessfn(reduced, items) : reduced
 }
