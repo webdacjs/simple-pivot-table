@@ -3,8 +3,6 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.getNumericValue = getNumericValue;
-exports.getReducedValue = getReducedValue;
 exports.getGroups = getGroups;
 exports.calculateSectionPercentageValue = calculateSectionPercentageValue;
 exports.default = getGroupedData;
@@ -12,6 +10,8 @@ exports.default = getGroupedData;
 var _settings = require("./settings");
 
 var _lodash = _interopRequireDefault(require("lodash.filter"));
+
+var _getAggregated = _interopRequireDefault(require("./getAggregated"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -21,62 +21,8 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-function getNumericValue(value) {
-  var numValue = parseFloat(value);
-
-  if (isNaN(numValue)) {
-    return 0;
-  }
-
-  return numValue;
-}
-
-function getReducedValue(values, aggregator, formatter) {
-  if (aggregator === 'sum') {
-    var rawValue = values.reduce(function (a, b) {
-      return a + (getNumericValue(b) || 0);
-    }, 0);
-    return formatter ? formatter(rawValue) : rawValue;
-  }
-
-  if (aggregator === 'avg') {
-    var _rawValue = values.reduce(function (a, b) {
-      return a + (getNumericValue(b) || a);
-    }, 0) / values.length;
-
-    return formatter ? formatter(_rawValue) : _rawValue;
-  }
-
-  if (aggregator === 'median') {
-    var _rawValue2 = values[Math.round(values.length / 2)];
-    return formatter ? formatter(_rawValue2) : _rawValue2;
-  }
-
-  if (typeof aggregator === 'function') {
-    var _rawValue3 = values.reduce(function (a, b) {
-      return aggregator(a, b);
-    });
-
-    return formatter ? formatter(_rawValue3) : _rawValue3;
-  } // default count
-
-
-  return values.length;
-}
-
-function getAggregatedValues(items, vals, postprocessfn) {
-  var reduced = {};
-  vals.forEach(function (val) {
-    var values = items.map(function (item) {
-      return item[val.field];
-    });
-    reduced[val.field] = getReducedValue(values, val.aggregator, val.formatter);
-  });
-  return postprocessfn ? postprocessfn(reduced) : reduced;
-} // This function creates a combined key that is used to aggregated data.
+// This function creates a combined key that is used to aggregated data.
 // ie. Europe___Switzerland, etc
-
-
 function getCombinedKeyBasedOnRowAttributes(dataItem, rowAttributes) {
   var keyArray = [];
   rowAttributes.forEach(function (rowAttribute, i) {
@@ -140,16 +86,16 @@ function getGroupedData(_ref) {
     var groupedOriginals = _objectSpread({}, grouped);
 
     Object.keys(grouped).forEach(function (key) {
-      grouped[key] = getAggregatedValues(grouped[key], vals, postprocessfn);
+      grouped[key] = (0, _getAggregated.default)(grouped[key], vals, postprocessfn);
 
       if (!postprocessfn) {
         groupedOriginals[key] = grouped[key];
       } else {
-        groupedOriginals[key] = getAggregatedValues(groupedOriginals[key], vals);
+        groupedOriginals[key] = (0, _getAggregated.default)(groupedOriginals[key], vals);
       }
     });
 
-    var _valueTotals = getAggregatedValues(data, vals, postprocessfn);
+    var _valueTotals = (0, _getAggregated.default)(data, vals, postprocessfn);
 
     return {
       groupedOriginals: groupedOriginals,
@@ -160,9 +106,9 @@ function getGroupedData(_ref) {
 
 
   Object.keys(grouped).forEach(function (key) {
-    grouped[key] = getAggregatedValues(grouped[key], vals, postprocessfn);
+    grouped[key] = (0, _getAggregated.default)(grouped[key], vals, postprocessfn);
   });
-  var valueTotals = getAggregatedValues(data, vals, postprocessfn);
+  var valueTotals = (0, _getAggregated.default)(data, vals, postprocessfn);
 
   if (vals.length === 1 && (calculateTotalsPercentage || calculateSectionPercentage && showSectionTotals)) {
     var subTotalsSet;
