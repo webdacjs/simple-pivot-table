@@ -16,6 +16,7 @@ const Template = ({
   rows,
   columns,
   columnsLabels,
+  colors,
   barLegendSteps,
   barLegendFormatter,
   barType,
@@ -32,6 +33,7 @@ const Template = ({
   <PivotTableBarChart
     data={data}
     columns={columns}
+    colors={colors}
     rows={rows}
     columnsLabels={columnsLabels}
     barType={barType}
@@ -87,27 +89,26 @@ TwoDimensions.args = {
 }
 
 export const StackChart = Template.bind({})
+const getRandomInt = max => Math.floor(Math.random() * max)
 StackChart.args = {
   data: testData,
   rows: ['continent', 'currency_code', 'government', 'country'],
-  columnsLabels: ['Continent', 'Currency', 'Government', 'Country', 'Population Sum', 'Count'],
+  columnsLabels: ['Continent', 'Currency', 'Government', 'Country', 'bar1', 'bar2', 'bar3', 'bar4'],
+  colors: ['#4e79a7', '#e05759', '#59a14f', '#f28e2c'],
   barLegendSteps: 10,
   barsMaxValue: 100,
   barType: 'stack',
   postprocessfn: result => {
     return {
-      population: 50,
-      area: 50
+      bar1: getRandomInt(25),
+      bar2: getRandomInt(25),
+      bar3: getRandomInt(25),
+      bar4: getRandomInt(25)
     }
   },
   values: [
     {
       field: 'population',
-      aggregator: 'sum'
-    },
-    {
-      field: 'area',
-      aggregator: 'sum'
     }
   ]
 }

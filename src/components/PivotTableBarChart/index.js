@@ -23,6 +23,7 @@ export default function PivotTableBarChart ({
   barsMaxValue,
   barsMinValue = 0,
   columnsLabels,
+  colors,
   data,
   filters,
   height,
@@ -102,6 +103,7 @@ export default function PivotTableBarChart ({
             dataElement={valuesObj}
             dimensions={valuesCols}
             height={barsHeight}
+            colors={colors}
             minValue={minValue}
             maxValue={maxValue}
           />
@@ -114,6 +116,7 @@ export default function PivotTableBarChart ({
             dataElement={valuesObj}
             dimensions={valuesCols}
             height={barsHeight}
+            colors={colors}
             minValue={minValue}
             maxValue={maxValue}
           />
@@ -181,6 +184,7 @@ PivotTableBarChart.propTypes = {
   barsMaxValue: PropTypes.number,
   barsMinValue: PropTypes.number,
   columnsLabels: PropTypes.array,
+  colors: PropTypes.array,
   data: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.array
