@@ -1,6 +1,6 @@
-import {
-  getNumericValue,
-  getReducedValue
+import getAggregatedValues, {
+  getReducedValue,
+  getNumericValue
 } from './getAggregated'
 
 test('Testing the getNumericValue function', () => {
@@ -42,4 +42,11 @@ test('Testing the custom reducer (max)', () => {
   const testArray = [5, 10, 15]
   const maxReduced = getReducedValue(testArray, customAg)
   expect(maxReduced).toBe(15)
+})
+
+test('Testing getAggregatedValues', () => {
+  const items  = [{val: 1}, {val: 2}, {val: 3}]
+  const vals = [{field: 'val', aggregator: 'sum'}]
+  const reduced = getAggregatedValues(items, vals)
+  expect(reduced.val).toBe(6)
 })
