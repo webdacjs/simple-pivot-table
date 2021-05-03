@@ -12,12 +12,12 @@ export default function Table ({
   maxHeight,
   height
 }) {
-  const [cols, setCols] = useState()
-  const [rows, setRows] = useState()
-  const [asc, setAsc] = useState()
+  const [cols, setCols] = useState(null)
+  const [rows, setRows] = useState(null)
+  const [asc, setAsc] = useState(null)
 
-  function orderByColumn (col) {
-    setRows()
+  function orderByColumn (col: string) {
+    setRows(undefined)
     const direction = asc ? undefined : 'desc'
     const sortedData = soa(data, col, direction)
     setRows(sortedData)
@@ -30,7 +30,7 @@ export default function Table ({
     setAsc(true)
   }, [data, columns, columnsLabels]); // eslint-disable-line
 
-  function filterIterations (rawRows) {
+  function filterIterations (rawRows: Array<object>) {
     let filteredRows = [...rawRows]
     filters.forEach(filterFn => {
       filteredRows = filteredRows.filter(filterFn)
@@ -38,17 +38,17 @@ export default function Table ({
     return filteredRows
   }
 
-  const getFilteredRows = rawRows => filters
+  const getFilteredRows = (rawRows: Array<object>) => filters
     ? filterIterations(rawRows)
     : rawRows
 
-  const getColumnLabel = (col, i) =>
+  const getColumnLabel = (col: string, i: number) =>
     columnsLabels && columnsLabels[i] ? columnsLabels[i] : col
 
   const getHeader = () =>
     <thead>
       <tr>
-        {cols.map((col, i) =>
+        {cols.map((col: string, i: number) =>
           <th key={`col-${i}`} onClick={() => orderByColumn(col)}>
             {getColumnLabel(col, i)}
           </th>)}
@@ -59,7 +59,7 @@ export default function Table ({
     <tbody>
       {getFilteredRows(rows).map((row, i) =>
         <tr key={`row-${i}`}>
-          {cols.map((col, j) => <td key={`cell-${i}-${j}`}>{row[col]}</td>)}
+          {cols.map((col: string, j: number) => <td key={`cell-${i}-${j}`}>{row[col]}</td>)}
         </tr>)}
     </tbody>
 
@@ -82,5 +82,4 @@ Table.propTypes = {
   maxHeight: PropTypes.string,
   maxWidth: PropTypes.string,
   width: PropTypes.string
-
 }

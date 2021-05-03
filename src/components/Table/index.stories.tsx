@@ -3,7 +3,7 @@ import React from 'react'
 import Table from './index'
 import './index.css'
 
-import testData from '../../testData/'
+import testData from '../../testData/index.json'
 
 export default {
   title: 'Table',

@@ -65,7 +65,7 @@ function Table(_ref) {
       setAsc = _useState6[1];
 
   function orderByColumn(col) {
-    setRows();
+    setRows(undefined);
     var direction = asc ? undefined : 'desc';
     var sortedData = (0, _sortObjectsArray.default)(data, col, direction);
     setRows(sortedData);
