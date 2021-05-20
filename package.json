@@ -33,6 +33,7 @@
     "queue": "6.0.2",
     "react-popover": "git+https://github.com/webdacjs/react-popover.git",
     "rimraf": "3.0.2",
+    "sort-array": "^4.1.4",
     "sort-objects-array": "1.7.1"
   },
   "scripts": {

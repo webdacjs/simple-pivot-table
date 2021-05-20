@@ -19,6 +19,7 @@ const Template = ({
   width,
   values,
   height,
+  orderBy,
   postprocessfn,
   showColumnTotals,
   showRowsTotals,
@@ -35,6 +36,7 @@ const Template = ({
     height={height}
     values={values}
     width={width}
+    orderBy={orderBy}
     postprocessfn={postprocessfn}
     showColumnTotals={showColumnTotals}
     showRowsTotals={showRowsTotals}
@@ -50,6 +52,19 @@ Default.args = {
   showColumnTotals: true,
   values: [
     { field: 'population', aggregator: 'sum' }
+  ]
+}
+
+export const OrderBY = Template.bind({})
+OrderBY.args = {
+  data: testData,
+  rows: ['continent', 'country'],
+  showColumnTotals: true,
+  values: [
+    { field: 'population', aggregator: 'sum' }
+  ],
+  orderBy: [
+    {field: 'country', order: 'desc'}
   ]
 }
 

@@ -28,7 +28,8 @@ function getPivotDataColumns(_ref) {
       showSectionTotals = _ref.showSectionTotals,
       calculateSectionPercentage = _ref.calculateSectionPercentage,
       calculateTotalsPercentage = _ref.calculateTotalsPercentage,
-      getTree = _ref.getTree;
+      getTree = _ref.getTree,
+      orderBy = _ref.orderBy;
   var groupedData = (0, _getGrouped.default)({
     data: (0, _pivotCommon.getFilteredRows)(data, filters),
     rowAttributes: rows,
@@ -41,7 +42,7 @@ function getPivotDataColumns(_ref) {
   });
   var colsTotals = groupedData.valueTotals;
   var colsValues = (0, _pivotCommon.getColumns)(columnsLabels, rows, values, calculateTotalsPercentage, calculateSectionPercentage);
-  var pivotData = (0, _getDenormalized.default)(groupedData);
+  var pivotData = (0, _getDenormalized.default)(groupedData, rows, orderBy);
 
   if (getOriginals) {
     var groupedOriginals = groupedData.groupedOriginals;

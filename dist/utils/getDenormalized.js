@@ -7,6 +7,10 @@ exports.default = getDenormalized;
 
 var _settings = require("./settings");
 
+var _getSortedKeys = _interopRequireDefault(require("./getSortedKeys"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 function checkVisibility(previousItemSplit, keyCounts, partialK, prevK) {
   if (!previousItemSplit) {
     return true;
@@ -71,17 +75,18 @@ function getKeysCounts(sortedKeys) {
   return keyCounts;
 }
 
-function getDenormalized(groupedData) {
+function getDenormalized(groupedData, rows, orderBy) {
   var grouped = groupedData.grouped;
   var valuesFields = Array.from(new Set(Object.keys(grouped).map(function (x) {
     return Object.keys(grouped[x]);
   }).flat()));
   var denormalizedArray = [];
-  var sortedKeys = Object.keys(grouped).sort();
+  var sortedKeys = (0, _getSortedKeys.default)(Object.keys(grouped), rows, orderBy);
   var keyCounts = getKeysCounts(sortedKeys);
   sortedKeys.forEach(function (key, i) {
     var previousItem = i > 0 ? sortedKeys[i - 1] : null;
     denormalizedArray.push(getDenormalizedLine(key, grouped[key], previousItem, keyCounts, valuesFields));
-  });
+  }); // console.log(denormalizedArray)
+
   return denormalizedArray;
 }
