@@ -81,7 +81,7 @@ function getDenormalized(groupedData, rows, orderBy) {
     return Object.keys(grouped[x]);
   }).flat()));
   var denormalizedArray = [];
-  var sortedKeys = (0, _getSortedKeys.default)(Object.keys(grouped), rows, orderBy);
+  var sortedKeys = (0, _getSortedKeys.default)(grouped, rows, valuesFields, orderBy);
   var keyCounts = getKeysCounts(sortedKeys);
   sortedKeys.forEach(function (key, i) {
     var previousItem = i > 0 ? sortedKeys[i - 1] : null;

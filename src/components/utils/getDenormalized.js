@@ -67,7 +67,7 @@ export default function getDenormalized (groupedData, rows, orderBy) {
       x => Object.keys(grouped[x])).flat()
     ))
   const denormalizedArray = []
-  const sortedKeys = getSortedKeys(Object.keys(grouped), rows, orderBy)
+  const sortedKeys = getSortedKeys(grouped, rows, valuesFields, orderBy)
   const keyCounts = getKeysCounts(sortedKeys)
   sortedKeys.forEach((key, i) => {
     const previousItem = i > 0 ? sortedKeys[i - 1] : null
