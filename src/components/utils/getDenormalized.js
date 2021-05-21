@@ -75,6 +75,5 @@ export default function getDenormalized (groupedData, rows, orderBy) {
       getDenormalizedLine(key, grouped[key], previousItem, keyCounts, valuesFields)
     )
   })
-  // console.log(denormalizedArray)
   return denormalizedArray
 }
