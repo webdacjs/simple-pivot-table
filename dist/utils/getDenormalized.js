@@ -86,7 +86,6 @@ function getDenormalized(groupedData, rows, orderBy) {
   sortedKeys.forEach(function (key, i) {
     var previousItem = i > 0 ? sortedKeys[i - 1] : null;
     denormalizedArray.push(getDenormalizedLine(key, grouped[key], previousItem, keyCounts, valuesFields));
-  }); // console.log(denormalizedArray)
-
+  });
   return denormalizedArray;
 }
