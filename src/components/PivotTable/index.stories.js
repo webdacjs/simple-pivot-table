@@ -107,10 +107,6 @@ ColumnLabelsAndFormatters.args = {
       formatter: x => Math.round(x).toLocaleString()
     },
     { field: 'area' }
-  ],
-  orderBy: [
-    { field: 'continent', order: 'desc' },
-    { field: 'population', order: 'desc' }
   ]
 }
 
