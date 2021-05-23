@@ -1,4 +1,5 @@
 import { separator, subtotalsSuffix } from './settings'
+import getSortedKeys from './getSortedKeys'
 
 function checkVisibility (previousItemSplit, keyCounts, partialK, prevK) {
   if (!previousItemSplit) {
@@ -59,14 +60,14 @@ function getKeysCounts (sortedKeys) {
   return keyCounts
 }
 
-export default function getDenormalized (groupedData) {
+export default function getDenormalized (groupedData, rows, orderBy) {
   const { grouped } = groupedData
   const valuesFields = Array.from(
     new Set(Object.keys(grouped).map(
       x => Object.keys(grouped[x])).flat()
     ))
   const denormalizedArray = []
-  const sortedKeys = Object.keys(grouped).sort()
+  const sortedKeys = getSortedKeys(grouped, rows, valuesFields, orderBy)
   const keyCounts = getKeysCounts(sortedKeys)
   sortedKeys.forEach((key, i) => {
     const previousItem = i > 0 ? sortedKeys[i - 1] : null

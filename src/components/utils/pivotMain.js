@@ -19,7 +19,8 @@ export default function getPivotDataColumns ({
   showSectionTotals,
   calculateSectionPercentage,
   calculateTotalsPercentage,
-  getTree
+  getTree,
+  orderBy
 }) {
   const groupedData = getGroupedData(
     {
@@ -35,7 +36,7 @@ export default function getPivotDataColumns ({
   )
   const colsTotals = groupedData.valueTotals
   const colsValues = getColumns(columnsLabels, rows, values, calculateTotalsPercentage, calculateSectionPercentage)
-  const pivotData = getDenormalized(groupedData)
+  const pivotData = getDenormalized(groupedData, rows, orderBy)
 
   if (getOriginals) {
     const { groupedOriginals } = groupedData

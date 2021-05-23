@@ -19,6 +19,7 @@ const Template = ({
   width,
   values,
   height,
+  orderBy,
   postprocessfn,
   showColumnTotals,
   showRowsTotals,
@@ -35,6 +36,7 @@ const Template = ({
     height={height}
     values={values}
     width={width}
+    orderBy={orderBy}
     postprocessfn={postprocessfn}
     showColumnTotals={showColumnTotals}
     showRowsTotals={showRowsTotals}
@@ -50,6 +52,20 @@ Default.args = {
   showColumnTotals: true,
   values: [
     { field: 'population', aggregator: 'sum' }
+  ]
+}
+
+export const OrderBy = Template.bind({})
+OrderBy.args = {
+  data: testData,
+  rows: ['continent', 'country'],
+  showColumnTotals: true,
+  values: [
+    { field: 'population', aggregator: 'sum' }
+  ],
+  orderBy: [
+    { field: 'continent', order: 'desc' },
+    { field: 'population', order: 'asc' }
   ]
 }
 
@@ -91,6 +107,26 @@ ColumnLabelsAndFormatters.args = {
       formatter: x => Math.round(x).toLocaleString()
     },
     { field: 'area' }
+  ]
+}
+
+export const ColumnLabelsFormattersAndOrderBy = Template.bind({})
+ColumnLabelsFormattersAndOrderBy.args = {
+  data: testData,
+  rows: ['continent', 'country'],
+  columnsLabels: ['Continent', 'Country', 'Population Sum', 'Count'],
+  showSectionTotals: true,
+  values: [
+    {
+      field: 'population',
+      aggregator: 'sum',
+      formatter: x => Math.round(x).toLocaleString()
+    },
+    { field: 'area' }
+  ],
+  orderBy: [
+    { field: 'continent', order: 'desc' },
+    { field: 'population', order: 'desc' }
   ]
 }
 
