@@ -69,6 +69,7 @@ function PivotTableBarChart(_ref) {
       maxWidth = _ref.maxWidth,
       _ref$multiStackSplit = _ref.multiStackSplit,
       multiStackSplit = _ref$multiStackSplit === void 0 ? 2 : _ref$multiStackSplit,
+      orderBy = _ref.orderBy,
       popOverFormatter = _ref.popOverFormatter,
       popOverFunction = _ref.popOverFunction,
       postprocessfn = _ref.postprocessfn,
@@ -115,6 +116,7 @@ function PivotTableBarChart(_ref) {
       rows: rows,
       values: values,
       columnsLabels: columnsLabels,
+      orderBy: orderBy,
       postprocessfn: postprocessfn,
       getOriginals: getOriginals
     }),
@@ -312,6 +314,7 @@ PivotTableBarChart.propTypes = {
   multiStackSplit: _propTypes.default.number,
   maxHeight: _propTypes.default.string,
   maxWidth: _propTypes.default.string,
+  orderBy: _propTypes.default.array,
   popOverFormatter: _propTypes.default.func,
   popOverFunction: _propTypes.default.func,
   postprocessfn: _propTypes.default.func,

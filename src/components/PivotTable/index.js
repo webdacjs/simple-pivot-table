@@ -124,6 +124,7 @@ PivotTable.propTypes = {
   height: PropTypes.string,
   maxHeight: PropTypes.string,
   maxWidth: PropTypes.string,
+  orderBy: PropTypes.array,
   postprocessfn: PropTypes.func,
   rows: PropTypes.array,
   showColumnTotals: PropTypes.bool,
