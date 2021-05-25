@@ -31,6 +31,7 @@ export default function PivotTableBarChart ({
   maxHeight,
   maxWidth,
   multiStackSplit = 2,
+  orderBy,
   popOverFormatter,
   popOverFunction,
   postprocessfn,
@@ -55,6 +56,7 @@ export default function PivotTableBarChart ({
       rows,
       values,
       columnsLabels,
+      orderBy,
       postprocessfn,
       getOriginals
     })
@@ -218,6 +220,7 @@ PivotTableBarChart.propTypes = {
   multiStackSplit: PropTypes.number,
   maxHeight: PropTypes.string,
   maxWidth: PropTypes.string,
+  orderBy: PropTypes.array,
   popOverFormatter: PropTypes.func,
   popOverFunction: PropTypes.func,
   postprocessfn: PropTypes.func,

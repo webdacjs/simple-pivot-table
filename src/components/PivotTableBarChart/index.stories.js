@@ -24,6 +24,7 @@ const Template = ({
   barsMaxValue,
   barsHeight,
   showPopOver,
+  orderBy,
   popOverFormatter,
   popOverFunction,
   width,
@@ -45,6 +46,7 @@ const Template = ({
     barsMinValue={barsMinValue}
     barsMaxValue={barsMaxValue}
     showPopOver={showPopOver}
+    orderBy={orderBy}
     popOverFormatter={popOverFormatter}
     popOverFunction={popOverFunction}
     barsHeight={barsHeight}
@@ -150,6 +152,58 @@ MultiStackChart.args = {
   values: [
     {
       field: 'population'
+    }
+  ]
+}
+
+export const OrderBarsByField = Template.bind({})
+OrderBarsByField.args = {
+  data: testData,
+  rows: ['continent', 'country'],
+  orderBy: [
+    { field: 'population', order: 'desc' },
+    { field: 'area', order: 'desc' }
+  ],
+  barType: 'stack',
+  showPopOver: true,
+  barLegendSteps: 5,
+  values: [
+    {
+      field: 'population',
+      aggregator: 'sum'
+    },
+    {
+      field: 'area',
+      aggregator: 'sum'
+    }
+  ]
+}
+
+export const OrderBarsByFieldCustomFunction = Template.bind({})
+OrderBarsByFieldCustomFunction.args = {
+  data: testData,
+  rows: ['country'],
+  orderBy: [
+    { field: 'total', order: 'desc' }
+  ],
+  barType: 'stack',
+  showPopOver: true,
+  barLegendSteps: 5,
+  postprocessfn: result => {
+    return {
+      population: result.population,
+      area: result.area,
+      total: (result.population / 20) + (result.area * 3)
+    }
+  },
+  values: [
+    {
+      field: 'population',
+      aggregator: 'sum'
+    },
+    {
+      field: 'area',
+      aggregator: 'sum'
     }
   ]
 }
