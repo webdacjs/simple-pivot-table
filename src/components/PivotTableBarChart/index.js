@@ -37,6 +37,7 @@ export default function PivotTableBarChart ({
   postprocessfn,
   rows,
   showPopOver,
+  showRanking,
   values,
   width
 }) {
@@ -57,6 +58,7 @@ export default function PivotTableBarChart ({
       values,
       columnsLabels,
       orderBy,
+      showRanking,
       postprocessfn,
       getOriginals
     })
@@ -77,10 +79,14 @@ export default function PivotTableBarChart ({
   const getColumnLabel = (col, i) =>
     columnsLabels && columnsLabels[i] ? columnsLabels[i] : col
 
+  const getColsLength = () => showRanking 
+    ? rows.length + 1
+    : rows.length
+
   const getHeader = () =>
     <thead>
       <tr>
-        {cols.slice(0, rows.length).map((col, i) =>
+        {cols.slice(0, getColsLength()).map((col, i) =>
           <th key={`col-${i}`} className='pivotHeader'>
             {getColumnLabel(col, i)}
           </th>)}
@@ -155,11 +161,21 @@ export default function PivotTableBarChart ({
     if (popOverFunction) {
       return popOverFunction(row)
     }
-    const rowKey = headerItems.map(x => x.value).join(separator)
+    const headerLen = headerItems.length
+    const rowsLen = rows.length
+    const rowKey = !showRanking 
+      ? headerItems.map(x => x.value).join(separator)
+      : [...headerItems.slice(0, headerLen - 2), ...headerItems.slice(headerLen -1)].map(
+          x => x.value).join(separator)
+    // Popover Keys
+    const popOverKeys = !showRanking
+        ? rows
+        : [...rows.slice(0, rowsLen - 1), 'ranking', ...rows.slice(rowsLen - 1)]
+
     const originalValue = groupedDataState[rowKey]
     const dataArray = []
     headerItems.forEach((item, i) => {
-      dataArray.push({ key: rows[i], value: item.value })
+      dataArray.push({ key: popOverKeys[i], value: item.value })
     })
     Object.keys(originalValue).forEach(key => {
       const item = originalValue[key]

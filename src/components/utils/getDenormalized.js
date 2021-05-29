@@ -12,13 +12,14 @@ function checkVisibility (previousItemSplit, keyCounts, partialK, prevK) {
   return false
 }
 
-function getDenormalizedLine (key, data, previousItem, keyCounts, valuesFields) {
+function getDenormalizedLine (key, data, previousItem, keyCounts, valuesFields, countObj, showRanking) {
   const totalsLine = key.includes(subtotalsSuffix)
   const line = []
   // Add Header
   const previousItemSplit = previousItem ? previousItem.split(separator) : null
   const splitKey = key.split(separator)
   const splitKeyLength = splitKey.length
+  countObj.count++
   for (let norm = 0; norm < splitKeyLength; norm++) {
     const partialK = splitKey.slice(0, norm + 1).join(separator)
     const prevK = previousItemSplit ? previousItemSplit.slice(0, norm + 1).join(separator) : null
@@ -27,6 +28,24 @@ function getDenormalizedLine (key, data, previousItem, keyCounts, valuesFields) 
       value: splitKey[norm].replace(subtotalsSuffix, ''),
       rowSpan: keyCounts[partialK],
       visible: checkVisibility(previousItemSplit, keyCounts, partialK, prevK),
+      totalsLine
+    })
+    if (showRanking && norm === splitKeyLength - 2) {
+      if (countObj.prevKey !== partialK) {
+        countObj.prevKey = partialK
+        countObj.count = 1
+      }
+    }
+  }
+
+  // Inject Ranking if required
+  if (showRanking) {
+    const index = line.length - 1
+    line.splice(index, 0, {
+      type: 'header',
+      value: countObj.count,
+      rowSpan: 1,
+      visible: true,
       totalsLine
     })
   }
@@ -60,7 +79,7 @@ function getKeysCounts (sortedKeys) {
   return keyCounts
 }
 
-export default function getDenormalized (groupedData, rows, orderBy) {
+export default function getDenormalized (groupedData, rows, orderBy, showRanking) {
   const { grouped } = groupedData
   const valuesFields = Array.from(
     new Set(Object.keys(grouped).map(
@@ -69,10 +88,11 @@ export default function getDenormalized (groupedData, rows, orderBy) {
   const denormalizedArray = []
   const sortedKeys = getSortedKeys(grouped, rows, valuesFields, orderBy)
   const keyCounts = getKeysCounts(sortedKeys)
+  const countObj = {count: 0, prevKey: ''}
   sortedKeys.forEach((key, i) => {
     const previousItem = i > 0 ? sortedKeys[i - 1] : null
     denormalizedArray.push(
-      getDenormalizedLine(key, grouped[key], previousItem, keyCounts, valuesFields)
+      getDenormalizedLine(key, grouped[key], previousItem, keyCounts, valuesFields, countObj, showRanking)
     )
   })
   return denormalizedArray

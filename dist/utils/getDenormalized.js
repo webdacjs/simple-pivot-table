@@ -23,13 +23,14 @@ function checkVisibility(previousItemSplit, keyCounts, partialK, prevK) {
   return false;
 }
 
-function getDenormalizedLine(key, data, previousItem, keyCounts, valuesFields) {
+function getDenormalizedLine(key, data, previousItem, keyCounts, valuesFields, countObj, showRanking) {
   var totalsLine = key.includes(_settings.subtotalsSuffix);
   var line = []; // Add Header
 
   var previousItemSplit = previousItem ? previousItem.split(_settings.separator) : null;
   var splitKey = key.split(_settings.separator);
   var splitKeyLength = splitKey.length;
+  countObj.count++;
 
   for (var norm = 0; norm < splitKeyLength; norm++) {
     var partialK = splitKey.slice(0, norm + 1).join(_settings.separator);
@@ -39,6 +40,25 @@ function getDenormalizedLine(key, data, previousItem, keyCounts, valuesFields) {
       value: splitKey[norm].replace(_settings.subtotalsSuffix, ''),
       rowSpan: keyCounts[partialK],
       visible: checkVisibility(previousItemSplit, keyCounts, partialK, prevK),
+      totalsLine: totalsLine
+    });
+
+    if (showRanking && norm === splitKeyLength - 2) {
+      if (countObj.prevKey !== partialK) {
+        countObj.prevKey = partialK;
+        countObj.count = 1;
+      }
+    }
+  } // Inject Ranking if required
+
+
+  if (showRanking) {
+    var index = line.length - 1;
+    line.splice(index, 0, {
+      type: 'header',
+      value: countObj.count,
+      rowSpan: 1,
+      visible: true,
       totalsLine: totalsLine
     });
   } // Add values.
@@ -75,7 +95,7 @@ function getKeysCounts(sortedKeys) {
   return keyCounts;
 }
 
-function getDenormalized(groupedData, rows, orderBy) {
+function getDenormalized(groupedData, rows, orderBy, showRanking) {
   var grouped = groupedData.grouped;
   var valuesFields = Array.from(new Set(Object.keys(grouped).map(function (x) {
     return Object.keys(grouped[x]);
@@ -83,9 +103,13 @@ function getDenormalized(groupedData, rows, orderBy) {
   var denormalizedArray = [];
   var sortedKeys = (0, _getSortedKeys.default)(grouped, rows, valuesFields, orderBy);
   var keyCounts = getKeysCounts(sortedKeys);
+  var countObj = {
+    count: 0,
+    prevKey: ''
+  };
   sortedKeys.forEach(function (key, i) {
     var previousItem = i > 0 ? sortedKeys[i - 1] : null;
-    denormalizedArray.push(getDenormalizedLine(key, grouped[key], previousItem, keyCounts, valuesFields));
+    denormalizedArray.push(getDenormalizedLine(key, grouped[key], previousItem, keyCounts, valuesFields, countObj, showRanking));
   });
   return denormalizedArray;
 }

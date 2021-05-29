@@ -25,6 +25,7 @@ const Template = ({
   barsHeight,
   showPopOver,
   orderBy,
+  showRanking,
   popOverFormatter,
   popOverFunction,
   width,
@@ -47,6 +48,7 @@ const Template = ({
     barsMaxValue={barsMaxValue}
     showPopOver={showPopOver}
     orderBy={orderBy}
+    showRanking={showRanking}
     popOverFormatter={popOverFormatter}
     popOverFunction={popOverFunction}
     barsHeight={barsHeight}
@@ -159,6 +161,7 @@ MultiStackChart.args = {
 export const OrderBarsByField = Template.bind({})
 OrderBarsByField.args = {
   data: testData,
+  columnsLabels: ['Continent', 'Country', 'Population', 'Area'],
   rows: ['continent', 'country'],
   orderBy: [
     { field: 'population', order: 'desc' },
@@ -166,6 +169,31 @@ OrderBarsByField.args = {
   ],
   barType: 'stack',
   showPopOver: true,
+  barLegendSteps: 5,
+  values: [
+    {
+      field: 'population',
+      aggregator: 'sum'
+    },
+    {
+      field: 'area',
+      aggregator: 'sum'
+    }
+  ]
+}
+
+export const OrderBarsByFieldWithRanking = Template.bind({})
+OrderBarsByFieldWithRanking.args = {
+  data: testData,
+  columnsLabels: ['Continent', 'Rank', 'Country', 'Population', 'Area'],
+  rows: ['continent', 'country'],
+  orderBy: [
+    { field: 'population', order: 'desc' },
+    { field: 'area', order: 'desc' }
+  ],
+  barType: 'stack',
+  showPopOver: true,
+  showRanking: true,
   barLegendSteps: 5,
   values: [
     {
