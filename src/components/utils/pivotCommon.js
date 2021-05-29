@@ -5,7 +5,7 @@ export function removeNewLines (val) {
   return val.replace(/(\r\n|\n|\r)/gm, '')
 }
 
-export function getColumns (columnsLabels, rows, values, calculateTotalsPercentage, calculateSectionPercentage) {
+export function getColumns ({columnsLabels, rows, values, calculateTotalsPercentage, calculateSectionPercentage, showRanking}) {
   if (columnsLabels) {
     return columnsLabels
   }
@@ -17,6 +17,11 @@ export function getColumns (columnsLabels, rows, values, calculateTotalsPercenta
   }
   if (values.length === 1 && calculateSectionPercentage) {
     return [...rows, values[0].field, 'totals_section_percentage']
+  }
+  if (showRanking) {
+    const index = rows.length - 1
+    const rowsWithRanking = [...rows.slice(0, index), 'ranking', ...rows.slice(index)]
+    return [...rowsWithRanking, ...values.map(x => x.field)]
   }
   return [...rows, ...values.map(x => x.field)]
 }

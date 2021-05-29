@@ -30,7 +30,14 @@ function removeNewLines(val) {
   return val.replace(/(\r\n|\n|\r)/gm, '');
 }
 
-function getColumns(columnsLabels, rows, values, calculateTotalsPercentage, calculateSectionPercentage) {
+function getColumns(_ref) {
+  var columnsLabels = _ref.columnsLabels,
+      rows = _ref.rows,
+      values = _ref.values,
+      calculateTotalsPercentage = _ref.calculateTotalsPercentage,
+      calculateSectionPercentage = _ref.calculateSectionPercentage,
+      showRanking = _ref.showRanking;
+
   if (columnsLabels) {
     return columnsLabels;
   }
@@ -45,6 +52,14 @@ function getColumns(columnsLabels, rows, values, calculateTotalsPercentage, calc
 
   if (values.length === 1 && calculateSectionPercentage) {
     return [].concat(_toConsumableArray(rows), [values[0].field, 'totals_section_percentage']);
+  }
+
+  if (showRanking) {
+    var index = rows.length - 1;
+    var rowsWithRanking = [].concat(_toConsumableArray(rows.slice(0, index)), ['ranking'], _toConsumableArray(rows.slice(index)));
+    return [].concat(_toConsumableArray(rowsWithRanking), _toConsumableArray(values.map(function (x) {
+      return x.field;
+    })));
   }
 
   return [].concat(_toConsumableArray(rows), _toConsumableArray(values.map(function (x) {

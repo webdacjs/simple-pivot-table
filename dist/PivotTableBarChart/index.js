@@ -37,6 +37,14 @@ function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "functio
 
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
+
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
@@ -75,6 +83,7 @@ function PivotTableBarChart(_ref) {
       postprocessfn = _ref.postprocessfn,
       rows = _ref.rows,
       showPopOver = _ref.showPopOver,
+      showRanking = _ref.showRanking,
       values = _ref.values,
       width = _ref.width;
 
@@ -117,6 +126,7 @@ function PivotTableBarChart(_ref) {
       values: values,
       columnsLabels: columnsLabels,
       orderBy: orderBy,
+      showRanking: showRanking,
       postprocessfn: postprocessfn,
       getOriginals: getOriginals
     }),
@@ -145,8 +155,12 @@ function PivotTableBarChart(_ref) {
     return columnsLabels && columnsLabels[i] ? columnsLabels[i] : col;
   };
 
+  var getColsLength = function getColsLength() {
+    return showRanking ? rows.length + 1 : rows.length;
+  };
+
   var getHeader = function getHeader() {
-    return /*#__PURE__*/_react.default.createElement("thead", null, /*#__PURE__*/_react.default.createElement("tr", null, cols.slice(0, rows.length).map(function (col, i) {
+    return /*#__PURE__*/_react.default.createElement("thead", null, /*#__PURE__*/_react.default.createElement("tr", null, cols.slice(0, getColsLength()).map(function (col, i) {
       return /*#__PURE__*/_react.default.createElement("th", {
         key: "col-".concat(i),
         className: "pivotHeader"
@@ -231,14 +245,20 @@ function PivotTableBarChart(_ref) {
       return popOverFunction(row);
     }
 
-    var rowKey = headerItems.map(function (x) {
+    var headerLen = headerItems.length;
+    var rowsLen = rows.length;
+    var rowKey = !showRanking ? headerItems.map(function (x) {
       return x.value;
-    }).join(_settings.separator);
+    }).join(_settings.separator) : [].concat(_toConsumableArray(headerItems.slice(0, headerLen - 2)), _toConsumableArray(headerItems.slice(headerLen - 1))).map(function (x) {
+      return x.value;
+    }).join(_settings.separator); // Popover Keys
+
+    var popOverKeys = !showRanking ? rows : [].concat(_toConsumableArray(rows.slice(0, rowsLen - 1)), ['ranking'], _toConsumableArray(rows.slice(rowsLen - 1)));
     var originalValue = groupedDataState[rowKey];
     var dataArray = [];
     headerItems.forEach(function (item, i) {
       dataArray.push({
-        key: rows[i],
+        key: popOverKeys[i],
         value: item.value
       });
     });
