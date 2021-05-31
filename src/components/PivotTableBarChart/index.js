@@ -38,6 +38,7 @@ export default function PivotTableBarChart ({
   rows,
   showPopOver,
   showRanking,
+  tableClassName,
   values,
   width
 }) {
@@ -210,7 +211,7 @@ export default function PivotTableBarChart ({
 
   return (
     <div>
-      <table className='simple-pivot-table' style={{ width, height, maxWidth, maxHeight }}>
+      <table className={tableClassName || 'simple-pivot-table'} style={{ width, height, maxWidth, maxHeight }}>
         {cols && getHeader()}
         {cols && pivotRows && getRows()}
       </table>
@@ -242,6 +243,7 @@ PivotTableBarChart.propTypes = {
   postprocessfn: PropTypes.func,
   rows: PropTypes.array,
   showPopOver: PropTypes.bool,
+  tableClassName: PropTypes.string,
   values: PropTypes.array,
   width: PropTypes.string
 }
