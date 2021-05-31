@@ -26,8 +26,11 @@ test('Testing the sum reducer', () => {
 
 test('Testing the avg reducer', () => {
   const testArray = [5, 10, 15]
+  const testArrayWithZero = [0, 5, 10]
   const avgReduced = getReducedValue(testArray, 'avg')
+  const avgReducedWithZero = getReducedValue(testArrayWithZero, 'avg')
   expect(avgReduced).toBe(10)
+  expect(avgReducedWithZero).toBe(5)
 })
 
 test('Testing the custom reducer (min)', () => {

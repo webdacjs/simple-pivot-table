@@ -37,7 +37,7 @@ export default function getPivotDataColumns ({
   )
   const colsTotals = groupedData.valueTotals
   const colsValues = getColumns(
-    {columnsLabels, rows, values, calculateTotalsPercentage, calculateSectionPercentage, showRanking})
+    { columnsLabels, rows, values, calculateTotalsPercentage, calculateSectionPercentage, showRanking })
   const pivotData = getDenormalized(groupedData, rows, orderBy, showRanking)
 
   if (getOriginals) {
