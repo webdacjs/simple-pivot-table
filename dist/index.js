@@ -27,6 +27,12 @@ Object.defineProperty(exports, "PivotTable", {
     return _PivotTable.default;
   }
 });
+Object.defineProperty(exports, "ExperimentalPivotTable", {
+  enumerable: true,
+  get: function get() {
+    return _ExperimentalPivotTable.default;
+  }
+});
 Object.defineProperty(exports, "PivotTableBarChart", {
   enumerable: true,
   get: function get() {
@@ -53,6 +59,8 @@ var _PivotCsv = _interopRequireDefault(require("./PivotCsv"));
 var _PivotJSON = _interopRequireDefault(require("./PivotJSON"));
 
 var _PivotTable = _interopRequireDefault(require("./PivotTable"));
+
+var _ExperimentalPivotTable = _interopRequireDefault(require("./ExperimentalPivotTable"));
 
 var _PivotTableBarChart = _interopRequireDefault(require("./PivotTableBarChart"));
 
