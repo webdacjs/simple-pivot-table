@@ -5,7 +5,7 @@ export function removeNewLines (val) {
   return val.replace(/(\r\n|\n|\r)/gm, '')
 }
 
-export function getColumns ({columnsLabels, rows, values, calculateTotalsPercentage, calculateSectionPercentage, showRanking}) {
+export function getColumns ({ columnsLabels, rows, values, calculateTotalsPercentage, calculateSectionPercentage, showRanking }) {
   if (columnsLabels) {
     return columnsLabels
   }
