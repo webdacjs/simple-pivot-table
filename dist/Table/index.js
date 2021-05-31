@@ -47,6 +47,7 @@ function Table(_ref) {
       maxWidth = _ref.maxWidth,
       width = _ref.width,
       maxHeight = _ref.maxHeight,
+      tableClassName = _ref.tableClassName,
       height = _ref.height;
 
   var _useState = (0, _react.useState)(),
@@ -119,7 +120,7 @@ function Table(_ref) {
   };
 
   return /*#__PURE__*/_react.default.createElement("div", null, /*#__PURE__*/_react.default.createElement("table", {
-    className: "simple-table",
+    className: tableClassName || 'simple-table',
     style: {
       width: width,
       height: height,
@@ -137,5 +138,6 @@ Table.propTypes = {
   height: _propTypes.default.string,
   maxHeight: _propTypes.default.string,
   maxWidth: _propTypes.default.string,
+  tableClassName: _propTypes.default.string,
   width: _propTypes.default.string
 };

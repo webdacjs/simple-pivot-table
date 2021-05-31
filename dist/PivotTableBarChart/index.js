@@ -84,6 +84,7 @@ function PivotTableBarChart(_ref) {
       rows = _ref.rows,
       showPopOver = _ref.showPopOver,
       showRanking = _ref.showRanking,
+      tableClassName = _ref.tableClassName,
       values = _ref.values,
       width = _ref.width;
 
@@ -309,7 +310,7 @@ function PivotTableBarChart(_ref) {
   };
 
   return /*#__PURE__*/_react.default.createElement("div", null, /*#__PURE__*/_react.default.createElement("table", {
-    className: "simple-pivot-table",
+    className: tableClassName || 'simple-pivot-table',
     style: {
       width: width,
       height: height,
@@ -340,6 +341,7 @@ PivotTableBarChart.propTypes = {
   postprocessfn: _propTypes.default.func,
   rows: _propTypes.default.array,
   showPopOver: _propTypes.default.bool,
+  tableClassName: _propTypes.default.string,
   values: _propTypes.default.array,
   width: _propTypes.default.string
 };
