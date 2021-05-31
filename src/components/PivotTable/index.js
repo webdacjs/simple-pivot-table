@@ -18,6 +18,7 @@ export default function PivotTable ({
   showSectionTotals,
   calculateSectionPercentage,
   calculateTotalsPercentage,
+  tableClassName,
   values,
   width
 }) {
@@ -106,7 +107,7 @@ export default function PivotTable ({
 
   return (
     <div>
-      <table className='simple-pivot-table' style={{ width, height, maxWidth, maxHeight }}>
+      <table className={tableClassName || 'simple-pivot-table'} style={{ width, height, maxWidth, maxHeight }}>
         {cols && getHeader()}
         {cols && pivotRows && getRows()}
       </table>
@@ -132,6 +133,7 @@ PivotTable.propTypes = {
   showSectionTotals: PropTypes.bool,
   calculateSectionPercentage: PropTypes.bool,
   calculateTotalsPercentage: PropTypes.bool,
+  tableClassName: PropTypes.string,
   values: PropTypes.array,
   width: PropTypes.string
 }

@@ -10,6 +10,7 @@ export default function Table ({
   maxWidth,
   width,
   maxHeight,
+  tableClassName,
   height
 }) {
   const [cols, setCols] = useState()
@@ -65,7 +66,7 @@ export default function Table ({
 
   return (
     <div>
-      <table className='simple-table' style={{ width, height, maxWidth, maxHeight }}>
+      <table className={tableClassName || 'simple-table'} style={{ width, height, maxWidth, maxHeight }}>
         {cols && getHeader()}
         {cols && rows && getRows()}
       </table>
@@ -81,6 +82,6 @@ Table.propTypes = {
   height: PropTypes.string,
   maxHeight: PropTypes.string,
   maxWidth: PropTypes.string,
+  tableClassName: PropTypes.string,
   width: PropTypes.string
-
 }

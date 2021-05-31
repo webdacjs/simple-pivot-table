@@ -46,6 +46,7 @@ function PivotTable(_ref) {
       showSectionTotals = _ref.showSectionTotals,
       calculateSectionPercentage = _ref.calculateSectionPercentage,
       calculateTotalsPercentage = _ref.calculateTotalsPercentage,
+      tableClassName = _ref.tableClassName,
       values = _ref.values,
       width = _ref.width;
 
@@ -172,7 +173,7 @@ function PivotTable(_ref) {
   };
 
   return /*#__PURE__*/_react.default.createElement("div", null, /*#__PURE__*/_react.default.createElement("table", {
-    className: "simple-pivot-table",
+    className: tableClassName || 'simple-pivot-table',
     style: {
       width: width,
       height: height,
@@ -197,6 +198,7 @@ PivotTable.propTypes = {
   showSectionTotals: _propTypes.default.bool,
   calculateSectionPercentage: _propTypes.default.bool,
   calculateTotalsPercentage: _propTypes.default.bool,
+  tableClassName: _propTypes.default.string,
   values: _propTypes.default.array,
   width: _propTypes.default.string
 };
