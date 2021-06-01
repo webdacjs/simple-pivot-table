@@ -57,6 +57,10 @@ body {
     font-weight: bold;
 }
 
+th.pivotRowHeaderHighlight {
+    background-color: yellow;
+}
+
 .simple-pivot-table tr:nth-child(even) {
     background-color: #f2f2f2;
 }

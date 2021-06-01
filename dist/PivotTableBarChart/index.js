@@ -73,6 +73,8 @@ function PivotTableBarChart(_ref) {
       data = _ref.data,
       filters = _ref.filters,
       height = _ref.height,
+      hideColumns = _ref.hideColumns,
+      highlightRows = _ref.highlightRows,
       maxHeight = _ref.maxHeight,
       maxWidth = _ref.maxWidth,
       _ref$multiStackSplit = _ref.multiStackSplit,
@@ -273,6 +275,26 @@ function PivotTableBarChart(_ref) {
     return dataArray;
   };
 
+  var getItemValue = function getItemValue(i, value) {
+    if (hideColumns && hideColumns.includes(i + 1)) {
+      return '';
+    }
+
+    return value;
+  };
+
+  var getHeaderClassName = function getHeaderClassName(value) {
+    if (!highlightRows) {
+      return 'pivotRowHeader';
+    }
+
+    if (highlightRows.includes(value)) {
+      return 'pivotRowHeader pivotRowHeaderHighlight';
+    }
+
+    return 'pivotRowHeader';
+  };
+
   var getRowLine = function getRowLine(row, i) {
     var headerItems = (0, _lodash.default)(row, function (x) {
       return x.type === 'header';
@@ -282,8 +304,8 @@ function PivotTableBarChart(_ref) {
       return item.visible ? /*#__PURE__*/_react.default.createElement("th", {
         key: "th-".concat(i, "-").concat(y),
         rowSpan: item.rowSpan,
-        className: "pivotRowHeader"
-      }, item.value) : null;
+        className: getHeaderClassName(item.value)
+      }, getItemValue(y, item.value)) : null;
     }).filter(function (x) {
       return x;
     });
@@ -332,6 +354,8 @@ PivotTableBarChart.propTypes = {
   data: _propTypes.default.oneOfType([_propTypes.default.string, _propTypes.default.array]),
   filters: _propTypes.default.array,
   height: _propTypes.default.string,
+  hideColumns: _propTypes.default.array,
+  highlightRows: _propTypes.default.array,
   multiStackSplit: _propTypes.default.number,
   maxHeight: _propTypes.default.string,
   maxWidth: _propTypes.default.string,
