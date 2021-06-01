@@ -23,6 +23,8 @@ const Template = ({
   barsMinValue,
   barsMaxValue,
   barsHeight,
+  hideColumns,
+  highlightRows,
   showPopOver,
   orderBy,
   showRanking,
@@ -44,6 +46,8 @@ const Template = ({
     barLegendFormatter={barLegendFormatter}
     filters={filters}
     height={height}
+    hideColumns={hideColumns}
+    highlightRows={highlightRows}
     barsMinValue={barsMinValue}
     barsMaxValue={barsMaxValue}
     showPopOver={showPopOver}
@@ -191,6 +195,33 @@ OrderBarsByFieldWithRanking.args = {
     { field: 'population', order: 'desc' },
     { field: 'area', order: 'desc' }
   ],
+  barType: 'stack',
+  showPopOver: true,
+  showRanking: true,
+  barLegendSteps: 5,
+  values: [
+    {
+      field: 'population',
+      aggregator: 'sum'
+    },
+    {
+      field: 'area',
+      aggregator: 'sum'
+    }
+  ]
+}
+
+export const OrderBarsByFieldWithRankingHidingColumn = Template.bind({})
+OrderBarsByFieldWithRankingHidingColumn.args = {
+  data: testData,
+  columnsLabels: ['Continent', 'Rank', '', 'Population', 'Area'],
+  rows: ['continent', 'country'],
+  orderBy: [
+    { field: 'population', order: 'desc' },
+    { field: 'area', order: 'desc' }
+  ],
+  hideColumns: [3],
+  highlightRows: ['Ireland'],
   barType: 'stack',
   showPopOver: true,
   showRanking: true,

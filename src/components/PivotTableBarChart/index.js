@@ -28,6 +28,8 @@ export default function PivotTableBarChart ({
   data,
   filters,
   height,
+  hideColumns,
+  highlightRows,
   maxHeight,
   maxWidth,
   multiStackSplit = 2,
@@ -80,7 +82,7 @@ export default function PivotTableBarChart ({
   const getColumnLabel = (col, i) =>
     columnsLabels && columnsLabels[i] ? columnsLabels[i] : col
 
-  const getColsLength = () => showRanking 
+  const getColsLength = () => showRanking
     ? rows.length + 1
     : rows.length
 
@@ -164,14 +166,14 @@ export default function PivotTableBarChart ({
     }
     const headerLen = headerItems.length
     const rowsLen = rows.length
-    const rowKey = !showRanking 
+    const rowKey = !showRanking
       ? headerItems.map(x => x.value).join(separator)
-      : [...headerItems.slice(0, headerLen - 2), ...headerItems.slice(headerLen -1)].map(
+      : [...headerItems.slice(0, headerLen - 2), ...headerItems.slice(headerLen - 1)].map(
           x => x.value).join(separator)
     // Popover Keys
     const popOverKeys = !showRanking
-        ? rows
-        : [...rows.slice(0, rowsLen - 1), 'ranking', ...rows.slice(rowsLen - 1)]
+      ? rows
+      : [...rows.slice(0, rowsLen - 1), 'ranking', ...rows.slice(rowsLen - 1)]
 
     const originalValue = groupedDataState[rowKey]
     const dataArray = []
@@ -185,12 +187,29 @@ export default function PivotTableBarChart ({
     return dataArray
   }
 
+  const getItemValue = (i, value) => {
+    if (hideColumns && hideColumns.includes(i + 1)) {
+      return ''
+    }
+    return value
+  }
+
+  const getHeaderClassName = value => {
+    if (!highlightRows) {
+      return 'pivotRowHeader'
+    }
+    if (highlightRows.includes(value)) {
+      return 'pivotRowHeader pivotRowHeaderHighlight'
+    }
+    return 'pivotRowHeader'
+  }
+
   const getRowLine = (row, i) => {
     const headerItems = filter(row, x => x.type === 'header')
     const popOverDataArray = getPopOverDataArray(headerItems, row)
     const rowItems = headerItems.map(
       (item, y) => item.visible
-        ? <th key={`th-${i}-${y}`} rowSpan={item.rowSpan} className='pivotRowHeader'>{item.value}</th>
+        ? <th key={`th-${i}-${y}`} rowSpan={item.rowSpan} className={getHeaderClassName(item.value)}>{getItemValue(y, item.value)}</th>
         : null).filter(x => x)
     const { valuesObj, valuesCols } = getValuesObj(row)
     rowItems.push(
@@ -234,6 +253,8 @@ PivotTableBarChart.propTypes = {
   ]),
   filters: PropTypes.array,
   height: PropTypes.string,
+  hideColumns: PropTypes.array,
+  highlightRows: PropTypes.array,
   multiStackSplit: PropTypes.number,
   maxHeight: PropTypes.string,
   maxWidth: PropTypes.string,
