@@ -1,6 +1,6 @@
 {
   "name": "simple-pivot-table",
-  "version": "2.8.1",
+  "version": "2.8.2",
   "main": "dist/index.js",
   "module": "dist/index.js",
   "description": "Simple pivot table library with basic functionality.",
