@@ -109,7 +109,7 @@ export default function ExperimentalPivotTable ({
             {getColumnLabel(col, i + rows.length)}
           </th>)}
         {columns && values.map(() => columns[0].allowedValues.slice()).flat().map(
-          (x, i) => <th key='internal' className='pivotHeaderValue pivotHeaderInternal' style={{ textAlign: 'center' }}>{x}</th>)}
+          (x, i) => <th key={`internal-${i}`} className='pivotHeaderValue pivotHeaderInternal' style={{ textAlign: 'center' }}>{x}</th>)}
       </tr>
     </thead>
 
@@ -120,7 +120,7 @@ export default function ExperimentalPivotTable ({
       if (item.type === 'header' && item.visible) {
         return <th key={`th-${i}-${y}`} rowSpan={item.rowSpan} className={getLineClass('pivotRowHeader', item)}>{item.value}</th>
       } else if (item.type === 'value') {
-        return <td key={`td-${i}-${y}`} className={getLineClass('pivotValue', item)}>{item.value}</td>
+        return <td key={`td-${i}-${y}`} className={getLineClass('pivotValue testValue', item)}>{item.value}</td>
       }
     })
     return rowItems.filter(x => x)
