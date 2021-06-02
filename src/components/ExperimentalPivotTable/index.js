@@ -128,9 +128,9 @@ export default function ExperimentalPivotTable ({
       </thead>
     )
   }
- 
+
   const getLineClass = (baseClass, item, allowedValuesLength, i, rowsLength) => {
-    const baseClassLocal = item.totalsLine ? `${baseClass} pivotSubtotal`: baseClass
+    const baseClassLocal = item.totalsLine ? `${baseClass} pivotSubtotal` : baseClass
     if (allowedValuesLength) {
       const comparison = (i - rowsLength) + 1
       if (comparison % allowedValuesLength === 0) {
