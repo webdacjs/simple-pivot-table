@@ -102,13 +102,13 @@ export default function ExperimentalPivotTable ({
       <thead>
         {columns && <>
           <tr>
-            <th colspan={rowsLength}>{' '}</th>
-            <th colspan={getRootColumnLength()} style={{ textAlign: 'center' }}>{columns[0].label || columns[0].field}</th>
+            <th colSpan={rowsLength}>{' '}</th>
+            <th colSpan={getRootColumnLength()} style={{ textAlign: 'center' }}>{columns[0].label || columns[0].field}</th>
           </tr>
           <tr>
-            <th colspan={rowsLength}>{' '}</th>
+            <th colSpan={rowsLength}>{' '}</th>
             {values.map((x, i) =>
-              <th style={{ textAlign: 'center' }} className='pivotHeaderSeparator' colspan={allowedValuesLength}>
+              <th key={`head-${i}`} style={{ textAlign: 'center' }} className='pivotHeaderSeparator' colSpan={allowedValuesLength}>
                 {x.label || x.field}
               </th>)}
           </tr>
