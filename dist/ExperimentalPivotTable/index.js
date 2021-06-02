@@ -44,7 +44,6 @@ function ExperimentalPivotTable(_ref) {
       maxHeight = _ref.maxHeight,
       maxWidth = _ref.maxWidth,
       orderBy = _ref.orderBy,
-      postprocessfn = _ref.postprocessfn,
       rows = _ref.rows,
       showColumnTotals = _ref.showColumnTotals,
       showRowsTotals = _ref.showRowsTotals,
@@ -98,7 +97,7 @@ function ExperimentalPivotTable(_ref) {
     return combinedKeysWithVals;
   }
 
-  var postprocessfnToUse = postprocessfn || postprocessfnLocal;
+  var postprocessfnToUse = columns && postprocessfnLocal;
   (0, _react.useEffect)(function () {
     var _getPivotDataColumns = (0, _pivotMain.default)({
       data: data,
@@ -142,39 +141,56 @@ function ExperimentalPivotTable(_ref) {
     return columns[0].allowedValues.length * values.length;
   };
 
+  var getHeaderInternalClassName = function getHeaderInternalClassName(i, allowedValuesLength, x) {
+    if ((i + 1) % allowedValuesLength === 0) {
+      return 'pivotHeaderValue pivotHeaderInternal pivotHeaderSeparator';
+    }
+
+    return 'pivotHeaderValue pivotHeaderInternal';
+  };
+
   var getHeader = function getHeader() {
+    var allowedValuesLength;
+    var rowsLength = rows.length;
+
+    if (columns) {
+      allowedValuesLength = columns[0].allowedValues.length;
+    }
+
     return /*#__PURE__*/_react.default.createElement("thead", null, columns && /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/_react.default.createElement("tr", null, /*#__PURE__*/_react.default.createElement("th", {
-      colspan: rows.length
+      colSpan: rowsLength
     }, ' '), /*#__PURE__*/_react.default.createElement("th", {
-      colspan: getRootColumnLength(),
+      colSpan: getRootColumnLength(),
       style: {
         textAlign: 'center'
       }
     }, columns[0].label || columns[0].field)), /*#__PURE__*/_react.default.createElement("tr", null, /*#__PURE__*/_react.default.createElement("th", {
-      colspan: rows.length
+      colSpan: rowsLength
     }, ' '), values.map(function (x, i) {
       return /*#__PURE__*/_react.default.createElement("th", {
+        key: "head-".concat(i),
         style: {
           textAlign: 'center'
         },
-        colspan: columns[0].allowedValues.length
+        className: "pivotHeaderSeparator",
+        colSpan: allowedValuesLength
       }, x.label || x.field);
-    }))), /*#__PURE__*/_react.default.createElement("tr", null, cols.slice(0, rows.length).map(function (col, i) {
+    }))), /*#__PURE__*/_react.default.createElement("tr", null, cols.slice(0, rowsLength).map(function (col, i) {
       return /*#__PURE__*/_react.default.createElement("th", {
         key: "col-".concat(i),
         className: "pivotHeader"
       }, getColumnLabel(col, i));
-    }), !columns && cols.slice(rows.length, 100).map(function (col, i) {
+    }), !columns && cols.slice(rowsLength, 100).map(function (col, i) {
       return /*#__PURE__*/_react.default.createElement("th", {
-        key: "col-".concat(i + rows.length),
+        key: "col-".concat(i + rowsLength),
         className: "pivotHeaderValue"
-      }, getColumnLabel(col, i + rows.length));
+      }, getColumnLabel(col, i + rowsLength));
     }), columns && values.map(function () {
       return columns[0].allowedValues.slice();
     }).flat().map(function (x, i) {
       return /*#__PURE__*/_react.default.createElement("th", {
-        key: "internal",
-        className: "pivotHeaderValue pivotHeaderInternal",
+        key: "internal-".concat(i),
+        className: getHeaderInternalClassName(i, allowedValuesLength, x),
         style: {
           textAlign: 'center'
         }
@@ -182,11 +198,28 @@ function ExperimentalPivotTable(_ref) {
     })));
   };
 
-  var getLineClass = function getLineClass(baseClass, item) {
-    return item.totalsLine ? "".concat(baseClass, " pivotSubtotal") : baseClass;
+  var getLineClass = function getLineClass(baseClass, item, allowedValuesLength, i, rowsLength) {
+    var baseClassLocal = item.totalsLine ? "".concat(baseClass, " pivotSubtotal") : baseClass;
+
+    if (allowedValuesLength) {
+      var comparison = i - rowsLength + 1;
+
+      if (comparison % allowedValuesLength === 0) {
+        return "".concat(baseClassLocal, " pivotHeaderSeparator");
+      }
+    }
+
+    return baseClassLocal;
   };
 
   var getRowLine = function getRowLine(row, i) {
+    var rowsLength = rows.length;
+    var allowedValuesLength;
+
+    if (columns) {
+      allowedValuesLength = columns[0].allowedValues.length;
+    }
+
     var rowItems = row.map(function (item, y) {
       if (item.type === 'header' && item.visible) {
         return /*#__PURE__*/_react.default.createElement("th", {
@@ -195,10 +228,17 @@ function ExperimentalPivotTable(_ref) {
           className: getLineClass('pivotRowHeader', item)
         }, item.value);
       } else if (item.type === 'value') {
-        return /*#__PURE__*/_react.default.createElement("td", {
-          key: "td-".concat(i, "-").concat(y),
-          className: getLineClass('pivotValue', item)
-        }, item.value);
+        if (allowedValuesLength) {
+          return /*#__PURE__*/_react.default.createElement("td", {
+            key: "td-".concat(i, "-").concat(y),
+            className: getLineClass('pivotValue', item, allowedValuesLength, y, rowsLength)
+          }, item.value);
+        } else {
+          return /*#__PURE__*/_react.default.createElement("td", {
+            key: "td-".concat(i, "-").concat(y),
+            className: getLineClass('pivotValue', item)
+          }, item.value);
+        }
       }
     });
     return rowItems.filter(function (x) {
@@ -251,7 +291,6 @@ ExperimentalPivotTable.propTypes = {
   maxHeight: _propTypes.default.string,
   maxWidth: _propTypes.default.string,
   orderBy: _propTypes.default.array,
-  postprocessfn: _propTypes.default.func,
   rows: _propTypes.default.array,
   showColumnTotals: _propTypes.default.bool,
   showRowsTotals: _propTypes.default.bool,

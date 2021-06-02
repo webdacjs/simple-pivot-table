@@ -61,3 +61,8 @@ body {
 .simple-pivot-table tbody tr.selected td {
     background: #bbe4f2;
 }
+
+.pivotHeaderSeparator {
+    border-right: 1px solid #999;
+
+}

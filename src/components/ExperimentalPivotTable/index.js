@@ -13,7 +13,6 @@ export default function ExperimentalPivotTable ({
   maxHeight,
   maxWidth,
   orderBy,
-  postprocessfn,
   rows,
   showColumnTotals,
   showRowsTotals,
@@ -48,7 +47,7 @@ export default function ExperimentalPivotTable ({
     return combinedKeysWithVals
   }
 
-  const postprocessfnToUse = postprocessfn || postprocessfnLocal
+  const postprocessfnToUse = columns && postprocessfnLocal
 
   useEffect(() => {
     const { pivotData, colsValues, colsTotals } = getPivotDataColumns({
@@ -84,43 +83,79 @@ export default function ExperimentalPivotTable ({
   const getRootColumnLength = () =>
     columns[0].allowedValues.length * values.length
 
-  const getHeader = () =>
-    <thead>
-      {columns && <>
-        <tr>
-          <th colspan={rows.length}>{' '}</th>
-          <th colspan={getRootColumnLength()} style={{ textAlign: 'center' }}>{columns[0].label || columns[0].field}</th>
-        </tr>
-        <tr>
-          <th colspan={rows.length}>{' '}</th>
-          {values.map((x, i) =>
-            <th style={{ textAlign: 'center' }} colspan={columns[0].allowedValues.length}>
-              {x.label || x.field}
-            </th>)}
-        </tr>
-      </>}
-      <tr>
-        {cols.slice(0, rows.length).map((col, i) =>
-          <th key={`col-${i}`} className='pivotHeader'>
-            {getColumnLabel(col, i)}
-          </th>)}
-        {!columns && cols.slice(rows.length, 100).map((col, i) =>
-          <th key={`col-${i + rows.length}`} className='pivotHeaderValue'>
-            {getColumnLabel(col, i + rows.length)}
-          </th>)}
-        {columns && values.map(() => columns[0].allowedValues.slice()).flat().map(
-          (x, i) => <th key='internal' className='pivotHeaderValue pivotHeaderInternal' style={{ textAlign: 'center' }}>{x}</th>)}
-      </tr>
-    </thead>
+  const getHeaderInternalClassName = (i, allowedValuesLength, x) => {
+    if ((i + 1) % allowedValuesLength === 0) {
+      return 'pivotHeaderValue pivotHeaderInternal pivotHeaderSeparator'
+    }
+    return 'pivotHeaderValue pivotHeaderInternal'
+  }
 
-  const getLineClass = (baseClass, item) => item.totalsLine ? `${baseClass} pivotSubtotal` : baseClass
+  const getHeader = () => {
+    let allowedValuesLength
+    const rowsLength = rows.length
+
+    if (columns) {
+      allowedValuesLength = columns[0].allowedValues.length
+    }
+
+    return (
+      <thead>
+        {columns && <>
+          <tr>
+            <th colSpan={rowsLength}>{' '}</th>
+            <th colSpan={getRootColumnLength()} style={{ textAlign: 'center' }}>{columns[0].label || columns[0].field}</th>
+          </tr>
+          <tr>
+            <th colSpan={rowsLength}>{' '}</th>
+            {values.map((x, i) =>
+              <th key={`head-${i}`} style={{ textAlign: 'center' }} className='pivotHeaderSeparator' colSpan={allowedValuesLength}>
+                {x.label || x.field}
+              </th>)}
+          </tr>
+                    </>}
+        <tr>
+          {cols.slice(0, rowsLength).map((col, i) =>
+            <th key={`col-${i}`} className='pivotHeader'>
+              {getColumnLabel(col, i)}
+            </th>)}
+          {!columns && cols.slice(rowsLength, 100).map((col, i) =>
+            <th key={`col-${i + rowsLength}`} className='pivotHeaderValue'>
+              {getColumnLabel(col, i + rowsLength)}
+            </th>)}
+          {columns && values.map(() => columns[0].allowedValues.slice()).flat().map(
+            (x, i) => <th key={`internal-${i}`} className={getHeaderInternalClassName(i, allowedValuesLength, x)} style={{ textAlign: 'center' }}>{x}</th>)}
+        </tr>
+      </thead>
+    )
+  }
+
+  const getLineClass = (baseClass, item, allowedValuesLength, i, rowsLength) => {
+    const baseClassLocal = item.totalsLine ? `${baseClass} pivotSubtotal` : baseClass
+    if (allowedValuesLength) {
+      const comparison = (i - rowsLength) + 1
+      if (comparison % allowedValuesLength === 0) {
+        return `${baseClassLocal} pivotHeaderSeparator`
+      }
+    }
+    return baseClassLocal
+  }
 
   const getRowLine = (row, i) => {
+    const rowsLength = rows.length
+    let allowedValuesLength
+    if (columns) {
+      allowedValuesLength = columns[0].allowedValues.length
+    }
+
     const rowItems = row.map((item, y) => {
       if (item.type === 'header' && item.visible) {
         return <th key={`th-${i}-${y}`} rowSpan={item.rowSpan} className={getLineClass('pivotRowHeader', item)}>{item.value}</th>
       } else if (item.type === 'value') {
-        return <td key={`td-${i}-${y}`} className={getLineClass('pivotValue', item)}>{item.value}</td>
+        if (allowedValuesLength) {
+          return <td key={`td-${i}-${y}`} className={getLineClass('pivotValue', item, allowedValuesLength, y, rowsLength)}>{item.value}</td>
+        } else {
+          return <td key={`td-${i}-${y}`} className={getLineClass('pivotValue', item)}>{item.value}</td>
+        }
       }
     })
     return rowItems.filter(x => x)
@@ -168,7 +203,6 @@ ExperimentalPivotTable.propTypes = {
   maxHeight: PropTypes.string,
   maxWidth: PropTypes.string,
   orderBy: PropTypes.array,
-  postprocessfn: PropTypes.func,
   rows: PropTypes.array,
   showColumnTotals: PropTypes.bool,
   showRowsTotals: PropTypes.bool,

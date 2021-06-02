@@ -27,7 +27,7 @@ function getReducedValue(values, aggregator, formatter) {
 
   if (aggregator === 'avg') {
     var _rawValue = values.reduce(function (a, b) {
-      return a + (getNumericValue(b) || a);
+      return a + (getNumericValue(b) || 0);
     }, 0) / values.length;
 
     return formatter ? formatter(_rawValue) : _rawValue;

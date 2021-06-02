@@ -12,7 +12,7 @@ export function getReducedValue (values, aggregator, formatter) {
     return formatter ? formatter(rawValue) : rawValue
   }
   if (aggregator === 'avg') {
-    const rawValue = values.reduce((a, b) => a + (getNumericValue(b) || a), 0) / values.length
+    const rawValue = values.reduce((a, b) => a + (getNumericValue(b) || 0), 0) / values.length
     return formatter ? formatter(rawValue) : rawValue
   }
   if (aggregator === 'median') {
