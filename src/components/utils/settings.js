@@ -1,3 +1,3 @@
-export const separator = '---------'
+export const separator = '~-~-~-~-~-'
 
-export const subtotalsSuffix = '______'
+export const subtotalsSuffix = '~_~_~_~_~_~'
