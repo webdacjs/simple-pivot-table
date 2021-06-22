@@ -13,6 +13,7 @@ export default function PivotTable ({
   orderBy,
   postprocessfn,
   rows,
+  rowsLimit,
   showColumnTotals,
   showRowsTotals,
   showSectionTotals,
@@ -26,6 +27,8 @@ export default function PivotTable ({
   const [pivotRows, setRows] = useState()
   const [colsTotals, setColsTotals] = useState()
   const [selectedRow, setSelectedRow] = useState()
+
+  const getSlicedRows = rows => rowsLimit ? rows.slice(0, rowsLimit) : rows
 
   useEffect(() => {
     const { pivotData, colsValues, colsTotals } = getPivotDataColumns({
@@ -94,7 +97,7 @@ export default function PivotTable ({
 
   const getRows = () =>
     <tbody>
-      {pivotRows.map((row, i) =>
+      {getSlicedRows(pivotRows).map((row, i) =>
         <tr
           key={`row-${i}`}
           className={getRowClassName(`row-${i}`)}
@@ -128,6 +131,7 @@ PivotTable.propTypes = {
   orderBy: PropTypes.array,
   postprocessfn: PropTypes.func,
   rows: PropTypes.array,
+  rowsLimit: PropTypes.number,
   showColumnTotals: PropTypes.bool,
   showRowsTotals: PropTypes.bool,
   showSectionTotals: PropTypes.bool,

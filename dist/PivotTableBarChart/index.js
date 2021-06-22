@@ -84,6 +84,7 @@ function PivotTableBarChart(_ref) {
       popOverFunction = _ref.popOverFunction,
       postprocessfn = _ref.postprocessfn,
       rows = _ref.rows,
+      rowsLimit = _ref.rowsLimit,
       showPopOver = _ref.showPopOver,
       showRanking = _ref.showRanking,
       tableClassName = _ref.tableClassName,
@@ -121,6 +122,11 @@ function PivotTableBarChart(_ref) {
       setMinValue = _useState12[1];
 
   var getOriginals = true;
+
+  var getSlicedRows = function getSlicedRows(rows) {
+    return rowsLimit ? rows.slice(0, rowsLimit) : rows;
+  };
+
   (0, _react.useEffect)(function () {
     var _getPivotDataColumns = (0, _pivotMain.default)({
       data: data,
@@ -324,7 +330,7 @@ function PivotTableBarChart(_ref) {
   };
 
   var getRows = function getRows() {
-    return /*#__PURE__*/_react.default.createElement("tbody", null, pivotRows.map(function (row, i) {
+    return /*#__PURE__*/_react.default.createElement("tbody", null, getSlicedRows(pivotRows).map(function (row, i) {
       return /*#__PURE__*/_react.default.createElement("tr", {
         key: "row-".concat(i)
       }, getRowLine(row, i));
@@ -364,6 +370,7 @@ PivotTableBarChart.propTypes = {
   popOverFunction: _propTypes.default.func,
   postprocessfn: _propTypes.default.func,
   rows: _propTypes.default.array,
+  rowsLimit: _propTypes.default.number,
   showPopOver: _propTypes.default.bool,
   tableClassName: _propTypes.default.string,
   values: _propTypes.default.array,
