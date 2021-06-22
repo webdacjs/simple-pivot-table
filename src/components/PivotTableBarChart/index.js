@@ -38,6 +38,7 @@ export default function PivotTableBarChart ({
   popOverFunction,
   postprocessfn,
   rows,
+  rowsLimit,
   showPopOver,
   showRanking,
   tableClassName,
@@ -52,6 +53,8 @@ export default function PivotTableBarChart ({
   const [minValue, setMinValue] = useState()
 
   const getOriginals = true
+
+  const getSlicedRows = rows => rowsLimit ? rows.slice(0, rowsLimit) : rows
 
   useEffect(() => {
     const { pivotData, colsValues, colsTotals, groupedOriginals } = getPivotDataColumns({
@@ -222,7 +225,7 @@ export default function PivotTableBarChart ({
 
   const getRows = () =>
     <tbody>
-      {pivotRows.map((row, i) =>
+      {getSlicedRows(pivotRows).map((row, i) =>
         <tr key={`row-${i}`}>
           {getRowLine(row, i)}
         </tr>)}
@@ -263,6 +266,7 @@ PivotTableBarChart.propTypes = {
   popOverFunction: PropTypes.func,
   postprocessfn: PropTypes.func,
   rows: PropTypes.array,
+  rowsLimit: PropTypes.number,
   showPopOver: PropTypes.bool,
   tableClassName: PropTypes.string,
   values: PropTypes.array,

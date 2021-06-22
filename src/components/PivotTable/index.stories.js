@@ -21,6 +21,7 @@ const Template = ({
   height,
   orderBy,
   postprocessfn,
+  rowsLimit,
   showColumnTotals,
   showRowsTotals,
   showSectionTotals,
@@ -38,6 +39,7 @@ const Template = ({
     width={width}
     orderBy={orderBy}
     postprocessfn={postprocessfn}
+    rowsLimit={rowsLimit}
     showColumnTotals={showColumnTotals}
     showRowsTotals={showRowsTotals}
     showSectionTotals={showSectionTotals}
@@ -50,6 +52,17 @@ Default.args = {
   data: testData,
   rows: ['continent', 'country'],
   showColumnTotals: true,
+  values: [
+    { field: 'population', aggregator: 'sum' }
+  ]
+}
+
+export const RowLimit = Template.bind({})
+RowLimit.args = {
+  data: testData,
+  rows: ['country'],
+  showColumnTotals: false,
+  rowsLimit: 10,
   values: [
     { field: 'population', aggregator: 'sum' }
   ]
