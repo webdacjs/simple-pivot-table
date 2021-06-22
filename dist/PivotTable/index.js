@@ -41,6 +41,7 @@ function PivotTable(_ref) {
       orderBy = _ref.orderBy,
       postprocessfn = _ref.postprocessfn,
       rows = _ref.rows,
+      rowsLimit = _ref.rowsLimit,
       showColumnTotals = _ref.showColumnTotals,
       showRowsTotals = _ref.showRowsTotals,
       showSectionTotals = _ref.showSectionTotals,
@@ -69,6 +70,10 @@ function PivotTable(_ref) {
       _useState8 = _slicedToArray(_useState7, 2),
       selectedRow = _useState8[0],
       setSelectedRow = _useState8[1];
+
+  var getSlicedRows = function getSlicedRows(rows) {
+    return rowsLimit ? rows.slice(0, rowsLimit) : rows;
+  };
 
   (0, _react.useEffect)(function () {
     var _getPivotDataColumns = (0, _pivotMain.default)({
@@ -161,7 +166,7 @@ function PivotTable(_ref) {
   };
 
   var getRows = function getRows() {
-    return /*#__PURE__*/_react.default.createElement("tbody", null, pivotRows.map(function (row, i) {
+    return /*#__PURE__*/_react.default.createElement("tbody", null, getSlicedRows(pivotRows).map(function (row, i) {
       return /*#__PURE__*/_react.default.createElement("tr", {
         key: "row-".concat(i),
         className: getRowClassName("row-".concat(i)),
@@ -193,6 +198,7 @@ PivotTable.propTypes = {
   orderBy: _propTypes.default.array,
   postprocessfn: _propTypes.default.func,
   rows: _propTypes.default.array,
+  rowsLimit: _propTypes.default.number,
   showColumnTotals: _propTypes.default.bool,
   showRowsTotals: _propTypes.default.bool,
   showSectionTotals: _propTypes.default.bool,

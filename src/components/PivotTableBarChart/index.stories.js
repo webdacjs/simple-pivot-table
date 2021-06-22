@@ -30,6 +30,7 @@ const Template = ({
   showRanking,
   popOverFormatter,
   popOverFunction,
+  rowsLimit,
   width,
   values,
   height,
@@ -53,6 +54,7 @@ const Template = ({
     showPopOver={showPopOver}
     orderBy={orderBy}
     showRanking={showRanking}
+    rowsLimit={rowsLimit}
     popOverFormatter={popOverFormatter}
     popOverFunction={popOverFunction}
     barsHeight={barsHeight}
@@ -74,6 +76,21 @@ Default.args = {
     { field: 'population', aggregator: 'sum' }
   ]
 }
+
+export const RowsLimit = Template.bind({})
+RowsLimit.args = {
+  data: testData,
+  rows: ['country'],
+  barLegendSteps: 5,
+  rowsLimit: 10,
+  orderBy: [
+    { field: 'population', order: 'desc' }
+  ],
+  values: [
+    { field: 'population', aggregator: 'sum' }
+  ]
+}
+
 
 export const TwoDimensions = Template.bind({})
 TwoDimensions.args = {
