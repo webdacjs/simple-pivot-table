@@ -27,7 +27,7 @@ function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o =
 
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 
-function _iterableToArrayLimit(arr, i) { var _i = arr && (typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]); if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+function _iterableToArrayLimit(arr, i) { var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]; if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
@@ -45,6 +45,7 @@ function PivotTable(_ref) {
       showColumnTotals = _ref.showColumnTotals,
       showRowsTotals = _ref.showRowsTotals,
       showSectionTotals = _ref.showSectionTotals,
+      showRanking = _ref.showRanking,
       calculateSectionPercentage = _ref.calculateSectionPercentage,
       calculateTotalsPercentage = _ref.calculateTotalsPercentage,
       tableClassName = _ref.tableClassName,
@@ -83,6 +84,7 @@ function PivotTable(_ref) {
       values: values,
       columnsLabels: columnsLabels,
       orderBy: orderBy,
+      showRanking: showRanking,
       postprocessfn: postprocessfn,
       showSectionTotals: showSectionTotals,
       calculateSectionPercentage: calculateSectionPercentage,
@@ -114,13 +116,17 @@ function PivotTable(_ref) {
     return columnsLabels && columnsLabels[i] ? columnsLabels[i] : col;
   };
 
+  var getColsLength = function getColsLength() {
+    return showRanking ? rows.length + 1 : rows.length;
+  };
+
   var getHeader = function getHeader() {
-    return /*#__PURE__*/_react.default.createElement("thead", null, /*#__PURE__*/_react.default.createElement("tr", null, cols.slice(0, rows.length).map(function (col, i) {
+    return /*#__PURE__*/_react.default.createElement("thead", null, /*#__PURE__*/_react.default.createElement("tr", null, cols.slice(0, getColsLength()).map(function (col, i) {
       return /*#__PURE__*/_react.default.createElement("th", {
         key: "col-".concat(i),
         className: "pivotHeader"
       }, getColumnLabel(col, i));
-    }), cols.slice(rows.length, 100).map(function (col, i) {
+    }), cols.slice(getColsLength(), 100).map(function (col, i) {
       return /*#__PURE__*/_react.default.createElement("th", {
         key: "col-".concat(i + rows.length),
         className: "pivotHeaderValue"
@@ -202,6 +208,7 @@ PivotTable.propTypes = {
   showColumnTotals: _propTypes.default.bool,
   showRowsTotals: _propTypes.default.bool,
   showSectionTotals: _propTypes.default.bool,
+  showRanking: _propTypes.default.bool,
   calculateSectionPercentage: _propTypes.default.bool,
   calculateTotalsPercentage: _propTypes.default.bool,
   tableClassName: _propTypes.default.string,
