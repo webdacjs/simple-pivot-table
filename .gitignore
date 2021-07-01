@@ -27,3 +27,4 @@ __snapshots__
 
 # storybook static
 storybook-static
+dist/
