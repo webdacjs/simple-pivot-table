@@ -91,6 +91,21 @@ RowsLimit.args = {
   ]
 }
 
+export const RowsLimitWithRanking = Template.bind({})
+RowsLimitWithRanking.args = {
+  data: testData,
+  rows: ['country'],
+  barLegendSteps: 5,
+  rowsLimit: 10,
+  showRanking: true,
+  columnsLabels: ['#', 'Country', 'Population'],
+  orderBy: [
+    { field: 'population', order: 'desc' }
+  ],
+  values: [
+    { field: 'population', aggregator: 'sum' }
+  ]
+}
 
 export const TwoDimensions = Template.bind({})
 TwoDimensions.args = {

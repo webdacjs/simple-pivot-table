@@ -268,6 +268,7 @@ PivotTableBarChart.propTypes = {
   rows: PropTypes.array,
   rowsLimit: PropTypes.number,
   showPopOver: PropTypes.bool,
+  showRanking: PropTypes.bool,
   tableClassName: PropTypes.string,
   values: PropTypes.array,
   width: PropTypes.string

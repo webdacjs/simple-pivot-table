@@ -24,6 +24,7 @@ const Template = ({
   rowsLimit,
   showColumnTotals,
   showRowsTotals,
+  showRanking,
   showSectionTotals,
   calculateSectionPercentage,
   calculateTotalsPercentage
@@ -42,6 +43,7 @@ const Template = ({
     rowsLimit={rowsLimit}
     showColumnTotals={showColumnTotals}
     showRowsTotals={showRowsTotals}
+    showRanking={showRanking}
     showSectionTotals={showSectionTotals}
     calculateSectionPercentage={calculateSectionPercentage}
     calculateTotalsPercentage={calculateTotalsPercentage}
@@ -63,6 +65,21 @@ RowLimit.args = {
   rows: ['country'],
   showColumnTotals: false,
   rowsLimit: 10,
+  values: [
+    { field: 'population', aggregator: 'sum' }
+  ]
+}
+
+export const RowsLimitWithRanking = Template.bind({})
+RowsLimitWithRanking.args = {
+  data: testData,
+  rows: ['country'],
+  rowsLimit: 10,
+  showRanking: true,
+  columnsLabels: ['#', 'Country', 'Population'],
+  orderBy: [
+    { field: 'population', order: 'desc' }
+  ],
   values: [
     { field: 'population', aggregator: 'sum' }
   ]

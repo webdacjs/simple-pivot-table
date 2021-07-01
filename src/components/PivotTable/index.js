@@ -17,6 +17,7 @@ export default function PivotTable ({
   showColumnTotals,
   showRowsTotals,
   showSectionTotals,
+  showRanking,
   calculateSectionPercentage,
   calculateTotalsPercentage,
   tableClassName,
@@ -38,6 +39,7 @@ export default function PivotTable ({
       values,
       columnsLabels,
       orderBy,
+      showRanking,
       postprocessfn,
       showSectionTotals,
       calculateSectionPercentage,
@@ -61,14 +63,18 @@ export default function PivotTable ({
   const getColumnLabel = (col, i) =>
     columnsLabels && columnsLabels[i] ? columnsLabels[i] : col
 
+  const getColsLength = () => showRanking
+    ? rows.length + 1
+    : rows.length
+
   const getHeader = () =>
     <thead>
       <tr>
-        {cols.slice(0, rows.length).map((col, i) =>
+        {cols.slice(0, getColsLength()).map((col, i) =>
           <th key={`col-${i}`} className='pivotHeader'>
             {getColumnLabel(col, i)}
           </th>)}
-        {cols.slice(rows.length, 100).map((col, i) =>
+        {cols.slice(getColsLength(), 100).map((col, i) =>
           <th key={`col-${i + rows.length}`} className='pivotHeaderValue'>
             {getColumnLabel(col, i + rows.length)}
           </th>)}
@@ -135,6 +141,7 @@ PivotTable.propTypes = {
   showColumnTotals: PropTypes.bool,
   showRowsTotals: PropTypes.bool,
   showSectionTotals: PropTypes.bool,
+  showRanking: PropTypes.bool,
   calculateSectionPercentage: PropTypes.bool,
   calculateTotalsPercentage: PropTypes.bool,
   tableClassName: PropTypes.string,
