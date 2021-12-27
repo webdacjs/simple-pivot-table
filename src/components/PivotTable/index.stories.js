@@ -19,6 +19,7 @@ const Template = ({
   width,
   values,
   height,
+  highlightfn,
   orderBy,
   postprocessfn,
   rowsLimit,
@@ -36,6 +37,7 @@ const Template = ({
     columnsLabels={columnsLabels}
     filters={filters}
     height={height}
+    highlightfn={highlightfn}
     values={values}
     width={width}
     orderBy={orderBy}
@@ -83,6 +85,22 @@ RowsLimitWithRanking.args = {
   values: [
     { field: 'population', aggregator: 'sum' }
   ]
+}
+
+export const HighlightValue = Template.bind({})
+HighlightValue.args = {
+  data: testData,
+  rows: ['country'],
+  rowsLimit: 10,
+  showRanking: true,
+  columnsLabels: ['#', 'Country', 'Population'],
+  orderBy: [
+    { field: 'population', order: 'desc' }
+  ],
+  values: [
+    { field: 'population', aggregator: 'sum' }
+  ],
+  highlightfn: x => x > 1000000000
 }
 
 export const OrderBy = Template.bind({})

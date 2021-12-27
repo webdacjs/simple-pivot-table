@@ -8,6 +8,7 @@ export default function PivotTable ({
   data,
   filters,
   height,
+  highlightfn,
   maxHeight,
   maxWidth,
   orderBy,
@@ -81,7 +82,14 @@ export default function PivotTable ({
       </tr>
     </thead>
 
-  const getLineClass = (baseClass, item) => item.totalsLine ? `${baseClass} pivotSubtotal` : baseClass
+  function getLineClass (baseClass, item) {
+    if (item.totalsLine) {
+      return `${baseClass} pivotSubtotal`
+    } else if (highlightfn && highlightfn(item.value)) {
+      return `${baseClass} highlightedValue`
+    }
+    return baseClass
+  }
 
   const getRowLine = (row, i) => {
     const rowItems = row.map((item, y) => {
@@ -132,6 +140,7 @@ PivotTable.propTypes = {
   ]),
   filters: PropTypes.array,
   height: PropTypes.string,
+  highlightfn: PropTypes.func,
   maxHeight: PropTypes.string,
   maxWidth: PropTypes.string,
   orderBy: PropTypes.array,
